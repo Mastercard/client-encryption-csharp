@@ -13,11 +13,11 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
     {
         private const int SymmetricKeySize = 128;
 
-        internal string IvValue { get; private set; }
-        internal string EncryptedKeyValue { get; private set; }
-        internal string OaepPaddingDigestAlgorithmValue { get; private set; }
-        internal string EncryptionCertificateFingerprintValue { get; private set; }
-        internal string EncryptionKeyFingerprintValue { get; private set; }
+        public string IvValue { get; private set; }
+        public string EncryptedKeyValue { get; private set; }
+        public string OaepPaddingDigestAlgorithmValue { get; private set; }
+        public string EncryptionCertificateFingerprintValue { get; private set; }
+        public string EncryptionKeyFingerprintValue { get; private set; }
         private FieldLevelEncryptionConfig Config { get; set; }
         private byte[] SecretKeyBytes { get; set; }
         private byte[] IvBytes { get; set; }
