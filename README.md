@@ -29,7 +29,7 @@ Assemblies are strong-named as per [Strong naming and .NET libraries](https://do
 The SN key is available here: [`Identity.snk`](https://github.com/Mastercard/client-encryption-csharp/blob/master/Identity.snk).
 
 ### References <a name="references"></a>
-* [Encryption of sensitive data](https://developer.mastercard.com/page/mdes-token-connect-encryption-of-sensitive-data) guide
+<img src="https://user-images.githubusercontent.com/3964455/55259713-5d771700-525e-11e9-9cf6-af0c01ab176e.png" alt="Encryption of sensitive data" width="75%" height="75%"/>
 
 ## Usage <a name="usage"></a>
 ### Prerequisites <a name="prerequisites"></a>
@@ -348,7 +348,7 @@ var encryptedKeyValue = response.GetHeader(config.EncryptedKeyHeaderName);
 var parameters = new FieldLevelEncryptionParams(config, ivValue, encryptedKeyValue, ...);
 ```
 
-3. Call `decryptPayload` with params:
+3. Call `DecryptPayload` with params:
 ```cs
 FieldLevelEncryption.DecryptPayload(encryptedPayload, config, parameters);
 ```
