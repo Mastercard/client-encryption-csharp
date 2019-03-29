@@ -6,6 +6,7 @@ using Mastercard.Developer.ClientEncryption.Core.Utils;
 using Mastercard.Developer.ClientEncryption.Tests.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
+using static System.Security.Cryptography.X509Certificates.X509KeyStorageFlags;
 using static Mastercard.Developer.ClientEncryption.Core.Encryption.FieldLevelEncryptionConfig;
 
 namespace Mastercard.Developer.ClientEncryption.Tests.Encryption
@@ -1160,7 +1161,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Encryption
                     .WithDecryptionPath("encryptedData", "data")
                     .WithOaepPaddingDigestAlgorithm("SHA-256")
                     // Not the right key
-                    .WithDecryptionKey(EncryptionUtils.LoadDecryptionKey("./_Resources/test_key.p12", "mykeyalias", "Password1"))
+                    .WithDecryptionKey(EncryptionUtils.LoadDecryptionKey("./_Resources/test_key.p12", "mykeyalias", "Password1", MachineKeySet | Exportable)) // https://github.com/dotnet/corefx/issues/14745
                     .Build();
 
                 // WHEN
