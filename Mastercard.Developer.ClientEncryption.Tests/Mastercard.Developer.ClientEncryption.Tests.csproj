@@ -1,0 +1,96 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <Authors>Mastercard</Authors>
+    <Company>Mastercard</Company>
+    <!-- See: https://docs.microsoft.com/en-us/dotnet/standard/library-guidance/strong-naming -->
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../Identity.snk</AssemblyOriginatorKeyFile>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="_Resources\test_certificate-1024.pem" />
+    <None Remove="_Resources\test_certificate-4096.pem" />
+    <None Remove="_Resources\test_certificate-512.pem" />
+    <None Remove="_Resources\test_certificate.der" />
+    <None Remove="_Resources\test_certificate.pem" />
+    <None Remove="_Resources\test_invalid_key.der" />
+    <None Remove="_Resources\test_key.p12" />
+    <None Remove="_Resources\test_key_container.p12" />
+    <None Remove="_Resources\test_key_pkcs1-1024.pem" />
+    <None Remove="_Resources\test_key_pkcs1-4096.pem" />
+    <None Remove="_Resources\test_key_pkcs1.pem" />
+    <None Remove="_Resources\test_key_pkcs8.der" />
+    <None Remove="_Resources\test_key_pkcs8.pem" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="_Resources\test_certificate-1024.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\test_certificate-4096.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\test_certificate-512.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\test_certificate.der">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\test_certificate.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\test_invalid_key.der">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\test_key.p12">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\test_key_pkcs1-1024.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\test_key_pkcs1-4096.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\test_key_pkcs1.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\test_key_pkcs8.der">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\test_key_pkcs8.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.msbuild" Version="2.5.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mastercard.Developer.ClientEncryption.Core\Mastercard.Developer.ClientEncryption.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="_Resources\test_certificate.cert">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="_Resources\test_key.der">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="_Resources\test_key.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,253 @@
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+
+namespace Mastercard.Developer.ClientEncryption.Core.Utils
+{
+    internal static class RsaKeyUtils
+    {
+        private const string Pkcs1PemHeader = "-----BEGIN RSA PRIVATE KEY-----";
+        private const string Pkcs1PemFooter = "-----END RSA PRIVATE KEY-----";
+        private const string Pkcs8PemHeader = "-----BEGIN PRIVATE KEY-----";
+        private const string Pkcs8PemFooter = "-----END PRIVATE KEY-----";
+        
+        internal static RSA ReadPrivateKeyFile(string keyFilePath)
+        {
+            if (keyFilePath == null) throw new ArgumentNullException(nameof(keyFilePath));
+            var keyString = File.ReadAllText(keyFilePath);
+            if (keyString.Contains(Pkcs1PemHeader))
+            {
+                // OpenSSL / PKCS#1 Base64 PEM encoded file
+                keyString = keyString.Replace(Pkcs1PemHeader, string.Empty);
+                keyString = keyString.Replace(Pkcs1PemFooter, string.Empty);
+                keyString = keyString.Replace(Environment.NewLine, string.Empty);
+                return ReadPkcs1PrivateKey(Convert.FromBase64String(keyString));
+            }
+
+            if (keyString.Contains(Pkcs8PemHeader))
+            {
+                // PKCS#8 Base64 PEM encoded file
+                keyString = keyString.Replace(Pkcs8PemHeader, string.Empty);
+                keyString = keyString.Replace(Pkcs8PemFooter, string.Empty);
+                keyString = keyString.Replace(Environment.NewLine, string.Empty);
+                return ReadPkcs8PrivateKey(Convert.FromBase64String(keyString));
+            }
+
+            // We assume it's a PKCS#8 DER encoded binary file
+            return ReadPkcs8PrivateKey(File.ReadAllBytes(keyFilePath));
+        }
+
+        private static RSA ReadPkcs8PrivateKey(byte[] pkcs8Bytes)
+        {
+            try
+            {
+                var memoryStream = new MemoryStream(pkcs8Bytes);
+                var keyLength = (int) memoryStream.Length;
+                var reader = new BinaryReader(memoryStream);
+                
+                var bytes = reader.ReadUInt16();
+                if (bytes == 0x8130)
+                {
+                    reader.ReadByte();
+                }
+                else if (bytes == 0x8230)
+                {
+                    reader.ReadByte();
+                    reader.ReadByte();
+                }
+                else
+                {
+                    throw new ArgumentException("Failed to parse PKCS#8 key, 0x8130 or 0x8230 was expected!");
+                }
+
+                bytes = reader.ReadByte();
+                if (bytes != 0x02)
+                {
+                    throw new ArgumentException("Failed to parse PKCS#8 key, 0x02 was expected!");
+                }
+
+                bytes = reader.ReadUInt16();
+                if (bytes != 0x0001)
+                {
+                    throw new ArgumentException("Failed to parse PKCS#8 key, 0x0001 was expected!");
+                }
+
+                if (!reader.ReadBytes(15).SequenceEqual(new byte[] { 0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01, 0x05, 0x00 }))
+                {
+                    throw new ArgumentException("Failed to parse PKCS#8 key, RSA OID was expected!");
+                }
+
+                bytes = reader.ReadByte();
+                if (bytes != 0x04)
+                {
+                    throw new ArgumentException("Failed to parse PKCS#8 key, 0x04 was expected!");
+                }
+
+                bytes = reader.ReadByte();
+                if (bytes == 0x81)
+                {
+                    reader.ReadByte();
+                }
+                else if (bytes == 0x82)
+                {
+                    reader.ReadByte();
+                    reader.ReadByte();
+                }
+
+                var pkcs1Bytes = reader.ReadBytes((int) (keyLength - memoryStream.Position));
+                return ReadPkcs1PrivateKey(pkcs1Bytes);
+            }
+            catch (ArgumentException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("Failed to parse PKCS#8 key!", e);
+            }
+        }
+
+        private static RSA ReadPkcs1PrivateKey(byte[] pkcs1Bytes)
+        {
+            try
+            {
+                var memoryStream = new MemoryStream(pkcs1Bytes);
+                var reader = new BinaryReader(memoryStream);
+            
+                var bytes = reader.ReadUInt16();
+                if (bytes == 0x8130)
+                {
+                    reader.ReadByte();
+                }
+                else if (bytes == 0x8230)
+                {
+                    reader.ReadByte();
+                    reader.ReadByte();
+                }
+                else
+                {
+                    throw new ArgumentException("Failed to parse PKCS#1 key, 0x8130 or 0x8230 was expected!");
+                }
+
+                var versionBytes = reader.ReadUInt16();
+                if (versionBytes != 0x0102)
+                {
+                    throw new ArgumentException("Failed to parse PKCS#1 key, 0x0102 was expected!");
+                }
+
+                bytes = reader.ReadByte();
+                if (bytes != 0x00)
+                {
+                    throw new ArgumentException("Failed to parse PKCS#1 key, 0x00 was expected!");
+                }
+
+                var modulus = reader.ReadBytes(GetIntegerSize(reader));
+                var publicExponent = reader.ReadBytes(GetIntegerSize(reader));
+                var privateExponent = reader.ReadBytes(GetIntegerSize(reader));
+                var prime1 = reader.ReadBytes(GetIntegerSize(reader));
+                var prime2 = reader.ReadBytes(GetIntegerSize(reader));
+                var exponent1 = reader.ReadBytes(GetIntegerSize(reader));
+                var exponent2 = reader.ReadBytes(GetIntegerSize(reader));
+                var coefficient = reader.ReadBytes(GetIntegerSize(reader));
+                
+                var rsa = RSA.Create();
+                rsa.ImportParameters(new RSAParameters
+                {
+                    Modulus = modulus,
+                    Exponent = publicExponent,
+                    D = privateExponent ,
+                    P = prime1,
+                    Q = prime2,
+                    DP = exponent1,
+                    DQ = exponent2,
+                    InverseQ = coefficient
+                });
+                return rsa;
+            }
+            catch (ArgumentException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException("Failed to parse PKCS#1 key!", e);
+            }
+        }
+
+        /// <summary>
+        /// Returns the DER-encoded form of a key (exact same binary as https://docs.oracle.com/javase/7/docs/api/java/security/Key.html#getEncoded())
+        /// </summary>
+        internal static byte[] GetEncoded(PublicKey publicRsaKey)
+        {
+            var rawKeyBytes = publicRsaKey.EncodedKeyValue.RawData;
+            var rawKeyLength = rawKeyBytes.Length + 1;
+            byte[] sequenceBytes;
+            byte[] bitStringBytes;
+            byte[] oidBytes = { 0x30, 0xD, 0x6, 0x9, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0xD, 0x1, 0x1, 0x1, 0x5, 0x0 }; // 1.2.840.113549.1.1.1, NULL
+
+            if (rawKeyLength > 270)
+            {
+                // 2048, 4096 bits
+                var totalLength = rawKeyLength + 19;
+                sequenceBytes = new byte[] { 0x30, 0x82, (byte) ((totalLength >> 8) & 0xff), (byte) (totalLength & 0xff) };
+                bitStringBytes = new byte[] { 0x3, 0x82, (byte) ((rawKeyLength >> 8) & 0xff), (byte) (rawKeyLength & 0xff) };
+            }
+            else if (rawKeyLength > 140)
+            {
+                // 1024 bits
+                var totalLength = rawKeyLength + 18;
+                sequenceBytes = new byte[] { 0x30, 0x81, (byte) (totalLength & 0xff) };
+                bitStringBytes = new byte[] { 0x3, 0x81, (byte) (rawKeyLength & 0xff) };
+            }
+            else
+            {
+                // 512 bits
+                var totalLength = rawKeyLength + 17;
+                sequenceBytes = new byte[] { 0x30, (byte) (totalLength & 0xff) };
+                bitStringBytes = new byte[] { 0x3, (byte) (rawKeyLength & 0xff) };
+            }
+
+            return sequenceBytes.Concat(oidBytes)
+                .Concat(bitStringBytes)
+                .Concat(new byte[] { 0x0 })
+                .Concat(rawKeyBytes)
+                .ToArray();
+        }
+
+        private static int GetIntegerSize(BinaryReader reader)
+        {
+            int size;
+            var bytes = reader.ReadByte();
+            if (bytes != 0x02)
+            {
+                return 0;
+            }
+
+            bytes = reader.ReadByte();
+            if (bytes == 0x81)
+            {
+                size = reader.ReadByte();
+            }
+            else if (bytes == 0x82)
+            {
+                var high = reader.ReadByte();
+                var low = reader.ReadByte();
+                size = BitConverter.ToInt32(new byte[] { low, high, 0x00, 0x00 }, 0);
+            }
+            else
+            {
+                size = bytes;
+            }
+
+            while (reader.ReadByte() == 0x00)
+            {
+                size -= 1;
+            }
+
+            reader.BaseStream.Seek(-1, SeekOrigin.Current);
+            return size;
+        }
+    }
+}

@@ -1,0 +1,34 @@
+language: csharp
+git:
+  depth: false  # "Shallow clone detected during the analysis"
+matrix:
+  fast_finish: true
+  include:
+  - dotnet: 2.1.500
+    mono: none
+  - dotnet: 2.1  # latest available release
+    mono: none  
+    env: 
+      # Do not run analysis on PR (secure env variables like SONAR_TOKEN are not always available)
+      - WITH_SONAR_ANALYSIS=$([ "$TRAVIS_PULL_REQUEST" = "false" ] && echo true || echo false)
+      - TEST_RESULTS_PATH=./Mastercard.Developer.ClientEncryption.Tests/bin
+solution: Mastercard.Developer.ClientEncryption.sln
+install:
+  - dotnet restore
+  - test "$WITH_SONAR_ANALYSIS" = "true" && dotnet tool install --global dotnet-sonarscanner || echo 'Skipping sonarscanner install'
+before_script:
+  - export PATH="$PATH:$HOME/.dotnet/tools"
+  - |
+    test "$WITH_SONAR_ANALYSIS" = "true" && dotnet sonarscanner begin \
+    /k:"$SONAR_PROJECT_KEY" \
+    /n:"$SONAR_PROJECT_NAME" \
+    /o:"$SONAR_ORGANIZATION_KEY" \
+    /d:sonar.host.url="$SONAR_URL" \
+    /d:sonar.login="$SONAR_TOKEN" \
+    /d:sonar.cs.vstest.reportsPaths="${TEST_RESULTS_PATH}/tests.trx" \
+    /d:sonar.cs.opencover.reportsPaths="${TEST_RESULTS_PATH}/coverage.xml" || echo 'Skipping sonarscanner begin'
+script:
+  - dotnet test -c Release -l:"trx;LogFileName=tests.trx" -r:"bin/" /p:CollectCoverage=true /p:CoverletOutputFormat="opencover" /p:CoverletOutput="bin/coverage.xml"
+  - dotnet publish -c Release
+after_success:
+  - test "$WITH_SONAR_ANALYSIS" = "true" && dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN" || echo 'Skipping sonarscanner end'
