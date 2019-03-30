@@ -23,7 +23,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
                 keyString = keyString.Replace(Pkcs1PemHeader, string.Empty);
                 keyString = keyString.Replace(Pkcs1PemFooter, string.Empty);
                 keyString = keyString.Replace(Environment.NewLine, string.Empty);
-                return ReadPkcs1PrivateKey(Convert.FromBase64String(keyString));
+                return ReadPkcs1Key(Convert.FromBase64String(keyString));
             }
 
             if (keyString.Contains(Pkcs8PemHeader))
@@ -32,14 +32,14 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
                 keyString = keyString.Replace(Pkcs8PemHeader, string.Empty);
                 keyString = keyString.Replace(Pkcs8PemFooter, string.Empty);
                 keyString = keyString.Replace(Environment.NewLine, string.Empty);
-                return ReadPkcs8PrivateKey(Convert.FromBase64String(keyString));
+                return ReadPkcs8Key(Convert.FromBase64String(keyString));
             }
 
             // We assume it's a PKCS#8 DER encoded binary file
-            return ReadPkcs8PrivateKey(File.ReadAllBytes(keyFilePath));
+            return ReadPkcs8Key(File.ReadAllBytes(keyFilePath));
         }
 
-        private static RSA ReadPkcs8PrivateKey(byte[] pkcs8Bytes)
+        private static RSA ReadPkcs8Key(byte[] pkcs8Bytes)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
                 }
 
                 var pkcs1Bytes = reader.ReadBytes((int) (keyLength - memoryStream.Position));
-                return ReadPkcs1PrivateKey(pkcs1Bytes);
+                return ReadPkcs1Key(pkcs1Bytes);
             }
             catch (ArgumentException)
             {
@@ -109,7 +109,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
             }
         }
 
-        private static RSA ReadPkcs1PrivateKey(byte[] pkcs1Bytes)
+        private static RSA ReadPkcs1Key(byte[] pkcs1Bytes)
         {
             try
             {

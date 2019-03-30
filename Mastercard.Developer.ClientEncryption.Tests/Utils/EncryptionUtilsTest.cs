@@ -13,7 +13,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Utils
         public void TestLoadEncryptionCertificate_ShouldSupportDer()
         {
             // GIVEN
-            const string certificatePath = "./_Resources/test_certificate.der";
+            const string certificatePath = "./_Resources/Certificates/test_certificate-2048.der";
 
             // WHEN
             var certificate = EncryptionUtils.LoadEncryptionCertificate(certificatePath);
@@ -28,7 +28,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Utils
         public void TestLoadEncryptionCertificate_ShouldSupportPem()
         {
             // GIVEN
-            const string certificatePath = "./_Resources/test_certificate.pem";
+            const string certificatePath = "./_Resources/Certificates/test_certificate-2048.pem";
 
             // WHEN
             var certificate = EncryptionUtils.LoadEncryptionCertificate(certificatePath);
@@ -40,10 +40,10 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Utils
         }
 
         [TestMethod]
-        public void TestLoadDecryptionKey_ShouldSupportPkcs8Der()
+        public void TestLoadDecryptionKey_ShouldSupportUnencryptedKeyFile()
         {
             // GIVEN
-            const string keyPath = "./_Resources/test_key_pkcs8.der";
+            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-2048.der";
 
             // WHEN
             var privateKey = EncryptionUtils.LoadDecryptionKey(keyPath);
@@ -51,66 +51,6 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Utils
             // THEN
             Assert.IsNotNull(privateKey);
             Assert.AreEqual(2048, privateKey.KeySize);
-            Assert.AreEqual("RSA", privateKey.KeyExchangeAlgorithm);
-        }
-
-        [TestMethod]
-        public void TestLoadDecryptionKey_ShouldSupportPkcs8Base64Pem()
-        {
-            // GIVEN
-            const string keyPath = "./_Resources/test_key_pkcs8.pem";
-
-            // WHEN
-            var privateKey = EncryptionUtils.LoadDecryptionKey(keyPath);
-
-            // THEN
-            Assert.IsNotNull(privateKey);
-            Assert.AreEqual(2048, privateKey.KeySize);
-            Assert.AreEqual("RSA", privateKey.KeyExchangeAlgorithm);
-        }
-
-        [TestMethod]
-        public void TestLoadDecryptionKey_ShouldSupportPkcs1Base64Pem_Nominal()
-        {
-            // GIVEN
-            const string keyPath = "./_Resources/test_key_pkcs1.pem";
-
-            // WHEN
-            var privateKey = EncryptionUtils.LoadDecryptionKey(keyPath);
-
-            // THEN
-            Assert.IsNotNull(privateKey);
-            Assert.AreEqual(2048, privateKey.KeySize);
-            Assert.AreEqual("RSA", privateKey.KeyExchangeAlgorithm);
-        }
-
-        [TestMethod]
-        public void TestLoadDecryptionKey_ShouldSupportPkcs1Base64Pem_1024bits()
-        {
-            // GIVEN
-            const string keyPath = "./_Resources/test_key_pkcs1-1024.pem";
-
-            // WHEN
-            var privateKey = EncryptionUtils.LoadDecryptionKey(keyPath);
-
-            // THEN
-            Assert.IsNotNull(privateKey);
-            Assert.AreEqual(1024, privateKey.KeySize);
-            Assert.AreEqual("RSA", privateKey.KeyExchangeAlgorithm);
-        }
-
-        [TestMethod]
-        public void TestLoadDecryptionKey_ShouldSupportPkcs1Base64Pem_4096bits()
-        {
-            // GIVEN
-            const string keyPath = "./_Resources/test_key_pkcs1-4096.pem";
-
-            // WHEN
-            var privateKey = EncryptionUtils.LoadDecryptionKey(keyPath);
-
-            // THEN
-            Assert.IsNotNull(privateKey);
-            Assert.AreEqual(4096, privateKey.KeySize);
             Assert.AreEqual("RSA", privateKey.KeyExchangeAlgorithm);
         }
 
@@ -118,7 +58,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Utils
         public void TestLoadDecryptionKey_ShouldSupportPkcs12()
         {
             // GIVEN
-            const string keyContainerPath = "./_Resources/test_key.p12";
+            const string keyContainerPath = "./_Resources/Keys/Pkcs12/test_key.p12";
             const string keyAlias = "mykeyalias";
             const string keyPassword = "Password1";
 
@@ -136,7 +76,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Utils
         public void TestLoadDecryptionKey_ShouldThrowArgumentException_WhenInvalidKey()
         {
             // GIVEN
-            const string keyPath = "./_Resources/test_invalid_key.der";
+            const string keyPath = "./_Resources/Keys/Pkcs8/test_invalid_key.der";
 
             // WHEN
             EncryptionUtils.LoadDecryptionKey(keyPath);
@@ -147,7 +87,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Utils
         public void TestLoadDecryptionKey_ShouldThrowFileNotFoundException_WhenKeyFileDoesNotExist()
         {
             // GIVEN
-            const string keyPath = "./_Resources/some_file";
+            const string keyPath = "./_Resources/Keys/some_file";
 
             // WHEN
             EncryptionUtils.LoadDecryptionKey(keyPath);

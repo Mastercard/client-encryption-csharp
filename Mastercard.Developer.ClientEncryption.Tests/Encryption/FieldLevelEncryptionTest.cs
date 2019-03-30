@@ -1161,7 +1161,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Encryption
                     .WithDecryptionPath("encryptedData", "data")
                     .WithOaepPaddingDigestAlgorithm("SHA-256")
                     // Not the right key
-                    .WithDecryptionKey(EncryptionUtils.LoadDecryptionKey("./_Resources/test_key.p12", "mykeyalias", "Password1", MachineKeySet | Exportable)) // https://github.com/dotnet/corefx/issues/14745
+                    .WithDecryptionKey(EncryptionUtils.LoadDecryptionKey("./_Resources/Keys/Pkcs12/test_key.p12", "mykeyalias", "Password1", MachineKeySet | Exportable)) // https://github.com/dotnet/corefx/issues/14745
                     .Build();
 
                 // WHEN

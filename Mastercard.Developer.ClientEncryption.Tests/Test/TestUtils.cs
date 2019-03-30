@@ -12,7 +12,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Test
     {
         internal static X509Certificate2 GetTestEncryptionCertificate()
         {
-            return EncryptionUtils.LoadEncryptionCertificate("./_Resources/test_certificate.pem");
+            return EncryptionUtils.LoadEncryptionCertificate("./_Resources/Certificates/test_certificate-2048.pem");
         }
 
         internal static X509Certificate2 GetTestInvalidEncryptionCertificate()
@@ -22,7 +22,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Test
 
         internal static RSA GetTestDecryptionKey()
         {
-            return EncryptionUtils.LoadDecryptionKey("./_Resources/test_key_pkcs8.der");
+            return EncryptionUtils.LoadDecryptionKey("./_Resources/Keys/Pkcs8/test_key_pkcs8-2048.der");
         }
 
         internal static FieldLevelEncryptionConfigBuilder GetTestFieldLevelEncryptionConfigBuilder()

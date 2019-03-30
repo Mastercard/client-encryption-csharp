@@ -13,56 +13,61 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="_Resources\test_certificate-1024.pem" />
-    <None Remove="_Resources\test_certificate-4096.pem" />
-    <None Remove="_Resources\test_certificate-512.pem" />
-    <None Remove="_Resources\test_certificate.der" />
-    <None Remove="_Resources\test_certificate.pem" />
-    <None Remove="_Resources\test_invalid_key.der" />
-    <None Remove="_Resources\test_key.p12" />
-    <None Remove="_Resources\test_key_container.p12" />
-    <None Remove="_Resources\test_key_pkcs1-1024.pem" />
-    <None Remove="_Resources\test_key_pkcs1-4096.pem" />
-    <None Remove="_Resources\test_key_pkcs1.pem" />
-    <None Remove="_Resources\test_key_pkcs8.der" />
-    <None Remove="_Resources\test_key_pkcs8.pem" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="_Resources\test_certificate-1024.pem">
+    <EmbeddedResource Include="_Resources\Certificates\test_certificate-1024.pem">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="_Resources\test_certificate-4096.pem">
+    <EmbeddedResource Include="_Resources\Certificates\test_certificate-4096.pem">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="_Resources\test_certificate-512.pem">
+    <EmbeddedResource Include="_Resources\Certificates\test_certificate-512.pem">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="_Resources\test_certificate.der">
+    <EmbeddedResource Include="_Resources\Certificates\test_certificate-2048.der">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="_Resources\test_certificate.pem">
+    <EmbeddedResource Include="_Resources\Certificates\test_certificate-2048.pem">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="_Resources\test_invalid_key.der">
+    <EmbeddedResource Include="_Resources\Keys\Pkcs1\test_key_pkcs1-512.pem">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="_Resources\test_key.p12">
+    <EmbeddedResource Include="_Resources\Keys\Pkcs8\test_invalid_key.der">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="_Resources\test_key_pkcs1-1024.pem">
+    <EmbeddedResource Include="_Resources\Keys\Pkcs12\test_key.p12">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="_Resources\test_key_pkcs1-4096.pem">
+    <EmbeddedResource Include="_Resources\Keys\Pkcs1\test_key_pkcs1-1024.pem">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="_Resources\test_key_pkcs1.pem">
+    <EmbeddedResource Include="_Resources\Keys\Pkcs1\test_key_pkcs1-4096.pem">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="_Resources\test_key_pkcs8.der">
+    <EmbeddedResource Include="_Resources\Keys\Pkcs1\test_key_pkcs1-2048.pem">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="_Resources\test_key_pkcs8.pem">
+    <EmbeddedResource Include="_Resources\Keys\Pkcs8\test_key_pkcs8-1024.der">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\Keys\Pkcs8\test_key_pkcs8-1024.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\Keys\Pkcs8\test_key_pkcs8-2048.der">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\Keys\Pkcs8\test_key_pkcs8-2048.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\Keys\Pkcs8\test_key_pkcs8-4096.der">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\Keys\Pkcs8\test_key_pkcs8-4096.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\Keys\Pkcs8\test_key_pkcs8-512.der">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Resources\Keys\Pkcs8\test_key_pkcs8-512.pem">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

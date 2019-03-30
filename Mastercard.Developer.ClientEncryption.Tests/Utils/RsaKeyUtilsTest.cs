@@ -8,10 +8,178 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Utils
     public class RsaKeyUtilsTest
     {
         [TestMethod]
-        public void TestGetEncoded_512bits()
+        public void TestReadPrivateKeyFile_ShouldSupportPkcs8Pem512bits()
         {
             // GIVEN
-            const string certificatePath = "./_Resources/test_certificate-512.pem";
+            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-512.pem";
+
+            // WHEN
+            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
+
+            // THEN
+            Assert.AreEqual("RSA", rsa.KeyExchangeAlgorithm);
+            Assert.AreEqual(512, rsa.KeySize);
+        }
+
+        [TestMethod]
+        public void TestReadPrivateKeyFile_ShouldSupportPkcs8Pem1024bits()
+        {
+            // GIVEN
+            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-1024.pem";
+
+            // WHEN
+            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
+
+            // THEN
+            Assert.AreEqual("RSA", rsa.KeyExchangeAlgorithm);
+            Assert.AreEqual(1024, rsa.KeySize);
+        }
+
+        [TestMethod]
+        public void TestReadPrivateKeyFile_ShouldSupportPkcs8Pem2048bits()
+        {
+            // GIVEN
+            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-2048.pem";
+
+            // WHEN
+            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
+
+            // THEN
+            Assert.AreEqual("RSA", rsa.KeyExchangeAlgorithm);
+            Assert.AreEqual(2048, rsa.KeySize);
+        }
+
+        [TestMethod]
+        public void TestReadPrivateKeyFile_ShouldSupportPkcs8Pem4096bits()
+        {
+            // GIVEN
+            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-4096.pem";
+
+            // WHEN
+            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
+
+            // THEN
+            Assert.AreEqual("RSA", rsa.KeyExchangeAlgorithm);
+            Assert.AreEqual(4096, rsa.KeySize);
+        }
+
+        [TestMethod]
+        public void TestReadPrivateKeyFile_ShouldSupportPkcs8Der512bits()
+        {
+            // GIVEN
+            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-512.der";
+
+            // WHEN
+            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
+
+            // THEN
+            Assert.AreEqual("RSA", rsa.KeyExchangeAlgorithm);
+            Assert.AreEqual(512, rsa.KeySize);
+        }
+
+        [TestMethod]
+        public void TestReadPrivateKeyFile_ShouldSupportPkcs8Der1024bits()
+        {
+            // GIVEN
+            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-1024.der";
+
+            // WHEN
+            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
+
+            // THEN
+            Assert.AreEqual("RSA", rsa.KeyExchangeAlgorithm);
+            Assert.AreEqual(1024, rsa.KeySize);
+        }
+
+        [TestMethod]
+        public void TestReadPrivateKeyFile_ShouldSupportPkcs8Der2048bits()
+        {
+            // GIVEN
+            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-2048.der";
+
+            // WHEN
+            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
+
+            // THEN
+            Assert.AreEqual("RSA", rsa.KeyExchangeAlgorithm);
+            Assert.AreEqual(2048, rsa.KeySize);
+        }
+
+        [TestMethod]
+        public void TestReadPrivateKeyFile_ShouldSupportPkcs8Der4096bits()
+        {
+            // GIVEN
+            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-4096.der";
+
+            // WHEN
+            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
+
+            // THEN
+            Assert.AreEqual("RSA", rsa.KeyExchangeAlgorithm);
+            Assert.AreEqual(4096, rsa.KeySize);
+        }
+
+        [TestMethod]
+        public void TestReadPrivateKeyFile_ShouldSupportPkcs1Base64Pem512bits()
+        {
+            // GIVEN
+            const string keyPath = "./_Resources/Keys/Pkcs1/test_key_pkcs1-512.pem";
+
+            // WHEN
+            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
+
+            // THEN
+            Assert.AreEqual("RSA", rsa.KeyExchangeAlgorithm);
+            Assert.AreEqual(512, rsa.KeySize);
+        }
+
+        [TestMethod]
+        public void TestReadPrivateKeyFile_ShouldSupportPkcs1Base64Pem1024bits()
+        {
+            // GIVEN
+            const string keyPath = "./_Resources/Keys/Pkcs1/test_key_pkcs1-1024.pem";
+
+            // WHEN
+            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
+
+            // THEN
+            Assert.AreEqual("RSA", rsa.KeyExchangeAlgorithm);
+            Assert.AreEqual(1024, rsa.KeySize);
+        }
+
+        [TestMethod]
+        public void TestReadPrivateKeyFile_ShouldSupportPkcs1Base64Pem2048bits()
+        {
+            // GIVEN
+            const string keyPath = "./_Resources/Keys/Pkcs1/test_key_pkcs1-2048.pem";
+
+            // WHEN
+            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
+
+            // THEN
+            Assert.AreEqual("RSA", rsa.KeyExchangeAlgorithm);
+            Assert.AreEqual(2048, rsa.KeySize);
+        }
+
+        [TestMethod]
+        public void TestReadPrivateKeyFile_ShouldSupportPkcs1Base64Pem4096bits()
+        {
+            // GIVEN
+            const string keyPath = "./_Resources/Keys/Pkcs1/test_key_pkcs1-4096.pem";
+
+            // WHEN
+            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
+
+            // THEN
+            Assert.AreEqual("RSA", rsa.KeyExchangeAlgorithm);
+            Assert.AreEqual(4096, rsa.KeySize);
+        }
+
+        [TestMethod]
+        public void TestGetEncoded_ShouldSupportPublicKey512bits()
+        {
+            // GIVEN
+            const string certificatePath = "./_Resources/Certificates/test_certificate-512.pem";
             var certificate = EncryptionUtils.LoadEncryptionCertificate(certificatePath);
 
             // WHEN
@@ -23,10 +191,10 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Utils
         }
 
         [TestMethod]
-        public void TestGetEncoded_1024bits()
+        public void TestGetEncoded_ShouldSupportPublicKey1024bits()
         {
             // GIVEN
-            const string certificatePath = "./_Resources/test_certificate-1024.pem";
+            const string certificatePath = "./_Resources/Certificates/test_certificate-1024.pem";
             var certificate = EncryptionUtils.LoadEncryptionCertificate(certificatePath);
 
             // WHEN
@@ -38,10 +206,10 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Utils
         }
 
         [TestMethod]
-        public void TestGetEncoded_Nominal() // 2048
+        public void TestGetEncoded_ShouldSupportPublicKey2048bits()
         {
             // GIVEN
-            const string certificatePath = "./_Resources/test_certificate.pem";
+            const string certificatePath = "./_Resources/Certificates/test_certificate-2048.pem";
             var certificate = EncryptionUtils.LoadEncryptionCertificate(certificatePath);
 
             // WHEN
@@ -53,10 +221,10 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Utils
         }
 
         [TestMethod]
-        public void TestGetEncoded_4096bits()
+        public void TestGetEncoded_ShouldSupportPublicKey4096bits()
         {
             // GIVEN
-            const string certificatePath = "./_Resources/test_certificate-4096.pem";
+            const string certificatePath = "./_Resources/Certificates/test_certificate-4096.pem";
             var certificate = EncryptionUtils.LoadEncryptionCertificate(certificatePath);
 
             // WHEN
