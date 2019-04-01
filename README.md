@@ -405,7 +405,9 @@ See also:
 
 ##### Usage of the `RestSharpFieldLevelEncryptionInterceptor`
 
-`RestSharpFieldLevelEncryptionInterceptor` is located in the `Mastercard.Developer.ClientEncryption.RestSharp` package. To use it:
+`RestSharpFieldLevelEncryptionInterceptor` is located in the `Mastercard.Developer.ClientEncryption.RestSharp` package. 
+
+To use it:
 
 1. Create a new file (for instance `ApiClientWithEncryption.cs`) extending the definition of the generated `ApiClient` class:
 
