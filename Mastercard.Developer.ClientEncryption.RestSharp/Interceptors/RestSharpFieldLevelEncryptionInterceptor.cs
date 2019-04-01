@@ -115,7 +115,6 @@ namespace Mastercard.Developer.ClientEncryption.RestSharp.Interceptors
                 // Update body and content length
                 var contentTypeInfo = response.GetType().GetTypeInfo().GetDeclaredField("_content");
                 contentTypeInfo.SetValue(response, new Lazy<string>(() => decryptedPayload));
-                UpdateResponseHeader(response, "Content-Length", decryptedPayload.Length.ToString());
             }
             catch (EncryptionException)
             {
@@ -136,18 +135,6 @@ namespace Mastercard.Developer.ClientEncryption.RestSharp.Interceptors
             }
 
             request.AddOrUpdateHeader(name, value);
-        }
-
-        private static void UpdateResponseHeader(IRestResponse response, string name, string value)
-        {
-            if (string.IsNullOrEmpty(name))
-            {
-                // Do nothing
-                return;
-            }
-
-            response.Headers.Remove(name);
-            response.Headers.Add(name, value);
         }
 
         private static string ReadAndRemoveHeader(IRestResponse response, string name)

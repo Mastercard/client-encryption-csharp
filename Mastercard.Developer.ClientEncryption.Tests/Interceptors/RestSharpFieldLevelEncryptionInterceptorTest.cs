@@ -100,7 +100,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Interceptors
         }
 
         [TestMethod]
-        public void TestInterceptResponse_ShouldDecryptResponsePayloadAndUpdateContentLengthHeader()
+        public void TestInterceptResponse_ShouldDecryptResponsePayload()
         {
             // GIVEN
             const string encryptedPayload = "{" +
@@ -127,7 +127,6 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Interceptors
             // THEN
             var payload = response.Content;
             TestUtils.AssertPayloadEquals("{\"data\":\"string\"}", payload);
-            Assert.AreEqual(payload.Length.ToString(), response.Headers.GetValue("Content-Length"));
         }
 
         [TestMethod]
@@ -258,7 +257,6 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Interceptors
             // THEN
             var payload = response.Content;
             TestUtils.AssertPayloadEquals("{\"data\":\"string\"}", payload);
-            Assert.AreEqual(payload.Length.ToString(), response.Headers.GetValue("Content-Length"));
             Assert.IsNull(response.Headers.GetValue("x-iv"));
             Assert.IsNull(response.Headers.GetValue("x-encrypted-key"));
             Assert.IsNull(response.Headers.GetValue("x-oaep-padding-digest-algorithm"));
