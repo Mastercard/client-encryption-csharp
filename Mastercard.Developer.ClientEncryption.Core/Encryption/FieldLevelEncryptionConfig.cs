@@ -140,9 +140,6 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         /// <summary>
         /// If the encryption parameters must be written to/read from HTTP headers.
         /// </summary>
-        public bool UseHttpPayloads()
-        {
-            return !string.IsNullOrEmpty(EncryptedKeyFieldName) && !string.IsNullOrEmpty(IvFieldName);
-        }
+        public bool UseHttpPayloads() => !string.IsNullOrEmpty(EncryptedKeyFieldName) && !string.IsNullOrEmpty(IvFieldName);
     }
 }

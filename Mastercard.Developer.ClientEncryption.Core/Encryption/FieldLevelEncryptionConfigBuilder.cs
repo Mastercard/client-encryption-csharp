@@ -36,10 +36,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         /// <summary>
         /// Get an instance of the builder.
         /// </summary>
-        public static FieldLevelEncryptionConfigBuilder AFieldLevelEncryptionConfig()
-        {
-            return new FieldLevelEncryptionConfigBuilder();
-        }
+        public static FieldLevelEncryptionConfigBuilder AFieldLevelEncryptionConfig() => new FieldLevelEncryptionConfigBuilder();
 
         /// <summary>
         /// See: <see cref="FieldLevelEncryptionConfig.EncryptionCertificate"/>

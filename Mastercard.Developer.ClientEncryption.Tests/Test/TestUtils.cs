@@ -15,10 +15,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Test
             return EncryptionUtils.LoadEncryptionCertificate("./_Resources/Certificates/test_certificate-2048.pem");
         }
 
-        internal static X509Certificate2 GetTestInvalidEncryptionCertificate()
-        {
-            return new X509Certificate2(); // No key
-        }
+        internal static X509Certificate2 GetTestInvalidEncryptionCertificate() => new X509Certificate2(); // No key
 
         internal static RSA GetTestDecryptionKey()
         {

@@ -370,9 +370,6 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             return value;
         }
 
-        private static bool IsNullOrEmptyJson(object element)
-        {
-            return null == element;
-        }
+        private static bool IsNullOrEmptyJson(object element) => null == element;
     }
 }

@@ -21,10 +21,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
         /// <summary>
         /// Load a RSA decryption key from a file (PEM or DER).
         /// </summary>
-        public static RSA LoadDecryptionKey(string keyFilePath)
-        {
-            return RsaKeyUtils.ReadPrivateKeyFile(keyFilePath);
-        }
+        public static RSA LoadDecryptionKey(string keyFilePath) => RsaKeyUtils.ReadPrivateKeyFile(keyFilePath);
 
         /// <summary>
         /// Load a RSA decryption key out of a PKCS#12 container.
