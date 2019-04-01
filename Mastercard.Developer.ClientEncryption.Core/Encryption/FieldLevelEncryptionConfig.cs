@@ -138,8 +138,13 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         public FieldValueEncoding ValueEncoding { get; internal set; }
 
         /// <summary>
-        /// If the encryption parameters must be written to/read from HTTP headers.
+        /// If the encryption parameters must be written to/read from HTTP payloads.
         /// </summary>
         public bool UseHttpPayloads() => !string.IsNullOrEmpty(EncryptedKeyFieldName) && !string.IsNullOrEmpty(IvFieldName);
+
+        /// <summary>
+        /// If the encryption parameters must be written to/read from HTTP headers.
+        /// </summary>
+        public bool UseHttpHeaders() => !string.IsNullOrEmpty(EncryptedKeyHeaderName) && !string.IsNullOrEmpty(IvHeaderName);
     }
 }

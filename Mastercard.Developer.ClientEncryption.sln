@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mastercard.Developer.Client
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mastercard.Developer.ClientEncryption.Tests", "Mastercard.Developer.ClientEncryption.Tests\Mastercard.Developer.ClientEncryption.Tests.csproj", "{BD40992E-4317-42E9-8CC3-425C79167017}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mastercard.Developer.ClientEncryption.RestSharp", "Mastercard.Developer.ClientEncryption.RestSharp\Mastercard.Developer.ClientEncryption.RestSharp.csproj", "{4ABDAD88-8DC4-4463-91EC-74A711D6ACFB}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9FF81251-FD39-4A8E-9092-99D23D1EFFE3}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE = LICENSE
@@ -27,6 +29,10 @@ Global
 		{BD40992E-4317-42E9-8CC3-425C79167017}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD40992E-4317-42E9-8CC3-425C79167017}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD40992E-4317-42E9-8CC3-425C79167017}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4ABDAD88-8DC4-4463-91EC-74A711D6ACFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4ABDAD88-8DC4-4463-91EC-74A711D6ACFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4ABDAD88-8DC4-4463-91EC-74A711D6ACFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4ABDAD88-8DC4-4463-91EC-74A711D6ACFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

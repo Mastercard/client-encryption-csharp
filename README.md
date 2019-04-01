@@ -3,6 +3,7 @@
 [![](https://travis-ci.org/Mastercard/client-encryption-csharp.svg?branch=master)](https://travis-ci.org/Mastercard/client-encryption-csharp)
 [![](https://sonarcloud.io/api/project_badges/measure?project=Mastercard_client-encryption-csharp&metric=alert_status)](https://sonarcloud.io/dashboard?id=Mastercard_client-encryption-csharp) 
 [![](https://img.shields.io/nuget/v/Mastercard.Developer.ClientEncryption.Core.svg?label=nuget%20|%20core)](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.Core/)
+[![](https://img.shields.io/nuget/v/Mastercard.Developer.ClientEncryption.RestSharp.svg?label=nuget%20|%20restsharp)](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.RestSharp/)
 [![](https://img.shields.io/badge/license-MIT-yellow.svg)](https://github.com/Mastercard/client-encryption-csharp/blob/master/LICENSE)
 
 ## Table of Contents
@@ -15,6 +16,7 @@
   * [Loading the Encryption Certificate](#loading-the-encryption-certificate) 
   * [Loading the Decryption Key](#loading-the-decryption-key)
   * [Performing Field Level Encryption and Decryption](#performing-field-level-encryption-and-decryption)
+  * [Integrating with OpenAPI Generator API Client Libraries](#integrating-with-openapi-generator-api-client-libraries)
 
 ## Overview <a name="overview"></a>
 Library for Mastercard API compliant payload encryption/decryption.
@@ -44,11 +46,13 @@ As part of this set up, you'll receive:
 #### Package Manager
 ```shell
 Install-Package Mastercard.Developer.ClientEncryption.Core
+Install-Package Mastercard.Developer.ClientEncryption.RestSharp
 ```
 
 #### .NET CLI
 ```shell
 dotnet add package Mastercard.Developer.ClientEncryption.Core
+dotnet add package Mastercard.Developer.ClientEncryption.RestSharp
 ```
 
 ### Loading the Encryption Certificate <a name="loading-the-encryption-certificate"></a>
@@ -369,4 +373,62 @@ Output:
     "sensitiveField1": "sensitiveValue1",
     "sensitiveField2": "sensitiveValue2"
 }
+```
+
+### Integrating with OpenAPI Generator API Client Libraries <a name="integrating-with-openapi-generator-api-client-libraries"></a>
+
+[OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) generates API client libraries from [OpenAPI Specs](https://github.com/OAI/OpenAPI-Specification). 
+It provides generators and library templates for supporting multiple languages and frameworks.
+
+This project provides you with some interceptor classes you can use when configuring your API client. 
+These classes will take care of encrypting request and decrypting response payloads, but also of updating HTTP headers when needed.
+
+Generators currently supported:
++ [csharp (targetFramework v5.0)](#csharp-generator-target-framework-v5)
+
+#### csharp (targetFramework v5.0) <a name="csharp-generator-target-framework-v5"></a>
+
+##### OpenAPI Generator
+
+Client libraries can be generated using the following command:
+```shell
+java -jar openapi-generator-cli.jar generate -i openapi-spec.yaml -g csharp -c config.json -o out
+```
+config.json:
+```json
+{ "targetFramework": "v5.0" }
+```
+
+See also: 
+* [OpenAPI Generator (executable)](https://mvnrepository.com/artifact/org.openapitools/openapi-generator-cli)
+* [CONFIG OPTIONS for csharp](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/csharp.md)
+
+##### Usage of the `RestSharpFieldLevelEncryptionInterceptor`
+
+`RestSharpFieldLevelEncryptionInterceptor` is located in the `Mastercard.Developer.ClientEncryption.RestSharp` package. To use it:
+
+1. Create a new file (for instance `ApiClientWithEncryption.cs`) extending the definition of the generated `ApiClient` class:
+
+```cs
+partial class ApiClient
+{
+    public RestSharpFieldLevelEncryptionInterceptor EncryptionInterceptor { private get; set; }
+    partial void InterceptRequest(IRestRequest request) => EncryptionInterceptor.InterceptRequest(request);
+    partial void InterceptResponse(IRestRequest request, IRestResponse response) => EncryptionInterceptor.InterceptResponse(response);
+}
+```
+
+2. Configure your `ApiClient` instance the following way:
+
+```cs
+var config = Configuration.Default;
+config.BasePath = "https://sandbox.api.mastercard.com";
+config.ApiClient.RestClient.Authenticator = new RestSharpOAuth1Authenticator(ConsumerKey, signingKey, new Uri(config.BasePath));
+var fieldLevelEncryptionConfig = FieldLevelEncryptionConfigBuilder
+    .AFieldLevelEncryptionConfig()
+    // ...
+    .Build();
+config.ApiClient.EncryptionInterceptor = new RestSharpFieldLevelEncryptionInterceptor(fieldLevelEncryptionConfig);
+var serviceApi = new ServiceApi(config);
+// ...
 ```

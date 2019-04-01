@@ -345,7 +345,8 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         {
             return json.Replace("\n", string.Empty)
                 .Replace("\r", string.Empty)
-                .Replace("\t", string.Empty);
+                .Replace("\t", string.Empty)
+                .Replace(Environment.NewLine, string.Empty);
         }
         
         private static JToken AsPrimitiveValue(string value)
