@@ -130,8 +130,8 @@ var config = FieldLevelEncryptionConfigBuilder.AFieldLevelEncryptionConfig()
 ```
 
 See also:
-* [FieldLevelEncryptionConfigBuilder.cs](https://github.com/Mastercard/client-encryption-csharp/blob/master/Mastercard.Developer.ClientEncryption.Core/Encryption/FieldLevelEncryptionConfigBuilder.cs) for all config options
-* [Service configurations](https://github.com/Mastercard/client-encryption-csharp/wiki/C%23-Service-Configurations) wiki page
+* [FieldLevelEncryptionConfig.cs](https://github.com/Mastercard/client-encryption-csharp/blob/master/Mastercard.Developer.ClientEncryption.Core/Encryption/FieldLevelEncryptionConfig.cs) for all config options
+* [Service configurations in C#](https://github.com/Mastercard/client-encryption-csharp/wiki/Service-Configurations-in-C%23) wiki page
 
 #### Performing Encryption <a name="performing-encryption"></a>
 
@@ -290,8 +290,8 @@ var config = FieldLevelEncryptionConfigBuilder.AFieldLevelEncryptionConfig()
 ```
 
 See also:
-* [FieldLevelEncryptionConfigBuilder.cs](https://github.com/Mastercard/client-encryption-csharp/blob/master/Mastercard.Developer.ClientEncryption.Core/Encryption/FieldLevelEncryptionConfigBuilder.cs) for all config options
-* [Service configurations](https://github.com/Mastercard/client-encryption-csharp/wiki/C%23-Service-Configurations) wiki page
+* [FieldLevelEncryptionConfig.cs](https://github.com/Mastercard/client-encryption-csharp/blob/master/Mastercard.Developer.ClientEncryption.Core/Encryption/FieldLevelEncryptionConfig.cs) for all config options
+* [Service configurations in C#](https://github.com/Mastercard/client-encryption-csharp/wiki/Service-Configurations-in-C%23) wiki page
 
 ##### Encrypting Using HTTP Headers
 
@@ -407,9 +407,8 @@ See also:
 
 `RestSharpFieldLevelEncryptionInterceptor` is located in the `Mastercard.Developer.ClientEncryption.RestSharp` package. 
 
-To use it:
-
-1. Create a new file (for instance `ApiClientWithEncryption.cs`) extending the definition of the generated `ApiClient` class:
+Usage:
+1. Create a new file (for instance, `ApiClientWithEncryption.cs`) extending the definition of the generated `ApiClient` class:
 
 ```cs
 partial class ApiClient
