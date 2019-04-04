@@ -335,3 +335,6 @@ ASALocalRun/
 
 # Sonar
 .sonarqube
+
+# Generated documentation
+**/*.xml
