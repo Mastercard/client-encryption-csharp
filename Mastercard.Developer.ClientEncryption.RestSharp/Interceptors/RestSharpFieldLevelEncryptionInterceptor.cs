@@ -13,6 +13,9 @@ namespace Mastercard.Developer.ClientEncryption.RestSharp.Interceptors
     {
         private readonly FieldLevelEncryptionConfig _config;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public RestSharpFieldLevelEncryptionInterceptor(FieldLevelEncryptionConfig config)
         {
             _config = config;

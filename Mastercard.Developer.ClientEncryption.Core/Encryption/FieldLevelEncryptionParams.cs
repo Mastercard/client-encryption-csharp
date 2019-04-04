@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Mastercard.Developer.ClientEncryption.Core.Utils;
 using static Mastercard.Developer.ClientEncryption.Core.Encryption.FieldLevelEncryptionConfig;
+#pragma warning disable 1591 // "Missing XML comment for publicly visible type or member."
 
 namespace Mastercard.Developer.ClientEncryption.Core.Encryption
 {
@@ -13,11 +14,31 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
     {
         private const int SymmetricKeySize = 128;
 
+        /// <summary>
+        /// Initialization vector value.
+        /// </summary>
         public string IvValue { get; private set; }
+
+        /// <summary>
+        /// Encrypted key value.
+        /// </summary>
         public string EncryptedKeyValue { get; private set; }
+
+        /// <summary>
+        /// Digest algorithm to be used for the RSA OAEP padding. Example: "SHA-512".
+        /// </summary>
         public string OaepPaddingDigestAlgorithmValue { get; private set; }
+
+        /// <summary>
+        /// Digest of the encryption certificate.
+        /// </summary>
         public string EncryptionCertificateFingerprintValue { get; private set; }
+
+        /// <summary>
+        /// Digest of the encryption key.
+        /// </summary>
         public string EncryptionKeyFingerprintValue { get; private set; }
+
         private FieldLevelEncryptionConfig Config { get; set; }
         private byte[] SecretKeyBytes { get; set; }
         private byte[] IvBytes { get; set; }

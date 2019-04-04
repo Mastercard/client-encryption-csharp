@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+#pragma warning disable 1591 // "Missing XML comment for publicly visible type or member."
 
 namespace Mastercard.Developer.ClientEncryption.Core.Encryption
 {
