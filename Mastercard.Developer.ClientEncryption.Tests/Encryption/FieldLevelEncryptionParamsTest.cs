@@ -52,7 +52,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Encryption
 
         [TestMethod]
         [ExpectedException(typeof(EncryptionException))]
-        public void TestGetSecretKeyBytes_ShouldThrowEncryptionException_WhenFailsToEncryptedKey()
+        public void TestGetSecretKeyBytes_ShouldThrowEncryptionException_WhenFailsToReadEncryptedKey()
         {
             try
             {
