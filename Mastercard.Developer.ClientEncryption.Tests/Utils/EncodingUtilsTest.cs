@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using Mastercard.Developer.ClientEncryption.Core.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -22,6 +23,13 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Utils
         public void TestHexEncode_ShouldThrowArgumentNullException_WhenNullValue()
         {
             EncodingUtils.HexEncode(null);
+        }
+
+        [TestMethod]
+        public void TestHexEncode_ShouldKeepLeadingZeros()
+        {
+            var hex = EncodingUtils.HexEncode(SHA256.Create().ComputeHash(Encoding.ASCII.GetBytes("WIDDIES")));
+            Assert.AreEqual("000000c71f1bda5b63f5165243e10394bc9ebf62e394ef7c6e049c920ea1b181", hex);
         }
 
         [TestMethod]
