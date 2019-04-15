@@ -289,7 +289,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         {
             if (!(jToken is JObject))
             {
-                throw new InvalidOperationException("JSON object expected at path: '" + jsonPath + "'!");
+                throw new InvalidOperationException($"JSON object expected at path: '{jsonPath}'!");
             }
         }
 

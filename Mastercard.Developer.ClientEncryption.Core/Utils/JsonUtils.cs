@@ -16,7 +16,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
 
             if ("$".Equals(jsonPath))
             {
-                throw new InvalidOperationException("Unable to find parent for '" + jsonPath + "'");
+                throw new InvalidOperationException($"Unable to find parent for '{jsonPath}'");
             }
 
             // "$.['path'].['to'].['object']"?
@@ -46,7 +46,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
 
             if ("$".Equals(jsonPath))
             {
-                throw new InvalidOperationException("Unable to find object key for '" + jsonPath + "'");
+                throw new InvalidOperationException($"Unable to find object key for '{jsonPath}'");
             }
 
             // "$.['path'].['to'].['object']"?
@@ -65,6 +65,15 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
 
             // "object"
             return jsonPath;
+        }
+
+        /// <summary>
+        /// Checks if a JSON path points to a single item or if it potentially returns multiple items.
+        /// See: https://github.com/json-path/JsonPath
+        /// </summary>
+        internal static bool IsPathDefinite(string path)
+        {
+            return !path.Contains("*") && !path.Contains("..") && !path.Contains("@") && !path.Contains(",");
         }
     }
 }

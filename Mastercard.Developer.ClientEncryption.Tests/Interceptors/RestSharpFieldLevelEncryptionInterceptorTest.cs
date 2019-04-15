@@ -280,7 +280,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Interceptors
             public string Content
             {
                 get => _content.Value;
-                set => _content = new Lazy<string>(value);
+                set => _content = new Lazy<string>(() => value);
             }
         }
     }

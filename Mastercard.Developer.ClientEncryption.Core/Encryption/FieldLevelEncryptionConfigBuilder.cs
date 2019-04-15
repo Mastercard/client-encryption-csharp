@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using static Mastercard.Developer.ClientEncryption.Core.Encryption.FieldLevelEncryptionConfig;
+using static Mastercard.Developer.ClientEncryption.Core.Utils.JsonUtils;
 
 namespace Mastercard.Developer.ClientEncryption.Core.Encryption
 {
@@ -313,15 +314,6 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             {
                 throw new ArgumentException("IV field name and encrypted key field name must be both set or both unset!");
             }
-        }
-
-        /// <summary>
-        /// Checks if a path points to a single item or if it potentially returns multiple items.
-        /// See: https://github.com/json-path/JsonPath
-        /// </summary>
-        private static bool IsPathDefinite(string path)
-        {
-            return !path.Contains("*") && !path.Contains("..") && !path.Contains("@") && !path.Contains(",");
         }
     }
 }
