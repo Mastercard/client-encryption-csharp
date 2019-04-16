@@ -100,7 +100,7 @@ Supported RSA key formats:
 
 #### Introduction <a name="introduction"></a>
 
-The methods that do all the heavy lifting are `EncryptPayload` and `DecryptPayload` in the `FieldLevelEncryption` class.
+The core methods responsible for payload encryption and decryption are `EncryptPayload` and `DecryptPayload` in the `FieldLevelEncryption` class.
 
 * `EncryptPayload` usage:
 ```cs
