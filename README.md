@@ -57,7 +57,7 @@ dotnet add package Mastercard.Developer.ClientEncryption.RestSharp
 
 ### Loading the Encryption Certificate <a name="loading-the-encryption-certificate"></a>
 
-A `System.Security.Cryptography.X509Certificates.X509Certificate` object can be created from a file by calling the `EncryptionUtils.LoadEncryptionCertificate` method:
+A `System.Security.Cryptography.X509Certificates.X509Certificate` object can be created from a file by calling `EncryptionUtils.LoadEncryptionCertificate`:
 ```cs
 var encryptionCertificate = EncryptionUtils.LoadEncryptionCertificate("<insert certificate file path>");
 ```
@@ -66,9 +66,9 @@ Supported certificate formats: PEM, DER.
 
 ### Loading the Decryption Key <a name="loading-the-decryption-key"></a>
 
-#### From a PKCS#12 File
+#### From a PKCS#12 Key Store
 
-A `System.Security.Cryptography.RSA` object can be created from a PKCS#12 file by calling the `EncryptionUtils.LoadDecryptionKey` method:
+A `System.Security.Cryptography.RSA` object can be created from a PKCS#12 key store by calling `EncryptionUtils.LoadDecryptionKey` the following way:
 ```cs
 var decryptionKey = EncryptionUtils.LoadDecryptionKey(
                                     "<insert PKCS#12 key file path>", 
@@ -78,7 +78,7 @@ var decryptionKey = EncryptionUtils.LoadDecryptionKey(
 
 #### From an Unencrypted Key File
 
-A `System.Security.Cryptography.RSA` object can be created from an unencrypted key file by calling the `EncryptionUtils.LoadDecryptionKey` method:
+A `System.Security.Cryptography.RSA` object can be created from an unencrypted key file by calling `EncryptionUtils.LoadDecryptionKey` the following way:
 ```cs
 var decryptionKey = EncryptionUtils.LoadDecryptionKey("<insert key file path>");
 ```
