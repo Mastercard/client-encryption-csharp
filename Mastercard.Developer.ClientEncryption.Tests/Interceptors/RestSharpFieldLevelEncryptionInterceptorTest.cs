@@ -221,7 +221,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Interceptors
         }
         
         [TestMethod]
-        public void TestInterceptRequest_ShouldDecryptResponsePayloadAndRemoveEncryptionHttpHeaders_WhenRequestedInConfig()
+        public void TestInterceptResponse_ShouldDecryptResponsePayloadAndRemoveEncryptionHttpHeaders_WhenRequestedInConfig()
         {
             // GIVEN
             const string encryptedPayload = "{" +
