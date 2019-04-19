@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Mastercard.Developer.ClientEncryption.Core.Encryption;
-using Mastercard.Developer.ClientEncryption.Tests.Test;
+using Mastercard.Developer.ClientEncryption.Tests.NetCore.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Mastercard.Developer.ClientEncryption.Tests.Encryption
+namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
 {
     [TestClass]
     public class FieldLevelEncryptionParamsTest

@@ -4,7 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 using Mastercard.Developer.ClientEncryption.Core.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Mastercard.Developer.ClientEncryption.Tests.Utils
+namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
 {
     [TestClass]
     public class EncryptionUtilsTest
@@ -51,7 +51,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Utils
             // THEN
             Assert.IsNotNull(privateKey);
             Assert.AreEqual(2048, privateKey.KeySize);
-            Assert.AreEqual("RSA", privateKey.KeyExchangeAlgorithm);
+            Assert.IsTrue(privateKey.KeyExchangeAlgorithm != null && privateKey.KeyExchangeAlgorithm.StartsWith("RSA"));
         }
 
         [TestMethod]
@@ -68,7 +68,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.Utils
 
             // THEN
             Assert.AreEqual(2048, privateKey.KeySize);
-            Assert.AreEqual("RSA", privateKey.KeyExchangeAlgorithm);
+            Assert.IsTrue(privateKey.KeyExchangeAlgorithm != null && privateKey.KeyExchangeAlgorithm.StartsWith("RSA"));
         }
 
         [TestMethod]

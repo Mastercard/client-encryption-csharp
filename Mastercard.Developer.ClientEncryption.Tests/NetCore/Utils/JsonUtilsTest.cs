@@ -2,7 +2,7 @@
 using Mastercard.Developer.ClientEncryption.Core.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Mastercard.Developer.ClientEncryption.Tests.Utils
+namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
 {
     [TestClass]
     public class JsonUtilsTest

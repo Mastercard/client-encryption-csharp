@@ -3,13 +3,13 @@ using System.Linq;
 using System.Text;
 using Mastercard.Developer.ClientEncryption.Core.Encryption;
 using Mastercard.Developer.ClientEncryption.Core.Utils;
-using Mastercard.Developer.ClientEncryption.Tests.Test;
+using Mastercard.Developer.ClientEncryption.Tests.NetCore.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 using static System.Security.Cryptography.X509Certificates.X509KeyStorageFlags;
 using static Mastercard.Developer.ClientEncryption.Core.Encryption.FieldLevelEncryptionConfig;
 
-namespace Mastercard.Developer.ClientEncryption.Tests.Encryption
+namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
 {
     [TestClass]
     public class FieldLevelEncryptionTest

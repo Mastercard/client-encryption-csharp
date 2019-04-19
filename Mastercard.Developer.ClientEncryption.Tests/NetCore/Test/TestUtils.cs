@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 // ReSharper disable once InconsistentNaming
 
-namespace Mastercard.Developer.ClientEncryption.Tests.Test
+namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Test
 {
     internal static class TestUtils
     {

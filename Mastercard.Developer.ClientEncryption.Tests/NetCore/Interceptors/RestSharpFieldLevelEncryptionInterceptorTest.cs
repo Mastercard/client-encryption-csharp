@@ -4,13 +4,13 @@ using System.Net;
 using System.Text;
 using Mastercard.Developer.ClientEncryption.Core.Encryption;
 using Mastercard.Developer.ClientEncryption.RestSharp.Interceptors;
-using Mastercard.Developer.ClientEncryption.Tests.Test;
+using Mastercard.Developer.ClientEncryption.Tests.NetCore.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RestSharp.Portable;
 using RestSharp.Portable.Impl;
 using static RestSharp.Portable.ParameterType;
 
-namespace Mastercard.Developer.ClientEncryption.Tests.Interceptors
+namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
 {
     [TestClass]
     public class RestSharpFieldLevelEncryptionInterceptorTest
