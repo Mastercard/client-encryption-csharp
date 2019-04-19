@@ -17,7 +17,7 @@
     <AssemblyOriginatorKeyFile>../Identity.snk</AssemblyOriginatorKeyFile>
     <AssemblyVersion>1.0.0.0</AssemblyVersion> <!-- Frozen -->
     <FileVersion>1.1.0.0</FileVersion> <!-- Same version as the package version -->
-    <DocumentationFile>Mastercard.Developer.ClientEncryption.Core.xml</DocumentationFile>
+    <DocumentationFile>Mastercard.Developer.ClientEncryption.RestSharp.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
