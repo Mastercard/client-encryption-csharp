@@ -7,7 +7,7 @@
     <Company>Mastercard</Company>
     <!-- See: https://docs.microsoft.com/en-us/dotnet/standard/library-guidance/strong-naming -->
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>../Identity.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>../../Identity.snk</AssemblyOriginatorKeyFile>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
@@ -83,8 +83,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mastercard.Developer.ClientEncryption.Core\Mastercard.Developer.ClientEncryption.Core.csproj" />
-    <ProjectReference Include="..\Mastercard.Developer.ClientEncryption.RestSharp\Mastercard.Developer.ClientEncryption.RestSharp.csproj" />
+    <ProjectReference Include="..\..\Mastercard.Developer.ClientEncryption.Core\Mastercard.Developer.ClientEncryption.Core.csproj" />
+    <ProjectReference Include="..\..\Mastercard.Developer.ClientEncryption.RestSharp\Mastercard.Developer.ClientEncryption.RestSharp.csproj" />
   </ItemGroup>
 
   <ItemGroup>
