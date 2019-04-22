@@ -20,8 +20,9 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
 
             // THEN
             Assert.IsNotNull(certificate);
-            Assert.IsNotNull(certificate.GetPublicKey());
             Assert.AreEqual("X509", certificate.GetFormat());
+            Assert.IsNotNull(certificate.GetRSAPublicKey());
+            Assert.IsTrue("RSACng".Equals(certificate.GetRSAPublicKey().GetType().Name));
         }
 
         [TestMethod]
@@ -35,8 +36,9 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
 
             // THEN
             Assert.IsNotNull(certificate);
-            Assert.IsNotNull(certificate.GetPublicKey());
             Assert.AreEqual("X509", certificate.GetFormat());
+            Assert.IsNotNull(certificate.GetRSAPublicKey());
+            Assert.IsTrue("RSACng".Equals(certificate.GetRSAPublicKey().GetType().Name));
         }
 
         [TestMethod]
@@ -50,8 +52,8 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
 
             // THEN
             Assert.IsNotNull(privateKey);
+            Assert.IsTrue("RSACng".Equals(privateKey.GetType().Name));
             Assert.AreEqual(2048, privateKey.KeySize);
-            Assert.IsTrue(privateKey.KeyExchangeAlgorithm != null && privateKey.KeyExchangeAlgorithm.StartsWith("RSA"));
         }
 
         [TestMethod]
@@ -67,8 +69,8 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
             var privateKey = EncryptionUtils.LoadDecryptionKey(keyContainerPath, keyAlias, keyPassword, flags);
 
             // THEN
+            Assert.IsTrue("RSACng".Equals(privateKey.GetType().Name));
             Assert.AreEqual(2048, privateKey.KeySize);
-            Assert.IsTrue(privateKey.KeyExchangeAlgorithm != null && privateKey.KeyExchangeAlgorithm.StartsWith("RSA"));
         }
 
         [TestMethod]

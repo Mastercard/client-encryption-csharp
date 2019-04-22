@@ -151,8 +151,8 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
                 var exponent1 = reader.ReadBytes(GetIntegerSize(reader));
                 var exponent2 = reader.ReadBytes(GetIntegerSize(reader));
                 var coefficient = reader.ReadBytes(GetIntegerSize(reader));
-                
-                var rsa = RSA.Create();
+
+                var rsa = CreateRsa();
                 rsa.ImportParameters(new RSAParameters
                 {
                     Modulus = modulus,
@@ -173,6 +173,26 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
             catch (Exception e)
             {
                 throw new ArgumentException("Failed to parse PKCS#1 key!", e);
+            }
+        }
+
+        private static RSA CreateRsa()
+        {
+            var rsa = RSA.Create();
+            switch (rsa.GetType().Name)
+            {
+                case "RSACryptoServiceProvider":
+                {
+                    // .NET Framework 4.6+: we need a RSACng key for OaepSHA256 and OaepSHA512
+                    var rsaCngType = Type.GetType("System.Security.Cryptography.RSACng, System.Security.Cryptography.Cng");
+                    if (null == rsaCngType)
+                    {
+                        throw new NotSupportedException("Failed to create a RSACng key! Consider adding System.Security.Cryptography.Cng to your project.");
+                    }
+                    return Activator.CreateInstance(rsaCngType) as RSA;
+                }
+                default:
+                    return rsa;
             }
         }
 
