@@ -2,7 +2,6 @@
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Mastercard.Developer.ClientEncryption.Core.Utils;
-using static Mastercard.Developer.ClientEncryption.Core.Encryption.FieldLevelEncryptionConfig;
 #pragma warning disable 1591 // "Missing XML comment for publicly visible type or member."
 
 namespace Mastercard.Developer.ClientEncryption.Core.Encryption
@@ -29,31 +28,17 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         /// </summary>
         public string OaepPaddingDigestAlgorithmValue { get; private set; }
 
-        /// <summary>
-        /// Digest of the encryption certificate.
-        /// </summary>
-        public string EncryptionCertificateFingerprintValue { get; private set; }
-
-        /// <summary>
-        /// Digest of the encryption key.
-        /// </summary>
-        public string EncryptionKeyFingerprintValue { get; private set; }
-
         private FieldLevelEncryptionConfig Config { get; set; }
         private byte[] SecretKeyBytes { get; set; }
         private byte[] IvBytes { get; set; }
 
         private FieldLevelEncryptionParams() {}
 
-        public FieldLevelEncryptionParams(FieldLevelEncryptionConfig config, string ivValue, string encryptedKeyValue,
-                                          string oaepPaddingDigestAlgorithmValue = null, string encryptionCertificateFingerprintValue = null,
-                                          string encryptionKeyFingerprintValue = null)
+        public FieldLevelEncryptionParams(FieldLevelEncryptionConfig config, string ivValue, string encryptedKeyValue, string oaepPaddingDigestAlgorithmValue = null)
         {
             IvValue = ivValue;
             EncryptedKeyValue = encryptedKeyValue;
             OaepPaddingDigestAlgorithmValue = oaepPaddingDigestAlgorithmValue;
-            EncryptionCertificateFingerprintValue = encryptionCertificateFingerprintValue;
-            EncryptionKeyFingerprintValue = encryptionKeyFingerprintValue;
             Config = config;
         }
 
@@ -74,9 +59,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             var encryptedSecretKeyBytes = WrapSecretKey(config, secretKeyBytes);
             var encryptedKeyValue = EncodingUtils.EncodeBytes(encryptedSecretKeyBytes, config.ValueEncoding);
 
-            // Compute fingerprints and OAEP padding digest algorithm
-            var encryptionCertificateFingerprint = GetOrComputeEncryptionCertificateFingerprint(config);
-            var encryptionKeyFingerprint = GetOrComputeEncryptionKeyFingerprint(config);
+            // Compute the OAEP padding digest algorithm
             var oaepPaddingDigestAlgorithmValue = config.OaepPaddingDigestAlgorithm.Replace("-", string.Empty);
 
             return new FieldLevelEncryptionParams
@@ -84,8 +67,6 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
                 IvValue = ivValue,
                 EncryptedKeyValue = encryptedKeyValue,
                 OaepPaddingDigestAlgorithmValue = oaepPaddingDigestAlgorithmValue,
-                EncryptionCertificateFingerprintValue = encryptionCertificateFingerprint,
-                EncryptionKeyFingerprintValue = encryptionKeyFingerprint,
                 Config = config,
                 SecretKeyBytes = secretKeyBytes,
                 IvBytes = ivBytes
@@ -192,51 +173,6 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             {
                 throw new EncryptionException("Failed to unwrap secret key!", e);
             }
-        }
-
-        private static string GetOrComputeEncryptionCertificateFingerprint(FieldLevelEncryptionConfig config)
-        {
-            try
-            {
-                var providedCertificateFingerprintValue = config.EncryptionCertificateFingerprint;
-                if (!string.IsNullOrEmpty(providedCertificateFingerprintValue))
-                {
-                    return providedCertificateFingerprintValue;
-                }
-
-                var certificateFingerprintBytes = Sha256Digest(config.EncryptionCertificate.RawData);
-                return EncodingUtils.EncodeBytes(certificateFingerprintBytes, FieldValueEncoding.Hex);
-            }
-            catch (Exception e)
-            {
-                throw new EncryptionException("Failed to compute encryption certificate fingerprint!", e);
-            }
-        }
-
-        private static string GetOrComputeEncryptionKeyFingerprint(FieldLevelEncryptionConfig config)
-        {
-            try
-            {
-                var providedKeyFingerprintValue = config.EncryptionKeyFingerprint;
-                if (!string.IsNullOrEmpty(providedKeyFingerprintValue))
-                {
-                    return providedKeyFingerprintValue;
-                }
-
-                var encodedKey = RsaKeyUtils.GetEncoded(config.EncryptionCertificate.PublicKey);
-                var keyFingerprintBytes = Sha256Digest(encodedKey);
-                return EncodingUtils.EncodeBytes(keyFingerprintBytes, FieldValueEncoding.Hex);
-            }
-            catch (Exception e)
-            {
-                throw new EncryptionException("Failed to compute encryption key fingerprint!", e);
-            }
-        }
-
-        private static byte[] Sha256Digest(byte[] inputBytes)
-        {
-            var sha256 = SHA256.Create();
-            return sha256.ComputeHash(inputBytes);
         }
     }
 }

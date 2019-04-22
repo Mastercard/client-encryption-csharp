@@ -53,8 +53,8 @@ namespace Mastercard.Developer.ClientEncryption.RestSharp.Interceptors
                     var parameters = FieldLevelEncryptionParams.Generate(_config);
                     UpdateRequestHeader(request, _config.IvHeaderName, parameters.IvValue);
                     UpdateRequestHeader(request, _config.EncryptedKeyHeaderName, parameters.EncryptedKeyValue);
-                    UpdateRequestHeader(request, _config.EncryptionCertificateFingerprintHeaderName, parameters.EncryptionCertificateFingerprintValue);
-                    UpdateRequestHeader(request, _config.EncryptionKeyFingerprintHeaderName, parameters.EncryptionKeyFingerprintValue);
+                    UpdateRequestHeader(request, _config.EncryptionCertificateFingerprintHeaderName, _config.EncryptionCertificateFingerprint);
+                    UpdateRequestHeader(request, _config.EncryptionKeyFingerprintHeaderName, _config.EncryptionKeyFingerprint);
                     UpdateRequestHeader(request, _config.OaepPaddingDigestAlgorithmHeaderName, parameters.OaepPaddingDigestAlgorithmValue);
                     encryptedPayload = FieldLevelEncryption.EncryptPayload(payload, _config, parameters);
                 }

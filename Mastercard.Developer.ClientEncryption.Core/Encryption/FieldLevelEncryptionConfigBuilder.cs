@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using Mastercard.Developer.ClientEncryption.Core.Utils;
 using static Mastercard.Developer.ClientEncryption.Core.Encryption.FieldLevelEncryptionConfig;
 using static Mastercard.Developer.ClientEncryption.Core.Utils.JsonUtils;
 
@@ -218,7 +219,10 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             CheckJsonPathParameterValues();
             CheckParameterValues();
             CheckParameterConsistency();
-            
+
+            ComputeEncryptionCertificateFingerprintWhenNeeded();
+            ComputeEncryptionKeyFingerprintWhenNeeded();
+
             return new FieldLevelEncryptionConfig
             {
                 EncryptionCertificateFingerprintFieldName = _encryptionCertificateFingerprintFieldName,
@@ -314,6 +318,49 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             {
                 throw new ArgumentException("IV field name and encrypted key field name must be both set or both unset!");
             }
+        }
+
+        private void ComputeEncryptionCertificateFingerprintWhenNeeded()
+        {
+            try
+            {
+                if (_encryptionCertificate == null || !string.IsNullOrEmpty(_encryptionCertificateFingerprint))
+                {
+                    // No encryption certificate set or certificate fingerprint already provided
+                    return;
+                }
+                var certificateFingerprintBytes = Sha256Digest(_encryptionCertificate.RawData);
+                _encryptionCertificateFingerprint = EncodingUtils.EncodeBytes(certificateFingerprintBytes, FieldValueEncoding.Hex);
+            }
+            catch (Exception e)
+            {
+                throw new EncryptionException("Failed to compute encryption certificate fingerprint!", e);
+            }
+        }
+
+        private void ComputeEncryptionKeyFingerprintWhenNeeded()
+        {
+            try
+            {
+                if (_encryptionCertificate == null || !string.IsNullOrEmpty(_encryptionKeyFingerprint))
+                {
+                    // No encryption certificate set or certificate fingerprint already provided
+                    return;
+                }
+                var encodedKey = RsaKeyUtils.GetEncoded(_encryptionCertificate.PublicKey);
+                var keyFingerprintBytes = Sha256Digest(encodedKey);
+                _encryptionKeyFingerprint = EncodingUtils.EncodeBytes(keyFingerprintBytes, FieldValueEncoding.Hex);
+            }
+            catch (Exception e)
+            {
+                throw new EncryptionException("Failed to compute encryption key fingerprint!", e);
+            }
+        }
+
+        private static byte[] Sha256Digest(byte[] inputBytes)
+        {
+            var sha256 = SHA256.Create();
+            return sha256.ComputeHash(inputBytes);
         }
     }
 }

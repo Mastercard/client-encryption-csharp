@@ -312,27 +312,6 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
                 throw;
             }
         }
-
-        [TestMethod]
-        public void TestEncryptPayload_ShouldComputeCertificateAndKeyFingerprints_WhenFingerprintsNotSetInConfig()
-        {
-            // GIVEN
-            const string payload = "{\"data\": {}, \"encryptedData\": {}}";
-            var config = TestUtils.GetTestFieldLevelEncryptionConfigBuilder()
-                .WithEncryptionPath("data", "encryptedData")
-                .WithEncryptionCertificateFingerprint(null)
-                .WithEncryptionKeyFingerprint(null)
-                .Build();
-
-            // WHEN
-            var encryptedPayload = FieldLevelEncryption.EncryptPayload(payload, config);
-
-            // THEN
-            var encryptedPayloadObject = JObject.Parse(encryptedPayload);
-            var encryptedData = encryptedPayloadObject["encryptedData"];
-            Assert.AreEqual("761b003c1eade3a5490e5000d37887baa5e6ec0e226c07706e599451fc032a79", encryptedData["encryptionKeyFingerprint"]);
-            Assert.AreEqual("80810fc13a8319fcf0e2ec322c82a4c304b782cc3ce671176343cfe8160c2279", encryptedData["encryptionCertificateFingerprint"]);
-        }
         
         [TestMethod]
         public void TestEncryptPayload_ShouldNotSetCertificateAndKeyFingerprints_WhenFieldNamesNotSetInConfig()
@@ -609,8 +588,8 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
             Assert.AreEqual(parameters.IvValue, encryptedData["iv"].ToString());
             Assert.AreEqual(parameters.EncryptedKeyValue, encryptedData["encryptedKey"].ToString());
             Assert.AreEqual(parameters.OaepPaddingDigestAlgorithmValue, encryptedData["oaepHashingAlgorithm"].ToString());
-            Assert.AreEqual(parameters.EncryptionCertificateFingerprintValue, encryptedData["encryptionCertificateFingerprint"].ToString());
-            Assert.AreEqual(parameters.EncryptionKeyFingerprintValue, encryptedData["encryptionKeyFingerprint"].ToString());
+            Assert.AreEqual(config.EncryptionCertificateFingerprint, encryptedData["encryptionCertificateFingerprint"].ToString());
+            Assert.AreEqual(config.EncryptionKeyFingerprint, encryptedData["encryptionKeyFingerprint"].ToString());
         }
 
         [TestMethod]
@@ -1246,10 +1225,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
             const string ivValue = "ba574b07248f63756bce778f8a115819";
             const string encryptedKeyValue = "26687f6d03d27145451d20bdaa29cc199e2533bb9eb7351772e31d1290b98380b43dbf47b9a337cc2ecaff9d3d9fb45305950f13382c5ad822ee6df79e1a57b14a3c58c71090121994a9f771ef96472669671718b55a0fa8d9f76de9e172fedcabbc87d64b5a994899e43abb19afa840269012c397b5b18d4babc0e41c1ad698db98c89121bbe5b2d227cfc5d3c3c87f4f4c8b04b509d326199b39adfbd8bca8bf0a150fcf3c37b9717382af502ad8d4d28b17b91762bf108d34aba0fb40ca410c2ecaeb30d68003af20dce27d9d034e4c557b8104e85f859de0eb709b23f9978869bae545c7f1b62173887eae9e75e4b6d6b4b01d7172ccc8c5774c0db51c24";
             const string oaepHashingAlgorithmValue = "SHA256";
-            const string encryptionCertificateFingerprintValue = "80810fc13a8319fcf0e2ec322c82a4c304b782cc3ce671176343cfe8160c2279";
-            const string encryptionKeyFingerprintValue = "761b003c1eade3a5490e5000d37887baa5e6ec0e226c07706e599451fc032a79";
-            var parameters = new FieldLevelEncryptionParams(config, ivValue, encryptedKeyValue, oaepHashingAlgorithmValue,
-            encryptionCertificateFingerprintValue, encryptionKeyFingerprintValue);
+            var parameters = new FieldLevelEncryptionParams(config, ivValue, encryptedKeyValue, oaepHashingAlgorithmValue);
 
             // WHEN
             var payload = FieldLevelEncryption.DecryptPayload(encryptedPayload, config, parameters);

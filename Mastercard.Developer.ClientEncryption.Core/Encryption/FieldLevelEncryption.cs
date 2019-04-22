@@ -140,10 +140,10 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
                 AddOrReplaceJsonKey(outJsonToken, config.EncryptedKeyFieldName, parameters.EncryptedKeyValue);
             }
             if (!string.IsNullOrEmpty(config.EncryptionCertificateFingerprintFieldName)) {
-                AddOrReplaceJsonKey(outJsonToken, config.EncryptionCertificateFingerprintFieldName, parameters.EncryptionCertificateFingerprintValue);
+                AddOrReplaceJsonKey(outJsonToken, config.EncryptionCertificateFingerprintFieldName, config.EncryptionCertificateFingerprint);
             }
             if (!string.IsNullOrEmpty(config.EncryptionKeyFingerprintFieldName)) {
-                AddOrReplaceJsonKey(outJsonToken, config.EncryptionKeyFingerprintFieldName, parameters.EncryptionKeyFingerprintValue);
+                AddOrReplaceJsonKey(outJsonToken, config.EncryptionKeyFingerprintFieldName, config.EncryptionKeyFingerprint);
             }
             if (!string.IsNullOrEmpty(config.OaepPaddingDigestAlgorithmFieldName)) {
                 AddOrReplaceJsonKey(outJsonToken, config.OaepPaddingDigestAlgorithmFieldName, parameters.OaepPaddingDigestAlgorithmValue);

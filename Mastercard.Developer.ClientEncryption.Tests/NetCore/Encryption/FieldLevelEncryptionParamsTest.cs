@@ -23,8 +23,6 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
             Assert.IsNotNull(parameters.GetIvBytes());
             Assert.IsNotNull(parameters.EncryptedKeyValue);
             Assert.IsNotNull(parameters.GetSecretKeyBytes());
-            Assert.AreEqual("80810fc13a8319fcf0e2ec322c82a4c304b782cc3ce671176343cfe8160c2279", parameters.EncryptionCertificateFingerprintValue);
-            Assert.AreEqual("761b003c1eade3a5490e5000d37887baa5e6ec0e226c07706e599451fc032a79", parameters.EncryptionKeyFingerprintValue);
             Assert.AreEqual("SHA256", parameters.OaepPaddingDigestAlgorithmValue);
         }
 
