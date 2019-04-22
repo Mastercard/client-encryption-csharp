@@ -117,16 +117,16 @@ var responsePayload = FieldLevelEncryption.DecryptPayload(encryptedResponsePaylo
 Use the `FieldLevelEncryptionConfigBuilder` to create `FieldLevelEncryptionConfig` instances. Example:
 ```cs
 var config = FieldLevelEncryptionConfigBuilder.AFieldLevelEncryptionConfig()
-        .WithEncryptionCertificate(encryptionCertificate)
-        .WithDecryptionKey(decryptionKey)
-        .WithEncryptionPath("$.path.to.foo", "$.path.to.encryptedFoo")
-        .WithDecryptionPath("$.path.to.encryptedFoo", "$.path.to.foo")
-        .WithOaepPaddingDigestAlgorithm("SHA-256")
-        .WithEncryptedValueFieldName("encryptedValue")
-        .WithEncryptedKeyFieldName("encryptedKey")
-        .WithIvFieldName("iv")
-        .WithValueEncoding(FieldValueEncoding.Hex)
-        .Build();
+    .WithEncryptionCertificate(encryptionCertificate)
+    .WithDecryptionKey(decryptionKey)
+    .WithEncryptionPath("$.path.to.foo", "$.path.to.encryptedFoo")
+    .WithDecryptionPath("$.path.to.encryptedFoo", "$.path.to.foo")
+    .WithOaepPaddingDigestAlgorithm("SHA-256")
+    .WithEncryptedValueFieldName("encryptedValue")
+    .WithEncryptedKeyFieldName("encryptedKey")
+    .WithIvFieldName("iv")
+    .WithValueEncoding(FieldValueEncoding.Hex)
+    .Build();
 ```
 
 See also:
@@ -140,15 +140,15 @@ Call `FieldLevelEncryption.EncryptPayload` with a JSON request payload and a `Fi
 Example using the configuration [above](#configuring-the-field-level-encryption):
 ```cs
 const string payload = "{" +
-            "    \"path\": {" +
-            "        \"to\": {" +
-            "            \"foo\": {" +
-            "                \"sensitiveField1\": \"sensitiveValue1\"," +
-            "                \"sensitiveField2\": \"sensitiveValue2\"" +
-            "            }" +
-            "        }" +
-            "    }" +
-            "}";
+    "    \"path\": {" +
+    "        \"to\": {" +
+    "            \"foo\": {" +
+    "                \"sensitiveField1\": \"sensitiveValue1\"," +
+    "                \"sensitiveField2\": \"sensitiveValue2\"" +
+    "            }" +
+    "        }" +
+    "    }" +
+    "}";
 var encryptedPayload = FieldLevelEncryption.EncryptPayload(payload, config);
 Console.WriteLine(JObject.Parse(encryptedPayload));
 ```
@@ -175,16 +175,16 @@ Call `FieldLevelEncryption.DecryptPayload` with a JSON response payload and a `F
 Example using the configuration [above](#configuring-the-field-level-encryption):
 ```cs
 const string encryptedPayload = "{" +
-            "    \"path\": {" +
-            "        \"to\": {" +
-            "            \"encryptedFoo\": {" +
-            "                \"iv\": \"e5d313c056c411170bf07ac82ede78c9\"," +
-            "                \"encryptedKey\": \"e3a56746c0f9109d18b3a2652b76(...)f16d8afeff36b2479652f5c24ae7bd\"," +
-            "                \"encryptedValue\": \"809a09d78257af5379df0c454dcdf(...)353ed59fe72fd4a7735c69da4080e74f\"" +
-            "            }" +
-            "        }" +
-            "    }" +
-            "}";
+    "    \"path\": {" +
+    "        \"to\": {" +
+    "            \"encryptedFoo\": {" +
+    "                \"iv\": \"e5d313c056c411170bf07ac82ede78c9\"," +
+    "                \"encryptedKey\": \"e3a56746c0f9109d18b3a2652b76(...)f16d8afeff36b2479652f5c24ae7bd\"," +
+    "                \"encryptedValue\": \"809a09d78257af5379df0c454dcdf(...)353ed59fe72fd4a7735c69da4080e74f\"" +
+    "            }" +
+    "        }" +
+    "    }" +
+    "}";
 var payload = FieldLevelEncryption.DecryptPayload(encryptedPayload, config);
 Console.WriteLine(JObject.Parse(payload));
 ```
@@ -209,18 +209,18 @@ Entire payloads can be encrypted using the "$" operator as encryption path:
 
 ```cs
 var config = FieldLevelEncryptionConfigBuilder.AFieldLevelEncryptionConfig()
-        .WithEncryptionCertificate(encryptionCertificate)
-        .WithEncryptionPath("$", "$")
-        // ...
-        .Build();
+    .WithEncryptionCertificate(encryptionCertificate)
+    .WithEncryptionPath("$", "$")
+    // ...
+    .Build();
 ```
 
 Example:
 ```cs
 const string payload = "{" +
-            "    \"sensitiveField1\": \"sensitiveValue1\"," +
-            "    \"sensitiveField2\": \"sensitiveValue2\"" +
-            "}";
+    "    \"sensitiveField1\": \"sensitiveValue1\"," +
+    "    \"sensitiveField2\": \"sensitiveValue2\"" +
+    "}";
 var encryptedPayload = FieldLevelEncryption.EncryptPayload(payload, config);
 Console.WriteLine(JObject.Parse(encryptedPayload));
 ```
@@ -240,19 +240,19 @@ Entire payloads can be decrypted using the "$" operator as decryption path:
 
 ```cs
 var config = FieldLevelEncryptionConfigBuilder.AFieldLevelEncryptionConfig()
-        .WithDecryptionKey(decryptionKey)
-        .WithDecryptionPath("$", "$")
-        // ...
-        .Build();
+    .WithDecryptionKey(decryptionKey)
+    .WithDecryptionPath("$", "$")
+    // ...
+    .Build();
 ```
 
 Example:
 ```cs
 const string encryptedPayload = "{" +
-            "  \"iv\": \"1b9396c98ab2bfd195de661d70905a45\"," +
-            "  \"encryptedKey\": \"7d5112fa08e554e3dbc455d0628(...)52e826dd10311cf0d63bbfb231a1a63ecc13\"," +
-            "  \"encryptedValue\": \"e5e9340f4d2618d27f8955828c86(...)379b13901a3b1e2efed616b6750a90fd379515\"" +
-            "}";
+    "  \"iv\": \"1b9396c98ab2bfd195de661d70905a45\"," +
+    "  \"encryptedKey\": \"7d5112fa08e554e3dbc455d0628(...)52e826dd10311cf0d63bbfb231a1a63ecc13\"," +
+    "  \"encryptedValue\": \"e5e9340f4d2618d27f8955828c86(...)379b13901a3b1e2efed616b6750a90fd379515\"" +
+    "}";
 var payload = FieldLevelEncryption.DecryptPayload(encryptedPayload, config);
 Console.WriteLine(JObject.Parse(payload));
 ```
@@ -276,17 +276,17 @@ Here is how to configure the library for using HTTP headers instead.
 Call `With{Param}HeaderName` instead of `With{Param}FieldName` when building a `FieldLevelEncryptionConfig` instance. Example:
 ```cs
 var config = FieldLevelEncryptionConfigBuilder.AFieldLevelEncryptionConfig()
-        .WithEncryptionCertificate(encryptionCertificate)
-        .WithDecryptionKey(decryptionKey)
-        .WithEncryptionPath("$", "$")
-        .WithDecryptionPath("$", "$")
-        .WithOaepPaddingDigestAlgorithm("SHA-256")
-        .WithEncryptedValueFieldName("data")
-        .WithIvHeaderName("x-iv")
-        .WithEncryptedKeyHeaderName("x-encrypted-key")
-        // ...
-        .WithValueEncoding(FieldValueEncoding.Hex)
-        .Build();
+    .WithEncryptionCertificate(encryptionCertificate)
+    .WithDecryptionKey(decryptionKey)
+    .WithEncryptionPath("$", "$")
+    .WithDecryptionPath("$", "$")
+    .WithOaepPaddingDigestAlgorithm("SHA-256")
+    .WithEncryptedValueFieldName("data")
+    .WithIvHeaderName("x-iv")
+    .WithEncryptedKeyHeaderName("x-encrypted-key")
+    // ...
+    .WithValueEncoding(FieldValueEncoding.Hex)
+    .Build();
 ```
 
 See also:
@@ -320,9 +320,9 @@ Example using the configuration [above](#configuration-for-using-http-headers):
 
 ```cs
 const string payload = "{" +
-            "    \"sensitiveField1\": \"sensitiveValue1\"," +
-            "    \"sensitiveField2\": \"sensitiveValue2\"" +
-            "}";
+    "    \"sensitiveField1\": \"sensitiveValue1\"," +
+    "    \"sensitiveField2\": \"sensitiveValue2\"" +
+    "}";
 var encryptedPayload = FieldLevelEncryption.EncryptPayload(payload, config, parameters);
 Console.WriteLine(JObject.Parse(encryptedPayload));
 ```
@@ -361,8 +361,8 @@ Example using the configuration [above](#configuration-for-using-http-headers):
 
 ```cs
 const string encryptedPayload = "{" +
-            "  \"data\": \"53b5f07ee46403af2e92abab900853(...)d560a0a08a1ed142099e3f4c84fe5e5\"" +
-            "}";
+    "  \"data\": \"53b5f07ee46403af2e92abab900853(...)d560a0a08a1ed142099e3f4c84fe5e5\"" +
+    "}";
 var payload = FieldLevelEncryption.DecryptPayload(encryptedPayload, config, parameters);
 Console.WriteLine(JObject.Parse(payload));
 ```
