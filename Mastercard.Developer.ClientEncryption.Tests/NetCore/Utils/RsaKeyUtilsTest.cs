@@ -17,7 +17,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
             var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
 
             // THEN
-            Assert.IsTrue("RSACng".Equals(rsa.GetType().Name));
+            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name); // We expect a RSACng (Windows) or a RSAOpenSsl (Linux, macOS)
             Assert.AreEqual(512, rsa.KeySize);
         }
 
@@ -31,7 +31,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
             var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
 
             // THEN
-            Assert.IsTrue("RSACng".Equals(rsa.GetType().Name));
+            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
             Assert.AreEqual(1024, rsa.KeySize);
         }
 
@@ -45,7 +45,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
             var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
 
             // THEN
-            Assert.IsTrue("RSACng".Equals(rsa.GetType().Name));
+            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
             Assert.AreEqual(2048, rsa.KeySize);
         }
 
@@ -59,7 +59,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
             var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
 
             // THEN
-            Assert.IsTrue("RSACng".Equals(rsa.GetType().Name));
+            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
             Assert.AreEqual(4096, rsa.KeySize);
         }
 
@@ -73,7 +73,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
             var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
 
             // THEN
-            Assert.IsTrue("RSACng".Equals(rsa.GetType().Name));
+            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
             Assert.AreEqual(512, rsa.KeySize);
         }
 
@@ -87,7 +87,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
             var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
 
             // THEN
-            Assert.IsTrue("RSACng".Equals(rsa.GetType().Name));
+            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
             Assert.AreEqual(1024, rsa.KeySize);
         }
 
@@ -101,7 +101,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
             var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
 
             // THEN
-            Assert.IsTrue("RSACng".Equals(rsa.GetType().Name));
+            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
             Assert.AreEqual(2048, rsa.KeySize);
         }
 
@@ -115,7 +115,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
             var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
 
             // THEN
-            Assert.IsTrue("RSACng".Equals(rsa.GetType().Name));
+            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
             Assert.AreEqual(4096, rsa.KeySize);
         }
 
@@ -129,7 +129,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
             var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
 
             // THEN
-            Assert.IsTrue("RSACng".Equals(rsa.GetType().Name));
+            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
             Assert.AreEqual(512, rsa.KeySize);
         }
 
@@ -143,7 +143,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
             var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
 
             // THEN
-            Assert.IsTrue("RSACng".Equals(rsa.GetType().Name));
+            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
             Assert.AreEqual(1024, rsa.KeySize);
         }
 
@@ -157,7 +157,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
             var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
 
             // THEN
-            Assert.IsTrue("RSACng".Equals(rsa.GetType().Name));
+            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
             Assert.AreEqual(2048, rsa.KeySize);
         }
 
@@ -171,7 +171,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
             var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
 
             // THEN
-            Assert.IsTrue("RSACng".Equals(rsa.GetType().Name));
+            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
             Assert.AreEqual(4096, rsa.KeySize);
         }
 

@@ -58,7 +58,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
             // GIVEN
             const string encryptedPayload = "{\"data\":\"WtBPYHL5jdU/BsECYzlyRUPIElWCwSCgKhk5RPy2AMZBGmC8OUJ1L9HC/SF2QpCU+ucZTmo7XOjhSdVi0/yrdZP1OG7dVWcW4MEWpxiU1gl0fS0LKKPOFjEymSP5f5otdTFCp00xPfzp+l6K3S3kZTAuSG1gh6TaRL+qfC1POz8KxhCEL8D1MDvxnlmchPx/hEyAzav0AID3T7T4WomzUXErNrnbDCCiL6pm4IBR8cDAzU4eSmTxdzZFyvTpBQDXVyFdkaNTo3GXk837wujVK8EX3c+gsJvMq4XVJFwGmPNhPM6P7OmdK45cldWrD5j2gO2VBH5aW1EXfot7d11bjJC9T8D/ZOQFF6uLIG7J9x9R0Ts0zXD/H24y9/jF30rKKX7TNmKHn5uh1Czd+h7ryIAqaQsOu6ILBKfH7W/NIR5qYN1GiL/kOYwx2pdIGQdcdolVdxV8Z6bt4Tcvq3jSZaCbhJI/kphZL7QHJgcG6luz9k0457x/0QCDPlve6JNgUQzAOYC64X0a07JpERH0O08/YbntKEq6qf7UhloyI5A=\"}";
             var config = TestUtils.GetTestFieldLevelEncryptionConfigBuilder()
-                .WithDecryptionKey(EncryptionUtils.LoadDecryptionKey("./_Resources/keys/pkcs1/test_key_pkcs1-2048.pem"))
+                .WithDecryptionKey(EncryptionUtils.LoadDecryptionKey("./_Resources/Keys/Pkcs1/test_key_pkcs1-2048.pem"))
                 .WithDecryptionPath("$", "$")
                 .WithEncryptedValueFieldName("data")
                 .WithValueEncoding(FieldValueEncoding.Base64)
