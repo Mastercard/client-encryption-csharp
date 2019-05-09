@@ -7,12 +7,12 @@ matrix:
   include:
   - dotnet: 2.1.500
     mono: none
-  - dotnet: 2.1  # latest available release
-    mono: none  
     env: 
       # Do not run analysis on PR (secure env variables like SONAR_TOKEN are not always available)
       - WITH_SONAR_ANALYSIS=$([ "$TRAVIS_PULL_REQUEST" = "false" ] && echo true || echo false)
       - TEST_RESULTS_PATH=./Mastercard.Developer.ClientEncryption.Tests/NetCore/bin
+  - dotnet: 2.1  # latest available release
+    mono: none
 solution: Mastercard.Developer.ClientEncryption.sln
 install:
   - dotnet restore
