@@ -5,7 +5,7 @@ git:
 matrix:
   fast_finish: true
   include:
-  - dotnet: 2.1.500
+  - dotnet: 2.1.700
     mono: none
     env: 
       # Do not run analysis on PR (secure env variables like SONAR_TOKEN are not always available)
