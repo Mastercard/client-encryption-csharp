@@ -161,6 +161,27 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
         }
 
         [TestMethod]
+        public void TestEncryptPayload_ShouldEncryptPrimitiveTypes_NumberAsString()
+        {
+            // GIVEN
+            const string payload = "{\"data\": \"123\", \"encryptedData\": {}}";
+            var config = TestUtils.GetTestFieldLevelEncryptionConfigBuilder()
+                .WithEncryptionPath("data", "encryptedData")
+                .WithDecryptionPath("encryptedData", "data")
+                .WithOaepPaddingDigestAlgorithm("SHA-256")
+                .Build();
+
+            // WHEN
+            var encryptedPayload = FieldLevelEncryption.EncryptPayload(payload, config);
+
+            // THEN
+            var encryptedPayloadObject = JObject.Parse(encryptedPayload);
+            Assert.IsNull(encryptedPayloadObject["data"]);
+            Assert.IsNotNull(encryptedPayloadObject["encryptedData"]);
+            TestUtils.AssertDecryptedPayloadEquals("{\"data\":123}", encryptedPayload, config);
+        }
+
+        [TestMethod]
         public void TestEncryptPayload_ShouldEncryptPrimitiveTypes_Integer()
         {
             // GIVEN
