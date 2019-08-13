@@ -197,9 +197,9 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             CheckOrCreateOutObject(payloadObject, jsonPathOut);
             AddDecryptedDataToPayload(payloadObject, decryptedValue, jsonPathOut);
 
-            // Remove the input object if now empty
+            // Remove the input if now empty
             inJsonToken = payloadObject.SelectToken(jsonPathIn);
-            if (!inJsonToken.HasValues)
+            if (inJsonToken.Type == JTokenType.Object && !inJsonToken.HasValues)
             {
                 inJsonToken.Parent.Remove();
             }

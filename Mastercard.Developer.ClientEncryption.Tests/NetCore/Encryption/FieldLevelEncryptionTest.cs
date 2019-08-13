@@ -1087,7 +1087,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
         }
 
         [TestMethod]
-        public void TestDecryptPayload_ShouldOverwriteInputObject_WhenOutPathSameAsInPath()
+        public void TestDecryptPayload_ShouldOverwriteInputObject_WhenOutPathSameAsInPath_ObjectData()
         {
             // GIVEN
             const string encryptedPayload = "{" +
@@ -1110,6 +1110,30 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
             var payloadObject = JObject.Parse(payload);
             Assert.AreEqual("field1Value", payloadObject["encryptedData"]["field1"]);
             Assert.AreEqual("field2Value", payloadObject["encryptedData"]["field2"]);
+        }
+
+        [TestMethod]
+        public void TestDecryptPayload_ShouldOverwriteInputObject_WhenOutPathSameAsInPath_PrimitiveTypeData()
+        {
+            // GIVEN
+            const string encryptedPayload = "{" +
+                "    \"data\": {" +
+                "        \"iv\": \"3ce861359fa1630c7a794901ee14bf41\"," +
+                "        \"encryptedKey\": \"02bb8d5c7d113ef271f199c09f0d76db2b6d5d2d209ad1a20dbc4dd0d04576a92ceb917eea5f403ccf64c3c39dda564046909af96c82fad62f89c3cbbec880ea3105a0a171af904cd3b86ea68991202a2795dca07050ca58252701b7ecea06055fd43e96f4beee48b6275e86af93c88c21994ff46f0610171bd388a2c0a1f518ffc8346f7f513f3283feae5b102c8596ddcb2aea5e62ceb17222e646c599f258463405d28ac012bfd4cc431f94111ee07d79e660948485e38c13cdb8bba8e1df3f7dba0f4c77696f71930533c955f3a430658edaa03b0b0c393934d60f5ac3ea5c06ed64bf969fc01942eac432b8e0c56f7538659a72859d445d150c169ae690\"," +
+                "        \"encryptedValue\": \"e2d6a3a76ea6e605e55b400e5a4eba11\"," +
+                "        \"oaepHashingAlgorithm\": \"SHA256\"" +
+                "    } " +
+                "}";
+            var config = TestUtils.GetTestFieldLevelEncryptionConfigBuilder()
+                .WithDecryptionPath("$.data", "$.data")
+                .Build();
+
+            // WHEN
+            var payload = FieldLevelEncryption.DecryptPayload(encryptedPayload, config);
+
+            // THEN
+            var payloadObject = JObject.Parse(payload);
+            Assert.AreEqual("string", payloadObject["data"]);
         }
 
         [TestMethod]
