@@ -292,7 +292,7 @@ var config = FieldLevelEncryptionConfigBuilder.AFieldLevelEncryptionConfig()
 
 See also:
 * [FieldLevelEncryptionConfig.cs](https://github.com/Mastercard/client-encryption-csharp/blob/master/Mastercard.Developer.ClientEncryption.Core/Encryption/FieldLevelEncryptionConfig.cs) for all config options
-* [Service configurations in C#](https://github.com/Mastercard/client-encryption-csharp/wiki/Service-Configurations-in-C%23) wiki page
+* [Service Configurations for Client Encryption C#](https://github.com/Mastercard/client-encryption-csharp/wiki/Service-Configurations-for-Client-Encryption-C%23)
 
 ##### Encrypting Using HTTP Headers
 
