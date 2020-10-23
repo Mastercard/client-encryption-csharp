@@ -1,7 +1,8 @@
 # client-encryption-csharp
 
 [![](https://travis-ci.org/Mastercard/client-encryption-csharp.svg?branch=master)](https://travis-ci.org/Mastercard/client-encryption-csharp)
-[![](https://sonarcloud.io/api/project_badges/measure?project=Mastercard_client-encryption-csharp&metric=alert_status)](https://sonarcloud.io/dashboard?id=Mastercard_client-encryption-csharp) 
+[![](https://sonarcloud.io/api/project_badges/measure?project=Mastercard_client-encryption-csharp&metric=alert_status)](https://sonarcloud.io/dashboard?id=Mastercard_client-encryption-csharp)
+[![](https://github.com/Mastercard/client-encryption-csharp/workflows/broken%20links%3F/badge.svg)](https://github.com/Mastercard/client-encryption-csharp/actions?query=workflow%3Abroken)
 [![](https://img.shields.io/nuget/v/Mastercard.Developer.ClientEncryption.Core.svg?label=nuget%20|%20core)](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.Core/)
 [![](https://img.shields.io/nuget/v/Mastercard.Developer.ClientEncryption.RestSharp.svg?label=nuget%20|%20restsharp)](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.RestSharp/)
 [![](https://img.shields.io/badge/license-MIT-yellow.svg)](https://github.com/Mastercard/client-encryption-csharp/blob/master/LICENSE)
