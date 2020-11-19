@@ -9,8 +9,8 @@ on:
 jobs:
   build:
     env:
-      NETCORE2_TEST_PROJECT: Mastercard.Developer.OAuth1Signer.Tests/NetCore2/Mastercard.Developer.OAuth1Signer.Tests.NetCore2.csproj
-      NETCORE3_TEST_PROJECT: Mastercard.Developer.OAuth1Signer.Tests/NetCore3/Mastercard.Developer.OAuth1Signer.Tests.NetCore3.csproj
+      NETCORE2_TEST_PROJECT: Mastercard.Developer.ClientEncryption.Tests/NetCore2/Mastercard.Developer.ClientEncryption.Tests.NetCore2.csproj
+      NETCORE3_TEST_PROJECT: Mastercard.Developer.ClientEncryption.Tests/NetCore3/Mastercard.Developer.ClientEncryption.Tests.NetCore3.csproj
 
     runs-on: ubuntu-latest
     
@@ -40,5 +40,5 @@ jobs:
     - name: Test
       run: |
         export PATH="$PATH:$HOME/.dotnet/tools"
-        dotnet test ${{ matrix.TEST_PROJECT }} -c Release -l:"trx;LogFileName=tests.trx" -r:"bin/" /p:CollectCoverage=true /p:CoverletOutputFormat="opencover" /p:CoverletOutput="bin/coverage.xml"
+        dotnet test $TEST_PROJECT -c Release -l:"trx;LogFileName=tests.trx" -r:"bin/" /p:CollectCoverage=true /p:CoverletOutputFormat="opencover" /p:CoverletOutput="bin/coverage.xml"
         dotnet publish ${{ matrix.TEST_PROJECT }} -c Release
