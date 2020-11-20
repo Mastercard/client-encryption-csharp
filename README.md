@@ -1,6 +1,6 @@
 # client-encryption-csharp
 
-[![](https://travis-ci.org/Mastercard/client-encryption-csharp.svg?branch=master)](https://travis-ci.org/Mastercard/client-encryption-csharp)
+[![](https://github.com/Mastercard/client-encryption-csharp/workflows/Build%20&%20Test/badge.svg)](https://github.com/Mastercard/client-encryption-csharp/actions?query=workflow%3A%22Build+%26+Test%22)
 [![](https://sonarcloud.io/api/project_badges/measure?project=Mastercard_client-encryption-csharp&metric=alert_status)](https://sonarcloud.io/dashboard?id=Mastercard_client-encryption-csharp)
 [![](https://github.com/Mastercard/client-encryption-csharp/workflows/broken%20links%3F/badge.svg)](https://github.com/Mastercard/client-encryption-csharp/actions?query=workflow%3A%22broken+links%3F%22)
 [![](https://img.shields.io/nuget/v/Mastercard.Developer.ClientEncryption.Core.svg?label=nuget%20|%20core)](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.Core/)
