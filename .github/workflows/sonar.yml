@@ -32,8 +32,8 @@ jobs:
         dotnet tool install --global dotnet-sonarscanner
         
         dotnet sonarscanner begin \
-          /k:"Mastercard_oauth1-signer-csharp" \
-          /n:"oauth1-signer-csharp" \
+          /k:"Mastercard_client-encryption-csharp" \
+          /n:"client-encryption-csharp" \
           /o:"mastercard" \
           /d:sonar.host.url="https://sonarcloud.io" \
           /d:sonar.login="$SONAR_TOKEN" \
