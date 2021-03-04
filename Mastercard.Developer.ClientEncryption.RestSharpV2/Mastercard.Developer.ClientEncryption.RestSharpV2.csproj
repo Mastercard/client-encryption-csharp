@@ -1,23 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.1.0</Version>
-    <Product>Mastercard.Developer.ClientEncryption.RestSharp</Product>
+    <Product>Mastercard.Developer.ClientEncryption.RestSharpV2</Product>
     <Authors>Mastercard</Authors>
     <Company>Mastercard</Company>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/Mastercard/client-encryption-csharp</PackageProjectUrl>
     <PackageReleaseNotes>See: https://github.com/Mastercard/client-encryption-csharp/releases</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Mastercard/client-encryption-csharp</RepositoryUrl>
-    <Description>RestSharp Portable extension for Mastercard API compliant payload encryption/decryption</Description>
+    <Description>RestSharp extension for Mastercard API compliant payload encryption/decryption</Description>
     <!-- See: https://docs.microsoft.com/en-us/dotnet/standard/library-guidance/strong-naming -->
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../Identity.snk</AssemblyOriginatorKeyFile>
     <AssemblyVersion>1.0.0.0</AssemblyVersion> <!-- Frozen -->
     <FileVersion>1.1.0.0</FileVersion> <!-- Same version as the package version -->
-    <DocumentationFile>Mastercard.Developer.ClientEncryption.RestSharp.xml</DocumentationFile>
+    <DocumentationFile>Mastercard.Developer.ClientEncryption.RestSharpV2.xml</DocumentationFile>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FubarCoder.RestSharp.Portable.Core" Version="4.0.6" /> <!-- Minimum version, inclusive -->
+    <PackageReference Include="RestSharp" Version="106.11.4" />
   </ItemGroup>
 
   <ItemGroup>

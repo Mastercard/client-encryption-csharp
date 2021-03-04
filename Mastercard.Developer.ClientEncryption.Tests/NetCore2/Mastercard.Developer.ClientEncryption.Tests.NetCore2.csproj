@@ -85,6 +85,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Mastercard.Developer.ClientEncryption.Core\Mastercard.Developer.ClientEncryption.Core.csproj" />
     <ProjectReference Include="..\..\Mastercard.Developer.ClientEncryption.RestSharp\Mastercard.Developer.ClientEncryption.RestSharp.csproj" />
+    <ProjectReference Include="..\..\Mastercard.Developer.ClientEncryption.RestSharpV2\Mastercard.Developer.ClientEncryption.RestSharpV2.csproj" />
   </ItemGroup>
 
   <ItemGroup>
