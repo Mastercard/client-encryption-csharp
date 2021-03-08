@@ -32,10 +32,10 @@
       <Link>Encryption\FieldLevelEncryptionTest.cs</Link>
     </Compile>
     <Compile Include="..\NetCore2\Interceptors\RestSharpFieldLevelEncryptionInterceptorTest.cs">
-      <Link>Interceptor\RestSharpFieldLevelEncryptionInterceptorTest.cs</Link>
+      <Link>Interceptors\RestSharpFieldLevelEncryptionInterceptorTest.cs</Link>
     </Compile>
     <Compile Include="..\NetCore2\Interceptors\RestSharpV2FieldLevelEncryptionInterceptorTest.cs">
-      <Link>Interceptor\RestSharpV2FieldLevelEncryptionInterceptorTest.cs</Link>
+      <Link>Interceptors\RestSharpV2FieldLevelEncryptionInterceptorTest.cs</Link>
     </Compile>
     <Compile Include="..\NetCore2\Test\TestUtils.cs">
       <Link>Test\TestUtils.cs</Link>
