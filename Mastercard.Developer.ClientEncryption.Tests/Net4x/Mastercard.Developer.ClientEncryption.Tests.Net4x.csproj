@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mastercard.Developer.ClientEncryption.Tests.Net4x</RootNamespace>
     <AssemblyName>Mastercard.Developer.ClientEncryption.Tests.Net4x</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
@@ -58,7 +58,10 @@
       <Link>Encryption\FieldLevelEncryptionTest.cs</Link>
     </Compile>
     <Compile Include="..\NetCore2\Interceptors\RestSharpFieldLevelEncryptionInterceptorTest.cs">
-      <Link>Interceptor\RestSharpFieldLevelEncryptionInterceptorTest.cs</Link>
+      <Link>Interceptors\RestSharpFieldLevelEncryptionInterceptorTest.cs</Link>
+    </Compile>
+    <Compile Include="..\NetCore2\Interceptors\RestSharpV2FieldLevelEncryptionInterceptorTest.cs">
+      <Link>Interceptors\RestSharpV2FieldLevelEncryptionInterceptorTest.cs</Link>
     </Compile>
     <Compile Include="..\NetCore2\Test\TestUtils.cs">
       <Link>Test\TestUtils.cs</Link>
@@ -159,6 +162,10 @@
     <ProjectReference Include="..\..\Mastercard.Developer.ClientEncryption.Core\Mastercard.Developer.ClientEncryption.Core.csproj">
       <Project>{8ffa4f79-9d2c-4807-bad7-8e2f0a15e099}</Project>
       <Name>Mastercard.Developer.ClientEncryption.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mastercard.Developer.ClientEncryption.RestSharpV2\Mastercard.Developer.ClientEncryption.RestSharpV2.csproj">
+      <Project>{bc6f2c72-16a3-44cb-ad68-3acd8a465640}</Project>
+      <Name>Mastercard.Developer.ClientEncryption.RestSharpV2</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Mastercard.Developer.ClientEncryption.RestSharp\Mastercard.Developer.ClientEncryption.RestSharp.csproj">
       <Project>{4abdad88-8dc4-4463-91ec-74a711d6acfb}</Project>
