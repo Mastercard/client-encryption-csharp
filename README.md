@@ -4,7 +4,8 @@
 [![](https://sonarcloud.io/api/project_badges/measure?project=Mastercard_client-encryption-csharp&metric=alert_status)](https://sonarcloud.io/dashboard?id=Mastercard_client-encryption-csharp)
 [![](https://github.com/Mastercard/client-encryption-csharp/workflows/broken%20links%3F/badge.svg)](https://github.com/Mastercard/client-encryption-csharp/actions?query=workflow%3A%22broken+links%3F%22)
 [![](https://img.shields.io/nuget/v/Mastercard.Developer.ClientEncryption.Core.svg?label=nuget%20|%20core)](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.Core/)
-[![](https://img.shields.io/nuget/v/Mastercard.Developer.ClientEncryption.RestSharp.svg?label=nuget%20|%20restsharp)](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.RestSharp/)
+[![](https://img.shields.io/nuget/v/Mastercard.Developer.ClientEncryption.RestSharp.svg?label=nuget%20|%20restsharp%20portable)](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.RestSharp/)
+[![](https://img.shields.io/nuget/v/Mastercard.Developer.ClientEncryption.RestSharpV2.svg?label=nuget%20|%20restsharp)](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.RestSharpV2/)
 [![](https://img.shields.io/badge/license-MIT-yellow.svg)](https://github.com/Mastercard/client-encryption-csharp/blob/master/LICENSE)
 
 ## Table of Contents
@@ -20,12 +21,15 @@
   * [Integrating with OpenAPI Generator API Client Libraries](#integrating-with-openapi-generator-api-client-libraries)
 
 ## Overview <a name="overview"></a>
-Library for Mastercard API compliant payload encryption/decryption.
+* `ClientEncryption.Core` is a zero dependency library for Mastercard API compliant payload encryption/decryption.
+* `ClientEncryption.RestSharpV2` is an extension dedicated to [RestSharp](https://restsharp.dev/)
+* `ClientEncryption.RestSharp` is an extension dedicated to [RestSharp Portable](https://github.com/FubarDevelopment/restsharp.portable) (project no longer maintained)
 
 ### Compatibility <a name="compatibility"></a>
 
 #### .NET <a name="net"></a>
-This library requires a .NET Framework implementing [.NET Standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) 1.3.
+* `ClientEncryption.Core` and `ClientEncryption.RestSharp` require a .NET Framework implementing [.NET Standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) 1.3.
+* `ClientEncryption.RestSharpV2` requires a .NET Framework implementing [.NET Standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) 2.0.
 
 #### Strong Naming <a name="strong-naming"></a>
 Assemblies are strong-named as per [Strong naming and .NET libraries](https://docs.microsoft.com/en-us/dotnet/standard/library-guidance/strong-naming).
@@ -46,14 +50,12 @@ As part of this set up, you'll receive:
 
 #### Package Manager
 ```shell
-Install-Package Mastercard.Developer.ClientEncryption.Core
-Install-Package Mastercard.Developer.ClientEncryption.RestSharp
+Install-Package Mastercard.Developer.ClientEncryption.{Core|RestSharp|RestSharpV2}
 ```
 
 #### .NET CLI
 ```shell
-dotnet add package Mastercard.Developer.ClientEncryption.Core
-dotnet add package Mastercard.Developer.ClientEncryption.RestSharp
+dotnet add package Mastercard.Developer.ClientEncryption.{Core|RestSharp|RestSharpV2}
 ```
 
 ### Loading the Encryption Certificate <a name="loading-the-encryption-certificate"></a>
@@ -385,20 +387,83 @@ This project provides you with some interceptor classes you can use when configu
 These classes will take care of encrypting request and decrypting response payloads, but also of updating HTTP headers when needed.
 
 Generators currently supported:
-+ [csharp (targetFramework v5.0)](#csharp-generator-target-framework-v5)
++ [csharp-netcore](#csharp-netcore-generator)
++ [csharp (deprecated)](#csharp-generator)
 
-#### csharp (targetFramework v5.0) <a name="csharp-generator-target-framework-v5"></a>
+#### csharp-netcore <a name="csharp-netcore-generator"></a>
 
 ##### OpenAPI Generator
 
 Client libraries can be generated using the following command:
 ```shell
-java -jar openapi-generator-cli.jar generate -i openapi-spec.yaml -g csharp -c config.json -o out
+java -jar openapi-generator-cli.jar generate -i openapi-spec.yaml -g csharp-netcore -c config.json -o out
 ```
 config.json:
 ```json
-{ "targetFramework": "v5.0" }
+{ "targetFramework": "netstandard2.0" }
 ```
+
+See also: 
+* [OpenAPI Generator (executable)](https://mvnrepository.com/artifact/org.openapitools/openapi-generator-cli)
+* [CONFIG OPTIONS for csharp](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/csharp.md)
+
+##### Usage of the `RestSharpFieldLevelEncryptionInterceptor`
+
+`RestSharpFieldLevelEncryptionInterceptor` is located in the `Mastercard.Developer.ClientEncryption.RestSharpV2` package. 
+
+##### Usage
+
+1. Create a new file (for instance, `ApiClientWithEncryption.cs`) extending the definition of the generated `ApiClient` class:
+
+```cs
+partial class ApiClient
+{
+    public RestSharpFieldLevelEncryptionInterceptor EncryptionInterceptor { private get; set; }
+    
+    public ApiClient(RSA signingKey, string basePath, string consumerKey)
+    {
+        this._baseUrl = basePath;
+        this.BasePath = new Uri(basePath);
+        this.Signer = new RestSharpSigner(consumerKey, signingKey);
+    }
+    
+    partial void InterceptRequest(IRestRequest request) {
+        EncryptionInterceptor.InterceptRequest(request);
+        Signer.Sign(this.BasePath, request);
+    }
+}
+```
+
+2. Configure your `ApiClient` instance the following way:
+
+```cs
+var serviceApi = new ServiceApi();
+var client = new ApiClient(SigningKey, BasePath, ConsumerKey);
+
+var fieldLevelEncryptionConfig = FieldLevelEncryptionConfigBuilder
+    .AFieldLevelEncryptionConfig()
+    // ...
+    .Build();
+
+client.EncryptionInterceptor = new RestSharpFieldLevelEncryptionInterceptor(fieldLevelEncryptionConfig)
+serviceApi.Client = client;
+// ...
+```
+
+#### csharp (deprecated)<a name="csharp-generator"></a>
+
+##### OpenAPI Generator
+
+Client libraries can be generated using the following command:
+```shell
+openapi-generator-cli generate -i openapi-spec.yaml -g csharp -c config.json -o out
+```
+config.json:
+```json
+{ "targetFramework": "netstandard1.3" }
+```
+
+⚠️ `v5.0` was used for `targetFramework` in OpenAPI Generator versions prior 5.0.0.
 
 See also: 
 * [OpenAPI Generator (executable)](https://mvnrepository.com/artifact/org.openapitools/openapi-generator-cli)
@@ -408,7 +473,7 @@ See also:
 
 `RestSharpFieldLevelEncryptionInterceptor` is located in the `Mastercard.Developer.ClientEncryption.RestSharp` package. 
 
-Usage:
+##### Usage:
 1. Create a new file (for instance, `ApiClientWithEncryption.cs`) extending the definition of the generated `ApiClient` class:
 
 ```cs
