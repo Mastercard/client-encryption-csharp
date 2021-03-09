@@ -7,13 +7,13 @@ on:
     branches: [ master ]
   schedule:
     - cron: "0 16 * * *"
-
 jobs:
   build:
-    runs-on: ubuntu-latest
-            
+    runs-on: ubuntu-latest            
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
