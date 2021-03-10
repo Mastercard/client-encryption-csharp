@@ -405,7 +405,7 @@ config.json:
 
 See also: 
 * [OpenAPI Generator (executable)](https://mvnrepository.com/artifact/org.openapitools/openapi-generator-cli)
-* [CONFIG OPTIONS for csharp](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/csharp.md)
+* [Config Options for csharp-netcore](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/csharp-netcore.md)
 
 ##### Usage of the `RestSharpFieldLevelEncryptionInterceptor`
 
@@ -467,7 +467,7 @@ config.json:
 
 See also: 
 * [OpenAPI Generator (executable)](https://mvnrepository.com/artifact/org.openapitools/openapi-generator-cli)
-* [CONFIG OPTIONS for csharp](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/csharp.md)
+* [Config Options for csharp](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/csharp.md)
 
 ##### Usage of the `RestSharpFieldLevelEncryptionInterceptor`
 
