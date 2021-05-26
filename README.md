@@ -22,9 +22,9 @@
   * [Integrating with OpenAPI Generator API Client Libraries](#integrating-with-openapi-generator-api-client-libraries)
 
 ## Overview <a name="overview"></a>
-* `ClientEncryption.Core` is a zero dependency library for Mastercard API compliant payload encryption/decryption.
-* `ClientEncryption.RestSharpV2` is an extension dedicated to [RestSharp](https://restsharp.dev/)
-* `ClientEncryption.RestSharp` is an extension dedicated to [RestSharp Portable](https://github.com/FubarDevelopment/restsharp.portable) (project no longer maintained)
+* [`ClientEncryption.Core`](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.Core/) is a zero dependency library for Mastercard API compliant payload encryption/decryption.
+* [`ClientEncryption.RestSharpV2`](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.RestSharpV2/) is an extension dedicated to [RestSharp](https://restsharp.dev/)
+* [`ClientEncryption.RestSharp`](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.RestSharp) is an extension dedicated to [RestSharp Portable](https://github.com/FubarDevelopment/restsharp.portable) (project no longer maintained)
 
 ### Compatibility <a name="compatibility"></a>
 
@@ -396,10 +396,12 @@ Generators currently supported:
 ##### OpenAPI Generator
 
 Client libraries can be generated using the following command:
+
 ```shell
 java -jar openapi-generator-cli.jar generate -i openapi-spec.yaml -g csharp-netcore -c config.json -o out
 ```
 config.json:
+
 ```json
 { "targetFramework": "netstandard2.0" }
 ```
@@ -410,7 +412,7 @@ See also:
 
 ##### Usage of the `RestSharpFieldLevelEncryptionInterceptor`
 
-`RestSharpFieldLevelEncryptionInterceptor` is located in the `Mastercard.Developer.ClientEncryption.RestSharpV2` package. 
+`RestSharpFieldLevelEncryptionInterceptor` is located in the [`ClientEncryption.RestSharpV2`](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.RestSharpV2/) package. 
 
 ##### Usage
 
@@ -456,9 +458,11 @@ serviceApi.Client = client;
 ##### OpenAPI Generator
 
 Client libraries can be generated using the following command:
+
 ```shell
 openapi-generator-cli generate -i openapi-spec.yaml -g csharp -c config.json -o out
 ```
+
 config.json:
 ```json
 { "targetFramework": "netstandard1.3" }
@@ -472,7 +476,7 @@ See also:
 
 ##### Usage of the `RestSharpFieldLevelEncryptionInterceptor`
 
-`RestSharpFieldLevelEncryptionInterceptor` is located in the `Mastercard.Developer.ClientEncryption.RestSharp` package. 
+`RestSharpFieldLevelEncryptionInterceptor` is located in the [`ClientEncryption.RestSharp`](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.RestSharp/) package. 
 
 ##### Usage:
 1. Create a new file (for instance, `ApiClientWithEncryption.cs`) extending the definition of the generated `ApiClient` class:
