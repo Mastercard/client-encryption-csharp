@@ -32,6 +32,9 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
 
             try
             {
+                // We will have to intercept the response later
+                request.OnBeforeDeserialization = InterceptResponse;
+                
                 // Check request actually has a payload
                 var bodyParam = request.Parameters.FirstOrDefault(param => param.Type == ParameterType.RequestBody);
                 if (bodyParam?.Value == null)
@@ -67,7 +70,6 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
 
                 // Update body and content length
                 bodyParam.Value = JsonConvert.DeserializeObject(encryptedPayload);
-                request.OnBeforeDeserialization = InterceptResponse;
                 UpdateRequestHeader(request, "Content-Length", encryptedPayload.Length);
             }
             catch (EncryptionException)
@@ -149,10 +151,14 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
                 return null;
             }
 
-            // Headers has been made read only
-            var headers = response.GetType().GetTypeInfo().GetDeclaredField("<Headers>k__BackingField");
-            var newHeaders = response.Headers.ToList().FindAll(h => h.Name != name);
-            headers.SetValue(response, newHeaders);
+            // The "Headers" collection has been made read only, but we try to remove
+            // the header from the response anyway.
+            var headersField = response.GetType().GetTypeInfo().GetDeclaredField("<Headers>k__BackingField");
+            if (headersField != null)
+            {
+                var updatedHeaders = response.Headers.ToList().FindAll(h => h.Name != name);
+                headersField.SetValue(response, updatedHeaders);
+            }
 
             return header.Value?.ToString() ?? string.Empty;
         }
