@@ -1,24 +1,28 @@
 name: Build & Test
-
-on:
+'on':
   push:
-    branches: [ master ]
+    branches:
+      - main
   pull_request:
-    branches: [ master ]
+    branches:
+      - main
   schedule:
-    - cron: "0 16 * * *"
-
+    - cron: 0 16 * * *
 jobs:
   build:
     env:
-      NETCORE2_TEST_PROJECT: Mastercard.Developer.ClientEncryption.Tests/NetCore2/Mastercard.Developer.ClientEncryption.Tests.NetCore2.csproj
-      NETCORE3_TEST_PROJECT: Mastercard.Developer.ClientEncryption.Tests/NetCore3/Mastercard.Developer.ClientEncryption.Tests.NetCore3.csproj
-
+      NETCORE2_TEST_PROJECT: >-
+        Mastercard.Developer.ClientEncryption.Tests/NetCore2/Mastercard.Developer.ClientEncryption.Tests.NetCore2.csproj
+      NETCORE3_TEST_PROJECT: >-
+        Mastercard.Developer.ClientEncryption.Tests/NetCore3/Mastercard.Developer.ClientEncryption.Tests.NetCore3.csproj
     runs-on: ubuntu-latest
-    
     strategy:
       matrix:
-        dotnet: [2.1.700, 2.1, 2.2, 3.1]
+        dotnet:
+          - 2.1.700
+          - 2.1
+          - 2.2
+          - 3.1
         include:
           - dotnet: 2.1.700
             mono: none
@@ -32,15 +36,19 @@ jobs:
           - dotnet: 3.1
             mono: none
             TEST_PROJECT: $NETCORE3_TEST_PROJECT
-            
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: ${{ matrix.dotnet }}
-    - name: Test
-      run: |
-        export PATH="$PATH:$HOME/.dotnet/tools"
-        dotnet test ${{ matrix.TEST_PROJECT }} -c Release -l:"trx;LogFileName=tests.trx" -r:"bin/" /p:CollectCoverage=true /p:CoverletOutputFormat="opencover" /p:CoverletOutput="bin/coverage.xml"
-        dotnet publish ${{ matrix.TEST_PROJECT }} -c Release
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '${{ matrix.dotnet }}'
+      - name: Test
+        run: >
+          export PATH="$PATH:$HOME/.dotnet/tools"
+
+          dotnet test ${{ matrix.TEST_PROJECT }} -c Release
+          -l:"trx;LogFileName=tests.trx" -r:"bin/" /p:CollectCoverage=true
+          /p:CoverletOutputFormat="opencover"
+          /p:CoverletOutput="bin/coverage.xml"
+
+          dotnet publish ${{ matrix.TEST_PROJECT }} -c Release
