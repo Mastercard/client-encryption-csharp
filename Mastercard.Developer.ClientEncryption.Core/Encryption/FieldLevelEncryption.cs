@@ -33,17 +33,17 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             try
             {
                 // Parse the given payload
-                var payloadObject = JObject.Parse(payload);
+                var payloadToken = JToken.Parse(payload);
 
                 // Perform encryption (if needed)
                 foreach (var jsonPathIn in config.EncryptionPaths.Keys)
                 {
                     var jsonPathOut = config.EncryptionPaths[jsonPathIn];
-                    EncryptPayloadPath(payloadObject, jsonPathIn, jsonPathOut, config, parameters);
+                    payloadToken = EncryptPayloadPath(payloadToken, jsonPathIn, jsonPathOut, config, parameters);
                 }
 
                 // Return the updated payload
-                return payloadObject.ToString();
+                return payloadToken.ToString();
             }
             catch (EncryptionException)
             {
@@ -71,17 +71,17 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             try
             {
                 // Parse the given payload
-                var payloadObject = JObject.Parse(payload);
+                var payloadToken = JToken.Parse(payload);
 
                 // Perform decryption (if needed)
                 foreach (var jsonPathIn in config.DecryptionPaths.Keys)
                 {
                     var jsonPathOut = config.DecryptionPaths[jsonPathIn];
-                    DecryptPayloadPath(payloadObject, jsonPathIn, jsonPathOut, config, parameters);
+                    payloadToken = DecryptPayloadPath(payloadToken, jsonPathIn, jsonPathOut, config, parameters);
                 }
 
                 // Return the updated payload
-                return payloadObject.ToString();
+                return payloadToken.ToString();
             }
             catch (EncryptionException)
             {
@@ -93,18 +93,18 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             }
         }
 
-        private static void EncryptPayloadPath(JObject payloadObject, string jsonPathIn, string jsonPathOut,
+        private static JToken EncryptPayloadPath(JToken payloadToken, string jsonPathIn, string jsonPathOut,
                                                FieldLevelEncryptionConfig config, FieldLevelEncryptionParams parameters)
         {
-            if (payloadObject == null) throw new ArgumentNullException(nameof(payloadObject));
+            if (payloadToken == null) throw new ArgumentNullException(nameof(payloadToken));
             if (jsonPathIn == null) throw new ArgumentNullException(nameof(jsonPathIn));
             if (jsonPathOut == null) throw new ArgumentNullException(nameof(jsonPathOut));
 
-            var inJsonToken = payloadObject.SelectToken(jsonPathIn);
+            var inJsonToken = payloadToken.SelectToken(jsonPathIn);
             if (inJsonToken == null)
             {
                 // Nothing to encrypt
-                return;
+                return payloadToken;
             }
 
             if (parameters == null) {
@@ -125,13 +125,13 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             }
             else
             {
-                // Delete keys
-                (inJsonToken as JObject)?.RemoveAll();
+                // We need a JObject (we can't work with a JArray for instance)
+                payloadToken = JObject.Parse("{}");
             }
 
             // Add encrypted data and encryption fields at the given JSON path
-            CheckOrCreateOutObject(payloadObject, jsonPathOut);
-            var outJsonToken = payloadObject.SelectToken(jsonPathOut) as JObject;
+            CheckOrCreateOutObject(payloadToken, jsonPathOut);
+            var outJsonToken = payloadToken.SelectToken(jsonPathOut) as JObject;
             AddOrReplaceJsonKey(outJsonToken, config.EncryptedValueFieldName, encryptedValue);
             if (!string.IsNullOrEmpty(config.IvFieldName)) {
                 AddOrReplaceJsonKey(outJsonToken, config.IvFieldName, parameters.IvValue);
@@ -148,20 +148,22 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             if (!string.IsNullOrEmpty(config.OaepPaddingDigestAlgorithmFieldName)) {
                 AddOrReplaceJsonKey(outJsonToken, config.OaepPaddingDigestAlgorithmFieldName, parameters.OaepPaddingDigestAlgorithmValue);
             }
+
+            return payloadToken;
         }
 
-        private static void DecryptPayloadPath(JObject payloadObject, string jsonPathIn, string jsonPathOut,
+        private static JToken DecryptPayloadPath(JToken payloadToken, string jsonPathIn, string jsonPathOut,
                                                FieldLevelEncryptionConfig config, FieldLevelEncryptionParams parameters)
         {
-            if (payloadObject == null) throw new ArgumentNullException(nameof(payloadObject));
+            if (payloadToken == null) throw new ArgumentNullException(nameof(payloadToken));
             if (jsonPathIn == null) throw new ArgumentNullException(nameof(jsonPathIn));
             if (jsonPathOut == null) throw new ArgumentNullException(nameof(jsonPathOut));
 
-            var inJsonToken = payloadObject.SelectToken(jsonPathIn);
+            var inJsonToken = payloadToken.SelectToken(jsonPathIn);
             if (inJsonToken == null)
             {
                 // Nothing to decrypt
-                return;
+                return payloadToken;
             }
 
             // Read and remove encrypted data and encryption fields at the given JSON path
@@ -170,7 +172,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             if (IsNullOrEmptyJson(encryptedValueJsonToken))
             {
                 // Nothing to decrypt
-                return;
+                return payloadToken;
             }
 
             if (!config.UseHttpPayloads() && parameters == null) {
@@ -194,15 +196,25 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
 
             // Add decrypted data at the given JSON path
             var decryptedValue = SanitizeJson(Encoding.UTF8.GetString(decryptedValueBytes));
-            CheckOrCreateOutObject(payloadObject, jsonPathOut);
-            AddDecryptedDataToPayload(payloadObject, decryptedValue, jsonPathOut);
-
-            // Remove the input if now empty
-            inJsonToken = payloadObject.SelectToken(jsonPathIn);
-            if (inJsonToken.Type == JTokenType.Object && !inJsonToken.HasValues)
+            if ("$".Equals(jsonPathOut))
             {
-                inJsonToken.Parent.Remove();
+                // The decrypted JSON is the new body
+                return JToken.Parse(decryptedValue);
             }
+            else
+            {
+                CheckOrCreateOutObject(payloadToken, jsonPathOut);
+                AddDecryptedDataToPayload(payloadToken, decryptedValue, jsonPathOut);
+                
+                // Remove the input if now empty
+                inJsonToken = payloadToken.SelectToken(jsonPathIn);
+                if (inJsonToken.Type == JTokenType.Object && !inJsonToken.HasValues)
+                {
+                    inJsonToken.Parent.Remove();
+                }
+            }
+            
+            return payloadToken;
         }
 
         internal static byte[] EncryptBytes(byte[] keyBytes, byte[] ivBytes, byte[] bytes)
