@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -19,6 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\NetCore2\AES\AesEncryptionTest.cs">
+      <Link>AES\AesEncryptionTest.cs</Link>
+    </Compile>
     <Compile Include="..\NetCore2\Encryption\EncryptionExceptionTest.cs">
       <Link>Encryption\EncryptionExceptionTest.cs</Link>
     </Compile>
@@ -31,14 +34,35 @@
     <Compile Include="..\NetCore2\Encryption\FieldLevelEncryptionTest.cs">
       <Link>Encryption\FieldLevelEncryptionTest.cs</Link>
     </Compile>
+    <Compile Include="..\NetCore2\Encryption\JweConfigBuilderTest.cs">
+      <Link>Encryption\JweConfigBuilderTest.cs</Link>
+    </Compile>
+    <Compile Include="..\NetCore2\Interceptors\RestResponseDouble.cs">
+      <Link>Interceptors\RestResponseDouble.cs</Link>
+    </Compile>
     <Compile Include="..\NetCore2\Interceptors\RestSharpFieldLevelEncryptionInterceptorTest.cs">
       <Link>Interceptors\RestSharpFieldLevelEncryptionInterceptorTest.cs</Link>
     </Compile>
     <Compile Include="..\NetCore2\Interceptors\RestSharpV2FieldLevelEncryptionInterceptorTest.cs">
       <Link>Interceptors\RestSharpV2FieldLevelEncryptionInterceptorTest.cs</Link>
     </Compile>
+    <Compile Include="..\NetCore2\Interceptors\RestSharpV2CBCJweEncryptionInterceptorTest.cs">
+      <Link>Interceptors\RestSharpV2CBCJweEncryptionInterceptorTest.cs</Link>
+    </Compile>
+    <Compile Include="..\NetCore2\JWE\JweHeaderTest.cs">
+      <Link>JWE\JweHeaderTest.cs</Link>
+    </Compile>
+    <Compile Include="..\NetCore2\JWE\CBCJweObjectTest.cs">
+      <Link>JWE\CBCJweObjectTest.cs</Link>
+    </Compile>
     <Compile Include="..\NetCore2\Test\TestUtils.cs">
       <Link>Test\TestUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\NetCore2\Utils\Base64UtilsTest.cs">
+      <Link>Utils\Base64UtilsTest.cs</Link>
+    </Compile>
+    <Compile Include="..\NetCore2\Utils\ByteUtilsTest.cs">
+      <Link>Utils\ByteUtilsTest.cs</Link>
     </Compile>
     <Compile Include="..\NetCore2\Utils\EncodingUtilsTest.cs">
       <Link>Utils\EncodingUtilsTest.cs</Link>

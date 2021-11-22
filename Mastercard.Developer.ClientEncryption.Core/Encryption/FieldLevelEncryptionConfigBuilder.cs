@@ -4,29 +4,21 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Mastercard.Developer.ClientEncryption.Core.Utils;
 using static Mastercard.Developer.ClientEncryption.Core.Encryption.FieldLevelEncryptionConfig;
-using static Mastercard.Developer.ClientEncryption.Core.Utils.JsonUtils;
 
 namespace Mastercard.Developer.ClientEncryption.Core.Encryption
 {
     /// <summary>
     /// A builder class for <see cref="FieldLevelEncryptionConfig"/>.
     /// </summary>
-    public class FieldLevelEncryptionConfigBuilder
+    public class FieldLevelEncryptionConfigBuilder : EncryptionConfigBuilder
     {
-        private X509Certificate2 _encryptionCertificate;
         private string _encryptionCertificateFingerprint;
-        private string _encryptionKeyFingerprint;
-        private RSA _decryptionKey;
-        private readonly Dictionary<string, string> _encryptionPaths = new Dictionary<string, string>();
-        private readonly Dictionary<string, string> _decryptionPaths = new Dictionary<string, string>();
-        private string _oaepPaddingDigestAlgorithm;
         private string _ivFieldName;
         private string _ivHeaderName;
         private string _oaepPaddingDigestAlgorithmFieldName;
         private string _oaepPaddingDigestAlgorithmHeaderName;
         private string _encryptedKeyFieldName;
         private string _encryptedKeyHeaderName;
-        private string _encryptedValueFieldName;
         private string _encryptionCertificateFingerprintFieldName;
         private string _encryptionCertificateFingerprintHeaderName;
         private string _encryptionKeyFingerprintFieldName;
@@ -41,7 +33,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         public static FieldLevelEncryptionConfigBuilder AFieldLevelEncryptionConfig() => new FieldLevelEncryptionConfigBuilder();
 
         /// <summary>
-        /// See: <see cref="FieldLevelEncryptionConfig.EncryptionCertificate"/>
+        /// See: <see cref="EncryptionConfig.EncryptionCertificate"/>
         /// </summary>
         public FieldLevelEncryptionConfigBuilder WithEncryptionCertificate(X509Certificate2 encryptionCertificate)
         {
@@ -59,7 +51,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         }
 
         /// <summary>
-        /// See: <see cref="FieldLevelEncryptionConfig.EncryptionKeyFingerprint"/>
+        /// See: <see cref="EncryptionConfig.EncryptionKeyFingerprint"/>
         /// </summary>
         public FieldLevelEncryptionConfigBuilder WithEncryptionKeyFingerprint(string encryptionKeyFingerprint)
         {
@@ -68,7 +60,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         }
 
         /// <summary>
-        /// See: <see cref="FieldLevelEncryptionConfig.DecryptionKey"/>
+        /// See: <see cref="EncryptionConfig.DecryptionKey"/>
         /// </summary>
         public FieldLevelEncryptionConfigBuilder WithDecryptionKey(RSA decryptionKey)
         {
@@ -77,7 +69,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         }
 
         /// <summary>
-        /// See: <see cref="FieldLevelEncryptionConfig.EncryptionPaths"/>
+        /// See: <see cref="EncryptionConfig.EncryptionPaths"/>
         /// </summary>
         public FieldLevelEncryptionConfigBuilder WithEncryptionPath(string jsonPathIn, string jsonPathOut)
         {
@@ -86,7 +78,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         }
 
         /// <summary>
-        /// See: <see cref="FieldLevelEncryptionConfig.DecryptionPaths"/>
+        /// See: <see cref="EncryptionConfig.DecryptionPaths"/>
         /// </summary>
         public FieldLevelEncryptionConfigBuilder WithDecryptionPath(string jsonPathIn, string jsonPathOut)
         {
@@ -95,7 +87,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         }
 
         /// <summary>
-        /// See: <see cref="FieldLevelEncryptionConfig.OaepPaddingDigestAlgorithm"/>
+        /// See: <see cref="EncryptionConfig.OaepPaddingDigestAlgorithm"/>
         /// </summary>
         public FieldLevelEncryptionConfigBuilder WithOaepPaddingDigestAlgorithm(string oaepPaddingDigestAlgorithm)
         {
@@ -131,7 +123,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         }
 
         /// <summary>
-        /// See: <see cref="FieldLevelEncryptionConfig.EncryptedValueFieldName"/>
+        /// See: <see cref="EncryptionConfig.EncryptedValueFieldName"/>
         /// </summary>
         public FieldLevelEncryptionConfigBuilder WithEncryptedValueFieldName(string encryptedValueFieldName)
         {
@@ -225,6 +217,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
 
             return new FieldLevelEncryptionConfig
             {
+                Scheme = EncryptionConfig.EncryptionScheme.Legacy,
                 EncryptionCertificateFingerprintFieldName = _encryptionCertificateFingerprintFieldName,
                 EncryptionKeyFingerprintFieldName = _encryptionKeyFingerprintFieldName,
                 EncryptionCertificateFingerprint = _encryptionCertificateFingerprint,
@@ -245,25 +238,6 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
                 EncryptionCertificateFingerprintHeaderName = _encryptionCertificateFingerprintHeaderName,
                 EncryptionKeyFingerprintHeaderName = _encryptionKeyFingerprintHeaderName
             };
-        }
-
-        private void CheckJsonPathParameterValues()
-        {
-            foreach (var key in _decryptionPaths.Keys)
-            {
-                if (!IsPathDefinite(key) || !IsPathDefinite(_decryptionPaths[key]))
-                {
-                    throw new ArgumentException("JSON paths for decryption must point to a single item!");
-                }
-            }
-
-            foreach (var key in _encryptionPaths.Keys)
-            {
-                if (!IsPathDefinite(key) || !IsPathDefinite(_encryptionPaths[key]))
-                {
-                    throw new ArgumentException("JSON paths for encryption must point to a single item!");
-                }
-            }
         }
 
         private void CheckParameterValues()
@@ -336,31 +310,6 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             {
                 throw new EncryptionException("Failed to compute encryption certificate fingerprint!", e);
             }
-        }
-
-        private void ComputeEncryptionKeyFingerprintWhenNeeded()
-        {
-            try
-            {
-                if (_encryptionCertificate == null || !string.IsNullOrEmpty(_encryptionKeyFingerprint))
-                {
-                    // No encryption certificate set or certificate fingerprint already provided
-                    return;
-                }
-                var encodedKey = RsaKeyUtils.GetEncoded(_encryptionCertificate.PublicKey);
-                var keyFingerprintBytes = Sha256Digest(encodedKey);
-                _encryptionKeyFingerprint = EncodingUtils.EncodeBytes(keyFingerprintBytes, FieldValueEncoding.Hex);
-            }
-            catch (Exception e)
-            {
-                throw new EncryptionException("Failed to compute encryption key fingerprint!", e);
-            }
-        }
-
-        private static byte[] Sha256Digest(byte[] inputBytes)
-        {
-            var sha256 = SHA256.Create();
-            return sha256.ComputeHash(inputBytes);
         }
     }
 }

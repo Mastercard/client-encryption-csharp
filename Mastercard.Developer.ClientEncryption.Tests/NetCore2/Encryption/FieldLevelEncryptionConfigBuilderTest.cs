@@ -56,6 +56,20 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
         }
 
         [TestMethod]
+        public void TestBuild_ResultShouldBeAssignableToGenericEncryptionConfig()
+        {
+            EncryptionConfig config = TestUtils.GetTestFieldLevelEncryptionConfigBuilder().Build();
+            Assert.IsNotNull(config);
+        }
+
+        [TestMethod]
+        public void TestBuild_ResultShouldHaveLegacySchemeSet()
+        {
+            EncryptionConfig config = TestUtils.GetTestFieldLevelEncryptionConfigBuilder().Build();
+            Assert.AreEqual(EncryptionConfig.EncryptionScheme.Legacy, config.Scheme);
+        }
+
+        [TestMethod]
         public void TestBuild_ShouldComputeCertificateAndKeyFingerprints_WhenFingerprintsNotSetInConfig()
         {
             var config = TestUtils.GetTestFieldLevelEncryptionConfigBuilder()
