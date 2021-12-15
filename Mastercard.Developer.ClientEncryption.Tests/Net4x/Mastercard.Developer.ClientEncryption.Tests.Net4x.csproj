@@ -75,6 +75,12 @@
     <Compile Include="..\NetCore2\Interceptors\RestSharpV2CBCJweEncryptionInterceptorTest.cs">
       <Link>Interceptors\RestSharpV2CBCJweEncryptionInterceptorTest.cs</Link>
     </Compile>
+    <Compile Include="..\NetCore2\Interceptors\RestSharpV2GCMJweEncryptionInterceptorTest.cs">
+      <Link>Interceptors\RestSharpV2GCMJweEncryptionInterceptorTest.cs</Link>
+    </Compile>
+    <Compile Include="..\NetCore2\JWE\GCMJweObjectTest.cs">
+      <Link>JWE\GCMJweObjectTest.cs</Link>
+    </Compile>
     <Compile Include="..\NetCore2\JWE\JweHeaderTest.cs">
       <Link>JWE\JweHeaderTest.cs</Link>
     </Compile>
