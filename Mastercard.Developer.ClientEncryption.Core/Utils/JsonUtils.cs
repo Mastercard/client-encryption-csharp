@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
 
 namespace Mastercard.Developer.ClientEncryption.Core.Utils
@@ -74,6 +75,117 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
         internal static bool IsPathDefinite(string path)
         {
             return !path.Contains("*") && !path.Contains("..") && !path.Contains("@") && !path.Contains(",");
+        }
+
+        internal static void CheckOrCreateOutObject(JToken payloadObject, string jsonPathOut)
+        {
+            var outJsonToken = payloadObject.SelectToken(jsonPathOut);
+            if (null != outJsonToken)
+            {
+                // Object already exists
+                AssertIsObject(outJsonToken, jsonPathOut);
+                return;
+            }
+
+            // Path does not exist: if parent exists then we create a new object under the parent
+            var parentJsonPath = GetParentJsonPath(jsonPathOut);
+            var parentJsonObject = payloadObject.SelectToken(parentJsonPath);
+            if (parentJsonObject == null)
+            {
+                throw new InvalidOperationException($"Parent path not found in payload: '{parentJsonPath}'!");
+            }
+            var elementKey = JsonUtils.GetJsonElementKey(jsonPathOut);
+            (parentJsonObject as JObject)?.Add(elementKey, new JObject());
+        }
+
+        internal static void AssertIsObject(JToken jToken, string jsonPath)
+        {
+            if (!(jToken is JObject))
+            {
+                throw new InvalidOperationException($"JSON object expected at path: '{jsonPath}'!");
+            }
+        }
+
+        internal static string SanitizeJson(string json)
+        {
+            return json.Replace("\n", string.Empty)
+                .Replace("\r", string.Empty)
+                .Replace("\t", string.Empty)
+                .Replace(Environment.NewLine, string.Empty);
+        }
+
+        internal static void AddOrReplaceJsonKey(JObject jsonObject, string key, JToken value)
+        {
+            jsonObject.Remove(key);
+            jsonObject.Add(key, value);
+        }
+
+        internal static bool IsNullOrEmptyJson(JToken token)
+        {
+            if (token == null)
+            {
+                return true;
+            }
+            switch (token.Type)
+            {
+                case JTokenType.Array:
+                case JTokenType.Object:
+                    return !token.HasValues;
+
+                case JTokenType.String:
+                    return token.ToString() == String.Empty;
+
+                case JTokenType.Null:
+                    return true;
+            }
+            return false;
+        }
+
+        internal static void AddDecryptedDataToPayload(JToken payloadObject, string decryptedValue, string jsonPathOut)
+        {
+            try
+            {
+                // Object?
+                var decryptedValueObject = JObject.Parse(decryptedValue);
+                var outJsonObject = payloadObject.SelectToken(jsonPathOut) as JObject;
+                outJsonObject?.Merge(decryptedValueObject); // Merge the two objects
+            }
+            catch
+            {
+                try
+                {
+                    // Array?
+                    var decryptedValueObject = JArray.Parse(decryptedValue);
+                    payloadObject.SelectToken(jsonPathOut).Replace(decryptedValueObject);
+                }
+                catch
+                {
+                    // Primitive type
+                    payloadObject.SelectToken(jsonPathOut).Replace(AsPrimitiveValue(decryptedValue));
+                }
+            }
+        }
+
+        private static JToken AsPrimitiveValue(string value)
+        {
+            // Boolean?
+            if ("true".Equals(value.ToLower()) || "false".Equals(value.ToLower()))
+            {
+                return bool.Parse(value);
+            }
+
+            // Numeric?
+            try
+            {
+                return long.Parse(value);
+            }
+            catch
+            {
+                // Not a number, do nothing
+            }
+
+            // String
+            return value;
         }
     }
 }

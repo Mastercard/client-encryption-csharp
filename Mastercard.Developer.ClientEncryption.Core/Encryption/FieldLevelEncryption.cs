@@ -113,7 +113,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             }
 
             // Encrypt data at the given JSON path
-            var inJsonString = SanitizeJson(inJsonToken.ToString());
+            var inJsonString = JsonUtils.SanitizeJson(inJsonToken.ToString());
             var inJsonBytes = Encoding.ASCII.GetBytes(inJsonString);
             var encryptedValueBytes = EncryptBytes(parameters.GetSecretKeyBytes(), parameters.GetIvBytes(), inJsonBytes);
             var encryptedValue = EncodingUtils.EncodeBytes(encryptedValueBytes, config.ValueEncoding);
@@ -130,23 +130,23 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             }
 
             // Add encrypted data and encryption fields at the given JSON path
-            CheckOrCreateOutObject(payloadToken, jsonPathOut);
+            JsonUtils.CheckOrCreateOutObject(payloadToken, jsonPathOut);
             var outJsonToken = payloadToken.SelectToken(jsonPathOut) as JObject;
-            AddOrReplaceJsonKey(outJsonToken, config.EncryptedValueFieldName, encryptedValue);
+            JsonUtils.AddOrReplaceJsonKey(outJsonToken, config.EncryptedValueFieldName, encryptedValue);
             if (!string.IsNullOrEmpty(config.IvFieldName)) {
-                AddOrReplaceJsonKey(outJsonToken, config.IvFieldName, parameters.IvValue);
+                JsonUtils.AddOrReplaceJsonKey(outJsonToken, config.IvFieldName, parameters.IvValue);
             }
             if (!string.IsNullOrEmpty(config.EncryptedKeyFieldName)) {
-                AddOrReplaceJsonKey(outJsonToken, config.EncryptedKeyFieldName, parameters.EncryptedKeyValue);
+                JsonUtils.AddOrReplaceJsonKey(outJsonToken, config.EncryptedKeyFieldName, parameters.EncryptedKeyValue);
             }
             if (!string.IsNullOrEmpty(config.EncryptionCertificateFingerprintFieldName)) {
-                AddOrReplaceJsonKey(outJsonToken, config.EncryptionCertificateFingerprintFieldName, config.EncryptionCertificateFingerprint);
+                JsonUtils.AddOrReplaceJsonKey(outJsonToken, config.EncryptionCertificateFingerprintFieldName, config.EncryptionCertificateFingerprint);
             }
             if (!string.IsNullOrEmpty(config.EncryptionKeyFingerprintFieldName)) {
-                AddOrReplaceJsonKey(outJsonToken, config.EncryptionKeyFingerprintFieldName, config.EncryptionKeyFingerprint);
+                JsonUtils.AddOrReplaceJsonKey(outJsonToken, config.EncryptionKeyFingerprintFieldName, config.EncryptionKeyFingerprint);
             }
             if (!string.IsNullOrEmpty(config.OaepPaddingDigestAlgorithmFieldName)) {
-                AddOrReplaceJsonKey(outJsonToken, config.OaepPaddingDigestAlgorithmFieldName, parameters.OaepPaddingDigestAlgorithmValue);
+                JsonUtils.AddOrReplaceJsonKey(outJsonToken, config.OaepPaddingDigestAlgorithmFieldName, parameters.OaepPaddingDigestAlgorithmValue);
             }
 
             return payloadToken;
@@ -167,7 +167,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             }
 
             // Read and remove encrypted data and encryption fields at the given JSON path
-            AssertIsObject(inJsonToken, jsonPathIn);
+            JsonUtils.AssertIsObject(inJsonToken, jsonPathIn);
             var encryptedValueJsonToken = ReadAndDeleteJsonKey(inJsonToken, config.EncryptedValueFieldName);
             if (IsNullOrEmptyJson(encryptedValueJsonToken))
             {
@@ -195,7 +195,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             var decryptedValueBytes = DecryptBytes(parameters.GetSecretKeyBytes(), parameters.GetIvBytes(), encryptedValueBytes);
 
             // Add decrypted data at the given JSON path
-            var decryptedValue = SanitizeJson(Encoding.UTF8.GetString(decryptedValueBytes));
+            var decryptedValue = JsonUtils.SanitizeJson(Encoding.UTF8.GetString(decryptedValueBytes));
             if ("$".Equals(jsonPathOut))
             {
                 // The decrypted JSON is the new body
@@ -203,8 +203,8 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             }
             else
             {
-                CheckOrCreateOutObject(payloadToken, jsonPathOut);
-                AddDecryptedDataToPayload(payloadToken, decryptedValue, jsonPathOut);
+                JsonUtils.CheckOrCreateOutObject(payloadToken, jsonPathOut);
+                JsonUtils.AddDecryptedDataToPayload(payloadToken, decryptedValue, jsonPathOut);
                 
                 // Remove the input if now empty
                 inJsonToken = payloadToken.SelectToken(jsonPathIn);
@@ -276,66 +276,6 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             }
         }
 
-        private static void CheckOrCreateOutObject(JToken payloadObject, string jsonPathOut)
-        {
-            var outJsonToken = payloadObject.SelectToken(jsonPathOut);
-            if (null != outJsonToken)
-            {
-                // Object already exists
-                AssertIsObject(outJsonToken, jsonPathOut);
-                return;
-            }
-
-            // Path does not exist: if parent exists then we create a new object under the parent
-            var parentJsonPath = JsonUtils.GetParentJsonPath(jsonPathOut);
-            var parentJsonObject = payloadObject.SelectToken(parentJsonPath);
-            if (parentJsonObject == null)
-            {
-                throw new InvalidOperationException($"Parent path not found in payload: '{parentJsonPath}'!");
-            }
-            var elementKey = JsonUtils.GetJsonElementKey(jsonPathOut);
-            (parentJsonObject as JObject)?.Add(elementKey, new JObject());
-        }
-
-        private static void AssertIsObject(JToken jToken, string jsonPath)
-        {
-            if (!(jToken is JObject))
-            {
-                throw new InvalidOperationException($"JSON object expected at path: '{jsonPath}'!");
-            }
-        }
-
-        private static void AddDecryptedDataToPayload(JToken payloadObject, string decryptedValue, string jsonPathOut)
-        {
-            try
-            {
-                // Object?
-                var decryptedValueObject = JObject.Parse(decryptedValue);
-                var outJsonObject = payloadObject.SelectToken(jsonPathOut) as JObject;
-                outJsonObject?.Merge(decryptedValueObject); // Merge the two objects
-            }
-            catch
-            {
-                try
-                {
-                    // Array?
-                    var decryptedValueObject = JArray.Parse(decryptedValue);
-                    payloadObject.SelectToken(jsonPathOut).Replace(decryptedValueObject);
-                }
-                catch
-                {
-                    // Primitive type
-                    payloadObject.SelectToken(jsonPathOut).Replace(AsPrimitiveValue(decryptedValue));
-                }
-            }
-        }
-
-        private static void AddOrReplaceJsonKey(JObject jsonObject, string key, JToken value)
-        {
-            jsonObject.Remove(key);
-            jsonObject.Add(key, value);
-        }
-
         private static string ReadAndDeleteJsonKey(JToken inJsonToken, string key)
         {
             if (string.IsNullOrEmpty(key))
@@ -351,36 +291,6 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             }
             value.Parent.Remove();
             return value.ToString();
-        }
-
-        private static string SanitizeJson(string json)
-        {
-            return json.Replace("\n", string.Empty)
-                .Replace("\r", string.Empty)
-                .Replace("\t", string.Empty)
-                .Replace(Environment.NewLine, string.Empty);
-        }
-        
-        private static JToken AsPrimitiveValue(string value)
-        {
-            // Boolean?
-            if ("true".Equals(value.ToLower()) || "false".Equals(value.ToLower()))
-            {
-                return bool.Parse(value);
-            }
-
-            // Numeric?
-            try
-            {
-                return long.Parse(value);
-            }
-            catch
-            {
-                // Not a number, do nothing
-            }
-
-            // String
-            return value;
         }
 
         private static bool IsNullOrEmptyJson(object element) => null == element;

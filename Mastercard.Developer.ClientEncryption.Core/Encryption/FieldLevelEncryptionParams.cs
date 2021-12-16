@@ -9,7 +9,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
     /// <summary>
     /// Encryption parameters for computing field level encryption/decryption.
     /// </summary>
-    public class FieldLevelEncryptionParams
+    public class FieldLevelEncryptionParams : EncryptionParams
     {
         private const int SymmetricKeySize = 128;
 
@@ -136,42 +136,6 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             catch (Exception e)
             {
                 throw new EncryptionException("Failed to decode the provided IV value!", e);
-            }
-        }
-
-        internal static byte[] WrapSecretKey(FieldLevelEncryptionConfig config, byte[] keyBytes)
-        {
-            try
-            {
-                var publicEncryptionKey = config.EncryptionCertificate.GetRSAPublicKey();
-                return publicEncryptionKey.Encrypt(keyBytes,
-                    "SHA-256".Equals(config.OaepPaddingDigestAlgorithm)
-                        ? RSAEncryptionPadding.OaepSHA256
-                        : RSAEncryptionPadding.OaepSHA512);
-            }
-            catch (Exception e)
-            {
-                throw new EncryptionException("Failed to wrap secret key!", e);
-            }
-        }
-
-        internal static byte[] UnwrapSecretKey(FieldLevelEncryptionConfig config, byte[] keyBytes, string oaepDigestAlgorithm)
-        {
-            try
-            {
-                if (!oaepDigestAlgorithm.Contains("-")) {
-                    oaepDigestAlgorithm = oaepDigestAlgorithm.Replace("SHA", "SHA-");
-                }
-
-                var decryptionKey = config.DecryptionKey;
-                return decryptionKey.Decrypt(keyBytes, 
-                    "SHA-256".Equals(oaepDigestAlgorithm) 
-                        ? RSAEncryptionPadding.OaepSHA256 
-                        : RSAEncryptionPadding.OaepSHA512);
-            }
-            catch (Exception e)
-            {
-                throw new EncryptionException("Failed to unwrap secret key!", e);
             }
         }
     }

@@ -1,14 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using Mastercard.Developer.ClientEncryption.Core.Encryption;
 using Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors;
 using Mastercard.Developer.ClientEncryption.Tests.NetCore.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RestSharp;
-using IRestRequest = RestSharp.IRestRequest;
-using IRestResponse = RestSharp.IRestResponse;
 using Method = RestSharp.Method;
 using Parameter = RestSharp.Parameter;
 using ParameterType = RestSharp.ParameterType;
@@ -259,41 +254,6 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
             Assert.IsNull(headers.Find(h => h.Name == "x-oaep-padding-digest-algorithm"));
             Assert.IsNull(headers.Find(h => h.Name == "x-encryption-key-fingerprint"));
             Assert.IsNull(headers.Find(h => h.Name == "x-encryption-certificate-fingerprint"));
-        }
-
-        private class RestResponseDouble : IRestResponse
-        {
-            public IRestRequest Request { get; set; } = null;
-            public Uri ResponseUri { get; set; } = null;
-            public string Server { get; set; }
-            public byte[] RawBytes { get; set; } = null;
-            public string ContentType { get; set; } = null;
-            public long ContentLength { get; set; }
-            public string ContentEncoding { get; set; }
-            public IList<RestResponseCookie> Cookies { get; } = null;
-            public IList<Parameter> Headers { get; }
-            public ResponseStatus ResponseStatus { get; set; }
-            public string ErrorMessage { get; set; }
-            public Exception ErrorException { get; set; }
-            public Version ProtocolVersion { get; set; }
-            public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.OK;
-            public bool IsSuccessful => true;
-
-            public string StatusDescription { get; set; } = null;
-
-            private Lazy<string> _content;
-
-            public RestResponseDouble(IList<Parameter> headers, string content)
-            {
-                Headers = headers;
-                Content = content;
-            }
-
-            public string Content
-            {
-                get => _content.Value;
-                set => _content = new Lazy<string>(() => value);
-            }
         }
     }
 }
