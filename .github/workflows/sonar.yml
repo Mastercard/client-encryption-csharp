@@ -2,13 +2,14 @@ name: Sonar
 'on':
   push:
     branches:
-      - main
+      - "**"
   pull_request_target:
     branches:
-      - main
+      - "**"
     types: [opened, synchronize, reopened, labeled]
   schedule:
     - cron: 0 16 * * *
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,18 +22,18 @@ jobs:
           github.event.pull_request.head.repo.full_name == github.repository ||
           github.event_name != 'pull_request_target') }}
         run: echo "Unsecure PR, must be labelled with the 'safe' label, then run the workflow again" && exit 1
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v1.9.0
         with:
-          dotnet-version: 2.1.700
+          dotnet-version: 6.0.x
       - name: Setup java
         uses: actions/setup-java@v1
         with:
           java-version: '11'
       - name: Test
         env:
-          NETCORE2_TEST_PROJECT: >-
-            Mastercard.Developer.ClientEncryption.Tests/NetCore2/Mastercard.Developer.ClientEncryption.Tests.NetCore2.csproj
+          NETCORE5_TEST_PROJECT: >-
+            Mastercard.Developer.ClientEncryption.Tests/Net5/Mastercard.Developer.ClientEncryption.Tests.Net5.csproj
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
         run: >
@@ -40,21 +41,20 @@ jobs:
 
           dotnet tool install --global dotnet-sonarscanner
 
-
           dotnet sonarscanner begin \
             /k:"Mastercard_client-encryption-csharp" \
             /n:"client-encryption-csharp" \
             /o:"mastercard" \
             /d:sonar.host.url="https://sonarcloud.io" \
             /d:sonar.login="$SONAR_TOKEN" \
-            /d:sonar.cs.vstest.reportsPaths="./Mastercard.Developer.ClientEncryption.Tests/NetCore2/bin/tests.trx" \
-            /d:sonar.cs.opencover.reportsPaths="./Mastercard.Developer.ClientEncryption.Tests/NetCore2/bin/coverage.xml"
+            /d:sonar.cs.vstest.reportsPaths="./Mastercard.Developer.ClientEncryption.Tests/Net5/bin/tests.trx" \
+            /d:sonar.cs.opencover.reportsPaths="./Mastercard.Developer.ClientEncryption.Tests/Net5/bin/coverage.xml"
 
-          dotnet test $NETCORE2_TEST_PROJECT -c Release
-          -l:"trx;LogFileName=tests.trx" -r:"bin/" /p:CollectCoverage=true
+          dotnet test $NETCORE5_TEST_PROJECT -c Release
+          -l:"trx;LogFileName=tests.trx" -r:"./Mastercard.Developer.ClientEncryption.Tests/Net5/bin/" /p:CollectCoverage=true
           /p:CoverletOutputFormat="opencover"
           /p:CoverletOutput="bin/coverage.xml"
 
-          dotnet publish $NETCORE2_TEST_PROJECT -c Release
+          dotnet publish $NETCORE5_TEST_PROJECT -c Release
 
           dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
