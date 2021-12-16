@@ -15,6 +15,9 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
     public class RestSharpV2GCMJweEncryptionInterceptorTest
     {
         [TestMethod]
+#if !NETCOREAPP3_1 && !NET5_0_OR_GREATER
+        [ExpectedException(typeof(EncryptionException), "AES/GCM/NoPadding is unsupported on .NET Standard < 2.1")]
+# endif
         public void TestIntercept_ShouldEncryptRequestPayloadAndUpdateContentLengthHeader()
         {
             // GIVEN
@@ -49,6 +52,9 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
         }
 
         [TestMethod]
+#if !NETCOREAPP3_1 && !NET5_0_OR_GREATER
+        [ExpectedException(typeof(EncryptionException), "AES/GCM/NoPadding is unsupported on .NET Standard < 2.1")]
+# endif
         public void TestInterceptResponse_ShouldDecryptResponsePayloadAndUpdateContentLengthHeader()
         {
             // GIVEN

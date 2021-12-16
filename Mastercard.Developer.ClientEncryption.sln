@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mastercard.Developer.ClientEncryption.RestSharpV2", "Mastercard.Developer.ClientEncryption.RestSharpV2\Mastercard.Developer.ClientEncryption.RestSharpV2.csproj", "{BC6F2C72-16A3-44CB-AD68-3ACD8A465640}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mastercard.Developer.ClientEncryption.Tests.Net5", "Mastercard.Developer.ClientEncryption.Tests\Net5\Mastercard.Developer.ClientEncryption.Tests.Net5.csproj", "{6BDFFEF6-994D-404E-AA54-9D2319CD6776}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{BC6F2C72-16A3-44CB-AD68-3ACD8A465640}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC6F2C72-16A3-44CB-AD68-3ACD8A465640}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC6F2C72-16A3-44CB-AD68-3ACD8A465640}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BDFFEF6-994D-404E-AA54-9D2319CD6776}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BDFFEF6-994D-404E-AA54-9D2319CD6776}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BDFFEF6-994D-404E-AA54-9D2319CD6776}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BDFFEF6-994D-404E-AA54-9D2319CD6776}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +67,7 @@ Global
 		{BD40992E-4317-42E9-8CC3-425C79167017} = {E0CEBD8D-61FC-4923-9D09-CBC9EC5E9187}
 		{DE07F478-E087-4FAA-80E2-220671C70418} = {E0CEBD8D-61FC-4923-9D09-CBC9EC5E9187}
 		{C7781CA0-4F09-45D3-A063-3892EAD237C7} = {E0CEBD8D-61FC-4923-9D09-CBC9EC5E9187}
+		{6BDFFEF6-994D-404E-AA54-9D2319CD6776} = {E0CEBD8D-61FC-4923-9D09-CBC9EC5E9187}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0BA6CB82-AD23-4F2E-BEC3-CA02F18DFF99}
