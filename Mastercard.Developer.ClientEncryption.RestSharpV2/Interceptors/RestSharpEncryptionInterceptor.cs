@@ -13,11 +13,6 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
     public abstract class RestSharpEncryptionInterceptor
     {
         /// <summary>
-        /// Constructor.
-        /// </summary>
-        internal RestSharpEncryptionInterceptor() {  }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="config"></param>
@@ -143,7 +138,7 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
             }
 
             // If we get here, there is no such header, so add one
-            Parameter header = new Parameter(name, value.ToString(), ParameterType.HttpHeader);
+            var header = new Parameter(name, value.ToString(), ParameterType.HttpHeader);
             response.Headers.Add(header);
         }
 

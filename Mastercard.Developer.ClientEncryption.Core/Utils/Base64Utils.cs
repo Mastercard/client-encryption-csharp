@@ -2,7 +2,7 @@
 
 namespace Mastercard.Developer.ClientEncryption.Core.Utils
 {
-    class Base64Utils
+    internal static class Base64Utils
     {
         // c.f. https://datatracker.ietf.org/doc/html/rfc7515#appendix-C
         internal static string URLEncode(byte[] bytes)

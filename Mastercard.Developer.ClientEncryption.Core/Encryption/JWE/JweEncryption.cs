@@ -6,13 +6,11 @@ using Mastercard.Developer.ClientEncryption.Core.Utils;
 
 namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
 {
-    public class JweEncryption
+    public static class JweEncryption
     {
         private const string ALGORITHM = "RSA-OAEP-256";
         private const string ENCRYPTION = "A256GCM";
         private const string CONTENT_TYPE = "application/json";
-
-        internal JweEncryption() { }
 
         public static string EncryptPayload(string payload, JweConfig config)
         {

@@ -32,11 +32,11 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
             byte[] plaintext;
             if (A256GCM.Equals(encryptionMethod))
             {
-                plaintext = AESGCM.Decrypt(unwrappedKey, this);
+                plaintext = AesGcm.Decrypt(unwrappedKey, this);
             }
             else if (A128CBC_HS256.Equals(encryptionMethod))
             {
-                plaintext = AESCBC.Decrypt(unwrappedKey, this);
+                plaintext = AesCbc.Decrypt(unwrappedKey, this);
             }
             else
             {
@@ -58,7 +58,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
             string encodedHeader = Base64Utils.URLEncode(Encoding.UTF8.GetBytes(headerString));
             byte[] aad = Encoding.ASCII.GetBytes(encodedHeader);
 
-            var encrypted = AESGCM.Encrypt(cek, iv, payloadBytes, aad);
+            var encrypted = AesGcm.Encrypt(cek, iv, payloadBytes, aad);
             return Serialize(encodedHeader, encryptedKey, Base64Utils.URLEncode(iv), Base64Utils.URLEncode(encrypted.Ciphertext), Base64Utils.URLEncode(encrypted.AuthTag));
         }
 

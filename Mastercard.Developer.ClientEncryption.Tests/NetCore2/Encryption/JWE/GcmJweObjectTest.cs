@@ -7,7 +7,7 @@ using Mastercard.Developer.ClientEncryption.Tests.NetCore.Test;
 namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption.JWE
 {
     [TestClass]
-    public class GCMJweObjectTest
+    public class GcmJweObjectTest
     {
         [TestMethod]
 #if !NETCOREAPP3_1 && !NET5_0_OR_GREATER

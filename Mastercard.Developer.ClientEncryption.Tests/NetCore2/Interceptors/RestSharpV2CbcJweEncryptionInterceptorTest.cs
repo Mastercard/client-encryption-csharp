@@ -12,7 +12,7 @@ using IRestResponse = RestSharp.IRestResponse;
 namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
 {
     [TestClass]
-    public class RestSharpV2CBCJweEncryptionInterceptorTest
+    public class RestSharpV2CbcJweEncryptionInterceptorTest
     {
         [TestMethod]
         public void TestFrom_ShouldReturnTheCorrectInterceptor()

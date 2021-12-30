@@ -12,7 +12,7 @@ using IRestResponse = RestSharp.IRestResponse;
 namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
 {
     [TestClass]
-    public class RestSharpV2GCMJweEncryptionInterceptorTest
+    public class RestSharpV2GcmJweEncryptionInterceptorTest
     {
         [TestMethod]
 #if !NETCOREAPP3_1 && !NET5_0_OR_GREATER
@@ -28,12 +28,9 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
             var request = new RestRequest
             {
                 Method = Method.POST,
-                Resource = "/service",
-                Parameters =
-                {
-                    new Parameter("param1", "{\"foo\":\"bar\"}", ParameterType.RequestBody)
-                }
+                Resource = "/service"
             };
+            request.AddParameter("param1", "{\"foo\":\"bar\"}", ParameterType.RequestBody);
 
             // WHEN
             var fixture = RestSharpEncryptionInterceptor.From(config);
@@ -65,7 +62,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
                 .Build();
 
             // WHEN
-            var response = RestSharpV2CBCJweEncryptionInterceptorTest.RestResponseWithContentLength(encryptedPayload);
+            var response = RestSharpV2CbcJweEncryptionInterceptorTest.RestResponseWithContentLength(encryptedPayload);
             var fixture = RestSharpEncryptionInterceptor.From(config);
             fixture.InterceptResponse(response);
 

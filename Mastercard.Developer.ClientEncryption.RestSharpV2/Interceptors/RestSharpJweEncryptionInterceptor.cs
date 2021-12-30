@@ -8,7 +8,7 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
     /// A class for encrypting RestSharp requests and decrypting RestSharp responses,
     /// using JSON Web Encryption.
     /// </summary>
-    public class RestSharpJweEncryptionInterceptor : RestSharpEncryptionInterceptor
+    internal class RestSharpJweEncryptionInterceptor : RestSharpEncryptionInterceptor
     {
         private readonly JweConfig _config;
 

@@ -6,7 +6,7 @@ using Mastercard.Developer.ClientEncryption.Tests.NetCore.Test;
 namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption.JWE
 {
     [TestClass]
-    public class CBCJweObjectTest
+    public class CbcJweObjectTest
     {
         [TestMethod]
         public void TestDecrypt_ShouldReturnDecryptedPayload_WhenPayloadIsCbcEncrypted()

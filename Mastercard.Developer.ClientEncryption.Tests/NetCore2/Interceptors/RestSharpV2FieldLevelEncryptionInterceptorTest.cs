@@ -24,12 +24,9 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
             var request = new RestRequest
             {
                 Method = Method.POST,
-                Resource = "/service",
-                Parameters =
-                {
-                    new Parameter("param1", "{\"foo\":\"bar\"}", ParameterType.RequestBody)
-                }
+                Resource = "/service"
             };
+            request.AddParameter("param1", "{\"foo\":\"bar\"}", ParameterType.RequestBody);
 
             // WHEN
             var instanceUnderTest = new RestSharpFieldLevelEncryptionInterceptor(config);
@@ -77,12 +74,9 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
             var request = new RestRequest
             {
                 Method = Method.POST,
-                Resource = "/service",
-                Parameters =
-                {
-                    new Parameter("param1", "{\"foo\":\"bar\"}", ParameterType.RequestBody )
-                }
+                Resource = "/service"
             };
+            request.AddParameter("param1", "{\"foo\":\"bar\"}", ParameterType.RequestBody);
 
             try
             {
@@ -184,12 +178,9 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
             var request = new RestRequest
             {
                 Method = Method.POST,
-                Resource = "/service",
-                Parameters =
-                {
-                    new Parameter("param1", "{\"foo\":\"bar\"}", ParameterType.RequestBody )
-                }
+                Resource = "/service"
             };
+            request.AddParameter("param1", "{\"foo\":\"bar\"}", ParameterType.RequestBody);
 
             // WHEN
             var instanceUnderTest = new RestSharpFieldLevelEncryptionInterceptor(config);

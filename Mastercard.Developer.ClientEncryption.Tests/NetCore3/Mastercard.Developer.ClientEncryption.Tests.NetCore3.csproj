@@ -46,17 +46,17 @@
     <Compile Include="..\NetCore2\Interceptors\RestSharpV2FieldLevelEncryptionInterceptorTest.cs">
       <Link>Interceptors\RestSharpV2FieldLevelEncryptionInterceptorTest.cs</Link>
     </Compile>
-    <Compile Include="..\NetCore2\Interceptors\RestSharpV2CBCJweEncryptionInterceptorTest.cs">
-      <Link>Interceptors\RestSharpV2CBCJweEncryptionInterceptorTest.cs</Link>
+    <Compile Include="..\NetCore2\Interceptors\RestSharpV2CbcJweEncryptionInterceptorTest.cs">
+      <Link>Interceptors\RestSharpV2CbcJweEncryptionInterceptorTest.cs</Link>
     </Compile>
-    <Compile Include="..\NetCore2\Interceptors\RestSharpV2GCMJweEncryptionInterceptorTest.cs">
-      <Link>Interceptors\RestSharpV2GCMJweEncryptionInterceptorTest.cs</Link>
+    <Compile Include="..\NetCore2\Interceptors\RestSharpV2GcmJweEncryptionInterceptorTest.cs">
+      <Link>Interceptors\RestSharpV2GcmJweEncryptionInterceptorTest.cs</Link>
     </Compile>
-    <Compile Include="..\NetCore2\Encryption\JWE\CBCJweObjectTest.cs">
-        <Link>Encryption\JWE\CBCJweObjectTest.cs</Link>
+    <Compile Include="..\NetCore2\Encryption\JWE\CbcJweObjectTest.cs">
+        <Link>Encryption\JWE\CbcJweObjectTest.cs</Link>
     </Compile> 
-    <Compile Include="..\NetCore2\Encryption\JWE\GCMJweObjectTest.cs">
-        <Link>Encryption\JWE\GCMJweObjectTest.cs</Link>
+    <Compile Include="..\NetCore2\Encryption\JWE\GcmJweObjectTest.cs">
+        <Link>Encryption\JWE\GcmJweObjectTest.cs</Link>
     </Compile> 
     <Compile Include="..\NetCore2\Encryption\JWE\JweHeaderTest.cs">
         <Link>Encryption\JWE\JweHeaderTest.cs</Link>

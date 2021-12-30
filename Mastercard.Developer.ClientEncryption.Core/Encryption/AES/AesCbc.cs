@@ -6,10 +6,8 @@ using Mastercard.Developer.ClientEncryption.Core.Encryption.JWE;
 
 namespace Mastercard.Developer.ClientEncryption.Core.Encryption.AES
 {
-    internal class AESCBC
+    internal static class AesCbc
     {
-        private AESCBC() { }
-
         public static byte[] Decrypt(byte[] secretKeyBytes, JweObject jweObject)
         {
             // Extract the encryption key
