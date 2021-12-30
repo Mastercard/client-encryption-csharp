@@ -6,7 +6,7 @@ using Mastercard.Developer.ClientEncryption.Core.Utils;
 
 namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
 {
-    public sealed class JweHeader
+    internal sealed class JweHeader
     {
         const string ALGORITHM = "alg";
         const string KEY_ID = "kid";

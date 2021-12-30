@@ -7,7 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
 {
-    public class JweObject
+    internal class JweObject
     {
         private const string A128CBC_HS256 = "A128CBC-HS256";
         private const string A256GCM = "A256GCM";
