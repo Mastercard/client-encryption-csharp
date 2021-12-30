@@ -9,7 +9,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
     /// <summary>
     /// Encryption parameters for computing field level encryption/decryption.
     /// </summary>
-    public class FieldLevelEncryptionParams : EncryptionParams
+    public class FieldLevelEncryptionParams
     {
         private const int SymmetricKeySize = 128;
 
@@ -56,7 +56,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             var secretKeyBytes = GenerateSecretKey();
 
             // Encrypt the secret key
-            var encryptedSecretKeyBytes = WrapSecretKey(config, secretKeyBytes);
+            var encryptedSecretKeyBytes = RsaEncryption.WrapSecretKey(config.EncryptionCertificate.GetRSAPublicKey(), secretKeyBytes, config.OaepPaddingDigestAlgorithm);
             var encryptedKeyValue = EncodingUtils.EncodeBytes(encryptedSecretKeyBytes, config.ValueEncoding);
 
             // Compute the OAEP padding digest algorithm
@@ -112,7 +112,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
                 }
                 // Decrypt the AES secret key
                 var encryptedSecretKeyBytes = EncodingUtils.DecodeValue(EncryptedKeyValue, Config.ValueEncoding);
-                SecretKeyBytes = UnwrapSecretKey(Config, encryptedSecretKeyBytes, OaepPaddingDigestAlgorithmValue);
+                SecretKeyBytes = RsaEncryption.UnwrapSecretKey(Config, encryptedSecretKeyBytes, OaepPaddingDigestAlgorithmValue);
                 return SecretKeyBytes;
             }
             catch (Exception e)

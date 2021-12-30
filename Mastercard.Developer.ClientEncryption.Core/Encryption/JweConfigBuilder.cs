@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
@@ -25,15 +26,6 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         public JweConfigBuilder WithEncryptionCertificate(X509Certificate2 encryptionCertificate)
         {
             _encryptionCertificate = encryptionCertificate;
-            return this;
-        }
-
-        /// <summary>
-        /// See: <see cref="EncryptionConfig.EncryptionKeyFingerprint"/>
-        /// </summary>
-        public JweConfigBuilder WithEncryptionKeyFingerprint(string encryptionKeyFingerprint)
-        {
-            _encryptionKeyFingerprint = encryptionKeyFingerprint;
             return this;
         }
 
@@ -65,15 +57,6 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         }
 
         /// <summary>
-        /// See: <see cref="EncryptionConfig.OaepPaddingDigestAlgorithm"/>
-        /// </summary>
-        public JweConfigBuilder WithOaepPaddingDigestAlgorithm(string oaepPaddingDigestAlgorithm)
-        {
-            _oaepPaddingDigestAlgorithm = oaepPaddingDigestAlgorithm;
-            return this;
-        }
-
-        /// <summary>
         /// See: <see cref="EncryptionConfig.EncryptedValueFieldName"/>
         /// </summary>
         public JweConfigBuilder WithEncryptedValueFieldName(string encryptedValueFieldName)
@@ -93,14 +76,13 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
 
             return new JweConfig
             {
-                Scheme = EncryptionConfig.EncryptionScheme.Jwe,
+                EncryptionCertificate = _encryptionCertificate,
                 EncryptionKeyFingerprint = _encryptionKeyFingerprint,
                 DecryptionKey = _decryptionKey,
-                EncryptionPaths = _encryptionPaths,
-                DecryptionPaths = _decryptionPaths,
-                EncryptionCertificate = _encryptionCertificate,
-                OaepPaddingDigestAlgorithm = _oaepPaddingDigestAlgorithm,
-                EncryptedValueFieldName = _encryptedValueFieldName
+                EncryptionPaths = _encryptionPaths.Count == 0 ? new Dictionary<string, string> { { "$", "$" } } : _encryptionPaths,
+                DecryptionPaths = _decryptionPaths.Count == 0 ? new Dictionary<string, string> { { "$.encryptedData", "$" } } : _decryptionPaths,
+                EncryptedValueFieldName = _encryptedValueFieldName ?? "encryptedData",
+                Scheme = EncryptionConfig.EncryptionScheme.Jwe
             };
         }
 

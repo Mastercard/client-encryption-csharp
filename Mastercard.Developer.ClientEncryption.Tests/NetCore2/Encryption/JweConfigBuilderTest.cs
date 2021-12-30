@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Mastercard.Developer.ClientEncryption.Core.Encryption;
 using Mastercard.Developer.ClientEncryption.Tests.NetCore.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,21 +16,18 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
             var config = JweConfigBuilder.AJweConfigBuilder()
                 .WithEncryptionPath("$.payload", "$.encryptedPayload")
                 .WithEncryptionCertificate(TestUtils.GetTestEncryptionCertificate())
-                .WithEncryptionKeyFingerprint("F806B26BC4870E26986C70B6590AF87BAF4C2B56BB50622C51B12212DAFF2810")
                 .WithDecryptionPath("$.encryptedPayload", "$.payload")
                 .WithDecryptionKey(TestUtils.GetTestDecryptionKey())
-                .WithOaepPaddingDigestAlgorithm("SHA-512")
                 .WithEncryptedValueFieldName("encryptedValue")
                 .Build();
 
             Assert.IsNotNull(config);
             Assert.AreEqual(1, config.EncryptionPaths.Count);
             Assert.IsNotNull(config.EncryptionCertificate);
-            Assert.AreEqual("F806B26BC4870E26986C70B6590AF87BAF4C2B56BB50622C51B12212DAFF2810", config.EncryptionKeyFingerprint);
             Assert.AreEqual(1, config.DecryptionPaths.Count);
             Assert.IsNotNull(config.DecryptionKey);
-            Assert.AreEqual("SHA-512", config.OaepPaddingDigestAlgorithm);
             Assert.AreEqual("encryptedValue", config.EncryptedValueFieldName);
+            Assert.AreEqual(EncryptionConfig.EncryptionScheme.Jwe, config.Scheme);
         }
 
         [TestMethod]
@@ -39,14 +38,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
         }
 
         [TestMethod]
-        public void TestBuild_ResultShouldHaveJWESchemeSet()
-        {
-            EncryptionConfig config = TestUtils.GetTestJweConfigBuilder().Build();
-            Assert.AreEqual(EncryptionConfig.EncryptionScheme.Jwe, config.Scheme);
-        }
-
-        [TestMethod]
-        public void TestBuild_ShouldComputeCertificateKeyFingerprints_WhenFingerprintsNotSet()
+        public void TestBuild_ShouldComputeCertificateKeyFingerprint_WhenFingerprintNotSet()
         {
             EncryptionConfig config = TestUtils.GetTestJweConfigBuilder().Build();
             Assert.AreEqual("761b003c1eade3a5490e5000d37887baa5e6ec0e226c07706e599451fc032a79", config.EncryptionKeyFingerprint);
@@ -54,11 +46,29 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
 
         [TestMethod]
         [ExpectedException(typeof(EncryptionException))]
-        public void TestBuild_ShouldThrowEncryptionException_WhenInvalidEncryptionCertficate()
+        public void TestBuild_ShouldThrowEncryptionException_WhenInvalidEncryptionCertificate()
         {
             TestUtils.GetTestJweConfigBuilder()
-                .WithEncryptionCertificate(TestUtils.GetTestInvalidEncryptionCertificate())
+                .WithEncryptionCertificate(TestUtils.GetTestInvalidEncryptionCertificate() )
                 .Build();
+        }
+
+        [TestMethod]
+        public void TestBuild_ShouldFallbackToDefaults()
+        {
+            // WHEN
+            var config = JweConfigBuilder.AJweConfigBuilder()
+                .WithEncryptionCertificate(TestUtils.GetTestEncryptionCertificate())
+                .Build();
+
+            // THEN
+            var expectedDecryptionPaths = new Dictionary<string, string> {{"$.encryptedData", "$"}};
+            var expectedEncryptionPaths = new Dictionary<string, string> {{ "$", "$" }};
+            Assert.AreEqual(expectedDecryptionPaths.Count, config.DecryptionPaths.Count);
+            Assert.AreEqual(expectedEncryptionPaths.Count, config.EncryptionPaths.Count);
+            Assert.AreEqual(0, expectedDecryptionPaths.Except(config.DecryptionPaths).Count());
+            Assert.AreEqual(0, expectedDecryptionPaths.Except(config.DecryptionPaths).Count());
+            Assert.AreEqual("encryptedData", config.EncryptedValueFieldName);
         }
 
         [TestMethod]

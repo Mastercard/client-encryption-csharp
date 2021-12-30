@@ -93,7 +93,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
             catch (Exception e)
             {
                 // THEN
-                Assert.AreEqual("Failed to wrap secret key!", e.Message);
+                Assert.AreEqual("Payload encryption failed!", e.Message);
                 throw;
             }
         }

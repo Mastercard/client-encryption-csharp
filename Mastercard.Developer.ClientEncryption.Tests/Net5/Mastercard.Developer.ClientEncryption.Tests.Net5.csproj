@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\NetCore2\AES\AesEncryptionTest.cs">
-      <Link>AES\AesEncryptionTest.cs</Link>
+    <Compile Include="..\NetCore2\Encryption\AES\AesEncryptionTest.cs">
+      <Link>Encryption\AES\AesEncryptionTest.cs</Link>
     </Compile>
     <Compile Include="..\NetCore2\Encryption\EncryptionExceptionTest.cs">
       <Link>Encryption\EncryptionExceptionTest.cs</Link>
@@ -52,14 +52,17 @@
     <Compile Include="..\NetCore2\Interceptors\RestSharpV2GCMJweEncryptionInterceptorTest.cs">
       <Link>Interceptors\RestSharpV2GCMJweEncryptionInterceptorTest.cs</Link>
     </Compile>
-    <Compile Include="..\NetCore2\JWE\CBCJweObjectTest.cs">
-        <Link>JWE\CBCJweObjectTest.cs</Link>
+    <Compile Include="..\NetCore2\Encryption\JWE\CBCJweObjectTest.cs">
+        <Link>Encryption\JWE\CBCJweObjectTest.cs</Link>
     </Compile> 
-    <Compile Include="..\NetCore2\JWE\GCMJweObjectTest.cs">
-        <Link>JWE\GCMJweObjectTest.cs</Link>
+    <Compile Include="..\NetCore2\Encryption\JWE\GCMJweObjectTest.cs">
+        <Link>Encryption\JWE\GCMJweObjectTest.cs</Link>
     </Compile> 
-    <Compile Include="..\NetCore2\JWE\JweHeaderTest.cs">
-        <Link>JWE\JweHeaderTest.cs</Link>
+    <Compile Include="..\NetCore2\Encryption\JWE\JweHeaderTest.cs">
+        <Link>Encryption\JWE\JweHeaderTest.cs</Link>
+    </Compile>
+    <Compile Include="..\NetCore2\Encryption\RSA\RsaEncryptionTest.cs">
+      <Link>Encryption\RSA\RsaEncryptionTest.cs</Link>
     </Compile>
     <Compile Include="..\NetCore2\Test\TestUtils.cs">
       <Link>Test\TestUtils.cs</Link>

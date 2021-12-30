@@ -6,7 +6,7 @@ using Mastercard.Developer.ClientEncryption.Core.Encryption.JWE;
 
 namespace Mastercard.Developer.ClientEncryption.Core.Encryption.AES
 {
-    class AESGCMAuthenticated
+    internal class AESGCMAuthenticated
     {
         public byte[] Ciphertext { get; private set; }
         public byte[] AuthTag { get; private set; }

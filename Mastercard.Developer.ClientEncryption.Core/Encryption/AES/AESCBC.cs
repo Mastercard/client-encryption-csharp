@@ -6,7 +6,7 @@ using Mastercard.Developer.ClientEncryption.Core.Encryption.JWE;
 
 namespace Mastercard.Developer.ClientEncryption.Core.Encryption.AES
 {
-    class AESCBC
+    internal class AESCBC
     {
         private AESCBC() { }
 
