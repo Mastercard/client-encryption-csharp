@@ -578,41 +578,50 @@ Generators currently supported:
 Client libraries can be generated using the following command:
 
 ```shell
-java -jar openapi-generator-cli.jar generate -i openapi-spec.yaml -g csharp-netcore -c config.json -o out
+openapi-generator-cli generate -i openapi-spec.yaml -g csharp-netcore -c config.json -o out
 ```
 config.json:
 
 ```json
-{ "targetFramework": "netstandard2.0" }
+{ "targetFramework": "netstandard2.1" }
 ```
 
 See also: 
-* [OpenAPI Generator (executable)](https://mvnrepository.com/artifact/org.openapitools/openapi-generator-cli)
+* [OpenAPI Generator CLI Installation](https://openapi-generator.tech/docs/installation)
 * [Config Options for csharp-netcore](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/csharp-netcore.md)
 
-##### Usage of the `RestSharpFieldLevelEncryptionInterceptor`
+##### Usage of the `RestSharpEncryptionInterceptor`
 
-`RestSharpFieldLevelEncryptionInterceptor` is located in the [`ClientEncryption.RestSharpV2`](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.RestSharpV2/) package. 
+`RestSharpEncryptionInterceptor` is located in the [`ClientEncryption.RestSharpV2`](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.RestSharpV2/) package. 
 
 ##### Usage
 
-1. Create a new file (for instance, `ApiClientWithEncryption.cs`) extending the definition of the generated `ApiClient` class:
+1. Create a new file (for instance, `MastercardApiClient.cs`) extending the definition of the generated `ApiClient` class:
 
 ```cs
 partial class ApiClient
 {
-    public RestSharpFieldLevelEncryptionInterceptor EncryptionInterceptor { private get; set; }
-    
-    public ApiClient(RSA signingKey, string basePath, string consumerKey)
+    private readonly Uri _basePath;
+    private readonly RestSharpSigner _signer;
+    private readonly RestSharpEncryptionInterceptor _encryptionInterceptor;
+
+    /// <summary>
+    /// Construct an ApiClient which will automatically:
+    /// - Sign requests
+    /// - Encrypt/decrypt requests and responses
+    /// </summary>
+    public ApiClient(RSA signingKey, string basePath, string consumerKey, EncryptionConfig config)
     {
-        this._baseUrl = basePath;
-        this.BasePath = new Uri(basePath);
-        this.Signer = new RestSharpSigner(consumerKey, signingKey);
+        _baseUrl = basePath;
+        _basePath = new Uri(basePath);
+        _signer = new RestSharpSigner(consumerKey, signingKey);
+        _encryptionInterceptor = RestSharpEncryptionInterceptor.From(config);
     }
-    
-    partial void InterceptRequest(IRestRequest request) {
-        EncryptionInterceptor.InterceptRequest(request);
-        Signer.Sign(this.BasePath, request);
+
+    partial void InterceptRequest(IRestRequest request)
+    {
+        _encryptionInterceptor.InterceptRequest(request);
+        _signer.Sign(_basePath, request);
     }
 }
 ```
@@ -620,16 +629,8 @@ partial class ApiClient
 2. Configure your `ApiClient` instance the following way:
 
 ```cs
-var serviceApi = new ServiceApi();
-var client = new ApiClient(SigningKey, BasePath, ConsumerKey);
-
-var fieldLevelEncryptionConfig = FieldLevelEncryptionConfigBuilder
-    .AFieldLevelEncryptionConfig()
-    // …
-    .Build();
-
-client.EncryptionInterceptor = new RestSharpFieldLevelEncryptionInterceptor(fieldLevelEncryptionConfig)
-serviceApi.Client = client;
+var client = new ApiClient(SigningKey, BasePath, ConsumerKey, config);
+var serviceApi = new ServiceApi() { Client = client };
 // …
 ```
 
@@ -651,7 +652,7 @@ config.json:
 ⚠️ `v5.0` was used for `targetFramework` in OpenAPI Generator versions prior 5.0.0.
 
 See also: 
-* [OpenAPI Generator (executable)](https://mvnrepository.com/artifact/org.openapitools/openapi-generator-cli)
+* [OpenAPI Generator CLI Installation](https://openapi-generator.tech/docs/installation)
 * [Config Options for csharp](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/csharp.md)
 
 ##### Usage of the `RestSharpFieldLevelEncryptionInterceptor`
@@ -659,7 +660,7 @@ See also:
 `RestSharpFieldLevelEncryptionInterceptor` is located in the [`ClientEncryption.RestSharp`](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.RestSharp/) package. 
 
 ##### Usage:
-1. Create a new file (for instance, `ApiClientWithEncryption.cs`) extending the definition of the generated `ApiClient` class:
+1. Create a new file (for instance, `MastercardApiClient.cs`) extending the definition of the generated `ApiClient` class:
 
 ```cs
 partial class ApiClient
@@ -676,11 +677,11 @@ partial class ApiClient
 var config = Configuration.Default;
 config.BasePath = "https://sandbox.api.mastercard.com";
 config.ApiClient.RestClient.Authenticator = new RestSharpOAuth1Authenticator(ConsumerKey, signingKey, new Uri(config.BasePath));
-var fieldLevelEncryptionConfig = FieldLevelEncryptionConfigBuilder
+var encryptionConfig = FieldLevelEncryptionConfigBuilder
     .AFieldLevelEncryptionConfig()
     // …
     .Build();
-config.ApiClient.EncryptionInterceptor = new RestSharpFieldLevelEncryptionInterceptor(fieldLevelEncryptionConfig);
+config.ApiClient.EncryptionInterceptor = new RestSharpFieldLevelEncryptionInterceptor(encryptionConfig);
 var serviceApi = new ServiceApi(config);
 // …
 ```
