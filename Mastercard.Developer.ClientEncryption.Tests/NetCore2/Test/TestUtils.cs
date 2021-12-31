@@ -55,7 +55,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Test
 
         internal static JweConfigBuilder GetTestJweConfigBuilder()
         {
-            return JweConfigBuilder.AJweConfigBuilder()
+            return JweConfigBuilder.AJweEncryptionConfig()
                 .WithEncryptionCertificate(TestUtils.GetTestEncryptionCertificate())
                 .WithDecryptionKey(TestUtils.GetTestDecryptionKey());
         }

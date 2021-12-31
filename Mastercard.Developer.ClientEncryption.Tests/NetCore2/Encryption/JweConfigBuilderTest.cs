@@ -13,7 +13,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
         [TestMethod]
         public void TestBuild_Nominal()
         {
-            var config = JweConfigBuilder.AJweConfigBuilder()
+            var config = JweConfigBuilder.AJweEncryptionConfig()
                 .WithEncryptionPath("$.payload", "$.encryptedPayload")
                 .WithEncryptionCertificate(TestUtils.GetTestEncryptionCertificate())
                 .WithDecryptionPath("$.encryptedPayload", "$.payload")
@@ -57,7 +57,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
         public void TestBuild_ShouldFallbackToDefaults()
         {
             // WHEN
-            var config = JweConfigBuilder.AJweConfigBuilder()
+            var config = JweConfigBuilder.AJweEncryptionConfig()
                 .WithEncryptionCertificate(TestUtils.GetTestEncryptionCertificate())
                 .Build();
 
@@ -77,7 +77,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
         {
             try
             {
-                JweConfigBuilder.AJweConfigBuilder().Build();
+                JweConfigBuilder.AJweEncryptionConfig().Build();
             }
             catch (Exception e)
             {
@@ -92,7 +92,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
         {
             try
             {
-                JweConfigBuilder.AJweConfigBuilder()
+                JweConfigBuilder.AJweEncryptionConfig()
                     .WithDecryptionPath("$.encryptedPayloads[*]", "$.payload")
                     .WithDecryptionKey(TestUtils.GetTestDecryptionKey())
                     .Build();
@@ -110,7 +110,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
         {
             try
             {
-                JweConfigBuilder.AJweConfigBuilder()
+                JweConfigBuilder.AJweEncryptionConfig()
                     .WithEncryptionPath("$.payloads[*]", "$.encryptedPayload")
                     .WithEncryptionCertificate(TestUtils.GetTestEncryptionCertificate())
                     .Build();
