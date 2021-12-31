@@ -18,26 +18,33 @@
   * [Adding the Libraries to Your Project](#adding-the-libraries-to-your-project)
   * [Loading the Encryption Certificate](#loading-the-encryption-certificate) 
   * [Loading the Decryption Key](#loading-the-decryption-key)
-  * [Performing Field Level Encryption and Decryption](#performing-field-level-encryption-and-decryption)
+  * [Performing Payload Encryption and Decryption](#performing-payload-encryption-and-decryption)
+    * [Introduction](#introduction)
+    * [JWE Encryption and Decryption](#jwe-encryption-and-decryption)
+    * [Mastercard Encryption and Decryption](#mastercard-encryption-and-decryption)
   * [Integrating with OpenAPI Generator API Client Libraries](#integrating-with-openapi-generator-api-client-libraries)
 
 ## Overview <a name="overview"></a>
-* [`ClientEncryption.Core`](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.Core/) is a zero dependency library for Mastercard API compliant payload encryption/decryption.
+* [`ClientEncryption.Core`](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.Core/) is a zero dependency library for Mastercard API compliant payload encryption/decryption
 * [`ClientEncryption.RestSharpV2`](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.RestSharpV2/) is an extension dedicated to [RestSharp](https://restsharp.dev/)
 * [`ClientEncryption.RestSharp`](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.RestSharp) is an extension dedicated to [RestSharp Portable](https://github.com/FubarDevelopment/restsharp.portable) (project no longer maintained)
 
 ### Compatibility <a name="compatibility"></a>
 
 #### .NET <a name="net"></a>
-* `ClientEncryption.Core` and `ClientEncryption.RestSharp` require a .NET Framework implementing [.NET Standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) 1.3.
-* `ClientEncryption.RestSharpV2` requires a .NET Framework implementing [.NET Standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) 2.0.
+* `ClientEncryption.Core` targets .NET Standard 1.3 and 2.1
+* `ClientEncryption.RestSharpV2` targets .NET Standard 2.0
+* `ClientEncryption.RestSharp` targets .NET Standard 1.3
+
+.NET Standard versions supported by .NET implementations can be found in the following articles: [.NET Standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard), [.NET Standard versions](https://dotnet.microsoft.com/en-us/platform/dotnet-standard#versions).
 
 #### Strong Naming <a name="strong-naming"></a>
 Assemblies are strong-named as per [Strong naming and .NET libraries](https://docs.microsoft.com/en-us/dotnet/standard/library-guidance/strong-naming).
 The SN key is available here: [`Identity.snk`](https://github.com/Mastercard/client-encryption-csharp/blob/master/Identity.snk).
 
 ### References <a name="references"></a>
-<img src="https://user-images.githubusercontent.com/3964455/55345820-c520a280-54a8-11e9-8235-407199fa1d97.png" alt="Encryption of sensitive data" width="75%" height="75%"/>
+* [JSON Web Encryption (JWE)](https://datatracker.ietf.org/doc/html/rfc7516)
+* [Securing Sensitive Data Using Payload Encryption](https://developer.mastercard.com/platform/documentation/security-and-authentication/securing-sensitive-data-using-payload-encryption/)
 
 ## Usage <a name="usage"></a>
 ### Prerequisites <a name="prerequisites"></a>
@@ -92,18 +99,192 @@ Supported RSA key formats:
 * PKCS#8 PEM (starts with "-----BEGIN PRIVATE KEY-----")
 * Binary DER-encoded PKCS#8
 
-### Performing Field Level Encryption and Decryption <a name="performing-field-level-encryption-and-decryption"></a>
+### Performing Payload Encryption and Decryption <a name="performing-payload-encryption-and-decryption"></a>
 
 + [Introduction](#introduction)
-+ [Configuring the Field Level Encryption](#configuring-the-field-level-encryption)
-+ [Performing Encryption](#performing-encryption)
-+ [Performing Decryption](#performing-decryption)
-+ [Encrypting Entire Payloads](#encrypting-entire-payloads)
-+ [Decrypting Entire Payloads](#decrypting-entire-payloads)
-+ [Using HTTP Headers for Encryption Params](#using-http-headers-for-encryption-params)
++ [JWE Encryption and Decryption](#jwe-encryption-and-decryption)
++ [Mastercard Encryption and Decryption](#mastercard-encryption-and-decryption)
 
 #### Introduction <a name="introduction"></a>
 
+This library supports two types of encryption/decryption, both of which support field level and entire payload encryption: JWE encryption and what the library refers to as Field Level Encryption (Mastercard encryption), a scheme used by many services hosted on Mastercard Developers before the library added support for JWE.
+
+#### JWE Encryption and Decryption <a name="jwe-encryption-and-decryption"></a>
+
++ [Introduction](#jwe-introduction)
++ [Configuring the JWE Encryption](#configuring-the-jwe-encryption)
++ [Performing JWE Encryption](#performing-jwe-encryption)
++ [Performing JWE Decryption](#performing-jwe-decryption)
++ [Encrypting Entire Payloads](#encrypting-entire-payloads-jwe)
++ [Decrypting Entire Payloads](#decrypting-entire-payloads-jwe)
+
+##### • Introduction <a name="jwe-introduction"></a>
+
+This library uses [JWE compact serialization](https://datatracker.ietf.org/doc/html/rfc7516#section-7.1) for the encryption of sensitive data.
+The core methods responsible for payload encryption and decryption are `EncryptPayload` and `DecryptPayload` in the `JweEncryption` class.
+
+* `EncryptPayload` usage:
+```cs
+var encryptedRequestPayload = JweEncryption.EncryptPayload(requestPayload, config);
+
+```
+
+* `DecryptPayload` usage:
+```cs
+var responsePayload = JweEncryption.DecryptPayload(encryptedResponsePayload, config);
+```
+
+##### • Configuring the JWE Encryption <a name="configuring-the-jwe-encryption"></a>
+Use the `JweConfigBuilder` to create `JweConfig` instances. Example:
+```cs
+var config = JweConfigBuilder.AJweEncryptionConfig()
+    .WithEncryptionCertificate(encryptionCertificate)
+    .WithDecryptionKey(decryptionKey)
+    .WithEncryptionPath("$.path.to.foo", "$.path.to.encryptedFoo")
+    .WithDecryptionPath("$.path.to.encryptedFoo", "$.path.to.foo")
+    .WithEncryptedValueFieldName("encryptedValue")
+    .Build();
+```
+
+See also:
+* [Service Configurations for Client Encryption C#](https://github.com/Mastercard/client-encryption-csharp/wiki/Service-Configurations-for-Client-Encryption-C%23)
+
+##### • Performing JWE Encryption <a name="performing-jwe-encryption"></a>
+
+Call `JweEncryption.EncryptPayload` with a JSON request payload and a `JweConfig` instance.
+
+Example using the configuration [above](#configuring-the-jwe-encryption):
+```cs
+const string payload = "{" +
+    "    \"path\": {" +
+    "        \"to\": {" +
+    "            \"foo\": {" +
+    "                \"sensitiveField1\": \"sensitiveValue1\"," +
+    "                \"sensitiveField2\": \"sensitiveValue2\"" +
+    "            }" +
+    "        }" +
+    "    }" +
+    "}";
+var encryptedPayload = JweEncryption.EncryptPayload(payload, config);
+Console.WriteLine(JObject.Parse(encryptedPayload));
+```
+
+Output:
+```json
+{
+    "path": {
+        "to": {
+            "encryptedFoo": {
+                "encryptedValue": "eyJraWQiOiI3NjFiMDAzYzFlYWRlM….Y+oPYKZEMTKyYcSIVEgtQw"
+            }
+        }
+    }
+}
+```
+
+##### • Performing JWE Decryption <a name="performing-jwe-decryption"></a>
+
+Call `JweEncryption.DecryptPayload` with a JSON response payload and a `JweConfig` instance.
+
+Example using the configuration [above](#configuring-the-jwe-encryption):
+```cs
+const string encryptedPayload = "{" +
+    "    \"path\": {" +
+    "        \"to\": {" +
+    "            \"encryptedFoo\": {" +
+    "                \"encryptedValue\": \"eyJraWQiOiI3NjFiMDAzYzFlYWRlM….Y+oPYKZEMTKyYcSIVEgtQw\"" +
+    "            }" +
+    "        }" +
+    "    }" +
+    "}";
+var payload = JweEncryption.DecryptPayload(encryptedPayload, config);
+Console.WriteLine(JObject.Parse(payload));
+```
+
+Output:
+```json
+{
+    "path": {
+        "to": {
+            "foo": {
+                "sensitiveField1": "sensitiveValue1",
+                "sensitiveField2": "sensitiveValue2"
+            }
+        }
+    }
+}
+```
+
+##### • Encrypting Entire Payloads <a name="encrypting-entire-payloads-jwe"></a>
+
+Entire payloads can be encrypted using the "$" operator as encryption path:
+
+```cs
+var config = JweConfigBuilder.AJweEncryptionConfig()
+    .WithEncryptionCertificate(encryptionCertificate)
+    .WithEncryptionPath("$", "$")
+    // …
+    .Build();
+```
+
+Example:
+```cs
+const string payload = "{" +
+    "    \"sensitiveField1\": \"sensitiveValue1\"," +
+    "    \"sensitiveField2\": \"sensitiveValue2\"" +
+    "}";
+var encryptedPayload = JweEncryption.EncryptPayload(payload, config);
+Console.WriteLine(JObject.Parse(encryptedPayload));
+```
+
+Output:
+```json
+{
+    "encryptedValue": "eyJraWQiOiI3NjFiMDAzYzFlYWRlM….Y+oPYKZEMTKyYcSIVEgtQw"
+}
+```
+
+##### • Decrypting Entire Payloads <a name="decrypting-entire-payloads-jwe"></a>
+
+Entire payloads can be decrypted using the "$" operator as decryption path:
+
+```cs
+var config = JweConfigBuilder.AJweEncryptionConfig()
+    .WithDecryptionKey(decryptionKey)
+    .WithDecryptionPath("$", "$")
+    // …
+    .Build();
+```
+
+Example:
+```cs
+const string encryptedPayload = "{" +
+    "  \"encryptedValue\": \"eyJraWQiOiI3NjFiMDAzYzFlYWRlM….Y+oPYKZEMTKyYcSIVEgtQw\"" +
+    "}";
+var payload = JweEncryption.DecryptPayload(encryptedPayload, config);
+Console.WriteLine(JObject.Parse(payload));
+```
+
+Output:
+```json
+{
+    "sensitiveField1": "sensitiveValue1",
+    "sensitiveField2": "sensitiveValue2"
+}
+```
+
+#### Mastercard Encryption and Decryption <a name="mastercard-encryption-and-decryption"></a>
+
++ [Introduction](#mastercard-introduction)
++ [Configuring the Mastercard Encryption](#configuring-the-mastercard-encryption)
++ [Performing Mastercard Encryption](#performing-mastercard-encryption)
++ [Performing Mastercard Decryption](#performing-mastercard-decryption)
++ [Encrypting Entire Payloads](#encrypting-entire-mastercard-payloads)
++ [Decrypting Entire Payloads](#decrypting-entire-mastercard-payloads)
++ [Using HTTP Headers for Encryption Params](#using-http-headers-for-encryption-params)
+
+##### • Introduction <a name="mastercard-introduction"></a>
+ 
 The core methods responsible for payload encryption and decryption are `EncryptPayload` and `DecryptPayload` in the `FieldLevelEncryption` class.
 
 * `EncryptPayload` usage:
@@ -116,8 +297,7 @@ var encryptedRequestPayload = FieldLevelEncryption.EncryptPayload(requestPayload
 var responsePayload = FieldLevelEncryption.DecryptPayload(encryptedResponsePayload, config);
 ```
 
-#### Configuring the Field Level Encryption <a name="configuring-the-field-level-encryption"></a>
-
+##### • Configuring the Mastercard Encryption <a name="configuring-the-mastercard-encryption"></a>
 Use the `FieldLevelEncryptionConfigBuilder` to create `FieldLevelEncryptionConfig` instances. Example:
 ```cs
 var config = FieldLevelEncryptionConfigBuilder.AFieldLevelEncryptionConfig()
@@ -137,7 +317,7 @@ See also:
 * [FieldLevelEncryptionConfig.cs](https://github.com/Mastercard/client-encryption-csharp/blob/master/Mastercard.Developer.ClientEncryption.Core/Encryption/FieldLevelEncryptionConfig.cs) for all config options
 * [Service Configurations for Client Encryption C#](https://github.com/Mastercard/client-encryption-csharp/wiki/Service-Configurations-for-Client-Encryption-C%23)
 
-#### Performing Encryption <a name="performing-encryption"></a>
+##### • Performing Mastercard Encryption <a name="performing-mastercard-encryption"></a>
 
 Call `FieldLevelEncryption.EncryptPayload` with a JSON request payload and a `FieldLevelEncryptionConfig` instance.
 
@@ -164,15 +344,15 @@ Output:
         "to": {
             "encryptedFoo": {
                 "iv": "7f1105fb0c684864a189fb3709ce3d28",
-                "encryptedKey": "67f467d1b653d98411a0c6d3c(...)ffd4c09dd42f713a51bff2b48f937c8",
-                "encryptedValue": "b73aabd267517fc09ed72455c2(...)dffb5fa04bf6e6ce9ade1ff514ed6141"
+                "encryptedKey": "67f467d1b653d98411a0c6d3c…ffd4c09dd42f713a51bff2b48f937c8",
+                "encryptedValue": "b73aabd267517fc09ed72455c2…dffb5fa04bf6e6ce9ade1ff514ed6141"
             }
         }
     }
 }
 ```
 
-#### Performing Decryption <a name="performing-decryption"></a>
+##### • Performing Mastercard Decryption <a name="performing-mastercard-decryption"></a>
 
 Call `FieldLevelEncryption.DecryptPayload` with a JSON response payload and a `FieldLevelEncryptionConfig` instance.
 
@@ -183,8 +363,8 @@ const string encryptedPayload = "{" +
     "        \"to\": {" +
     "            \"encryptedFoo\": {" +
     "                \"iv\": \"e5d313c056c411170bf07ac82ede78c9\"," +
-    "                \"encryptedKey\": \"e3a56746c0f9109d18b3a2652b76(...)f16d8afeff36b2479652f5c24ae7bd\"," +
-    "                \"encryptedValue\": \"809a09d78257af5379df0c454dcdf(...)353ed59fe72fd4a7735c69da4080e74f\"" +
+    "                \"encryptedKey\": \"e3a56746c0f9109d18b3a2652b76…f16d8afeff36b2479652f5c24ae7bd\"," +
+    "                \"encryptedValue\": \"809a09d78257af5379df0c454dcdf…353ed59fe72fd4a7735c69da4080e74f\"" +
     "            }" +
     "        }" +
     "    }" +
@@ -207,7 +387,7 @@ Output:
 }
 ```
 
-#### Encrypting Entire Payloads <a name="encrypting-entire-payloads"></a>
+##### • Encrypting Entire Payloads <a name="encrypting-entire-mastercard-payloads"></a>
 
 Entire payloads can be encrypted using the "$" operator as encryption path:
 
@@ -215,7 +395,7 @@ Entire payloads can be encrypted using the "$" operator as encryption path:
 var config = FieldLevelEncryptionConfigBuilder.AFieldLevelEncryptionConfig()
     .WithEncryptionCertificate(encryptionCertificate)
     .WithEncryptionPath("$", "$")
-    // ...
+    // …
     .Build();
 ```
 
@@ -233,12 +413,12 @@ Output:
 ```json
 {
     "iv": "1b9396c98ab2bfd195de661d70905a45",
-    "encryptedKey": "7d5112fa08e554e3dbc455d0628(...)52e826dd10311cf0d63bbfb231a1a63ecc13",
-    "encryptedValue": "e5e9340f4d2618d27f8955828c86(...)379b13901a3b1e2efed616b6750a90fd379515"
+    "encryptedKey": "7d5112fa08e554e3dbc455d0628…52e826dd10311cf0d63bbfb231a1a63ecc13",
+    "encryptedValue": "e5e9340f4d2618d27f8955828c86…379b13901a3b1e2efed616b6750a90fd379515"
 }
 ```
 
-#### Decrypting Entire Payloads <a name="decrypting-entire-payloads"></a>
+##### • Decrypting Entire Payloads <a name="decrypting-entire-mastercard-payloads"></a>
 
 Entire payloads can be decrypted using the "$" operator as decryption path:
 
@@ -246,7 +426,7 @@ Entire payloads can be decrypted using the "$" operator as decryption path:
 var config = FieldLevelEncryptionConfigBuilder.AFieldLevelEncryptionConfig()
     .WithDecryptionKey(decryptionKey)
     .WithDecryptionPath("$", "$")
-    // ...
+    // …
     .Build();
 ```
 
@@ -254,8 +434,8 @@ Example:
 ```cs
 const string encryptedPayload = "{" +
     "  \"iv\": \"1b9396c98ab2bfd195de661d70905a45\"," +
-    "  \"encryptedKey\": \"7d5112fa08e554e3dbc455d0628(...)52e826dd10311cf0d63bbfb231a1a63ecc13\"," +
-    "  \"encryptedValue\": \"e5e9340f4d2618d27f8955828c86(...)379b13901a3b1e2efed616b6750a90fd379515\"" +
+    "  \"encryptedKey\": \"7d5112fa08e554e3dbc455d0628…52e826dd10311cf0d63bbfb231a1a63ecc13\"," +
+    "  \"encryptedValue\": \"e5e9340f4d2618d27f8955828c86…379b13901a3b1e2efed616b6750a90fd379515\"" +
     "}";
 var payload = FieldLevelEncryption.DecryptPayload(encryptedPayload, config);
 Console.WriteLine(JObject.Parse(payload));
@@ -269,13 +449,13 @@ Output:
 }
 ```
 
-#### Using HTTP Headers for Encryption Params <a name="using-http-headers-for-encryption-params"></a>
+##### • Using HTTP Headers for Encryption Params <a name="using-http-headers-for-encryption-params"></a>
 
 In the sections above, encryption parameters (initialization vector, encrypted symmetric key, etc.) are part of the HTTP payloads.
 
 Here is how to configure the library for using HTTP headers instead.
 
-##### Configuration for Using HTTP Headers <a name="configuration-for-using-http-headers"></a>
+###### Configuration for Using HTTP Headers <a name="configuration-for-using-http-headers"></a>
 
 Call `With{Param}HeaderName` instead of `With{Param}FieldName` when building a `FieldLevelEncryptionConfig` instance. Example:
 ```cs
@@ -288,7 +468,7 @@ var config = FieldLevelEncryptionConfigBuilder.AFieldLevelEncryptionConfig()
     .WithEncryptedValueFieldName("data")
     .WithIvHeaderName("x-iv")
     .WithEncryptedKeyHeaderName("x-encrypted-key")
-    // ...
+    // …
     .WithValueEncoding(FieldValueEncoding.Hex)
     .Build();
 ```
@@ -297,7 +477,7 @@ See also:
 * [FieldLevelEncryptionConfig.cs](https://github.com/Mastercard/client-encryption-csharp/blob/master/Mastercard.Developer.ClientEncryption.Core/Encryption/FieldLevelEncryptionConfig.cs) for all config options
 * [Service Configurations for Client Encryption C#](https://github.com/Mastercard/client-encryption-csharp/wiki/Service-Configurations-for-Client-Encryption-C%23)
 
-##### Encrypting Using HTTP Headers
+###### Encrypting Using HTTP Headers
 
 Encryption can be performed using the following steps:
 
@@ -312,7 +492,7 @@ var parameters = FieldLevelEncryptionParams.Generate(config);
 ```cs
 request.SetHeader(config.IvHeaderName, parameters.IvValue);
 request.SetHeader(config.EncryptedKeyHeaderName, parameters.EncryptedKeyValue);
-// ...
+// …
 ```
 
 3. Call `EncryptPayload` with params:
@@ -334,11 +514,11 @@ Console.WriteLine(JObject.Parse(encryptedPayload));
 Output:
 ```json
 {
-    "data": "53b5f07ee46403af2e92abab900853(...)d560a0a08a1ed142099e3f4c84fe5e5"
+    "data": "53b5f07ee46403af2e92abab900853…d560a0a08a1ed142099e3f4c84fe5e5"
 }
 ```
 
-##### Decrypting Using HTTP Headers
+###### Decrypting Using HTTP Headers
 
 Decryption can be performed using the following steps:
 
@@ -347,13 +527,13 @@ Decryption can be performed using the following steps:
 ```cs
 var ivValue = response.GetHeader(config.IvHeaderName);
 var encryptedKeyValue = response.GetHeader(config.EncryptedKeyHeaderName);
-// ...
+// …
 ```
 
 2. Create a `FieldLevelEncryptionParams` instance:
 
 ```cs
-var parameters = new FieldLevelEncryptionParams(config, ivValue, encryptedKeyValue, ...);
+var parameters = new FieldLevelEncryptionParams(config, ivValue, encryptedKeyValue, …);
 ```
 
 3. Call `DecryptPayload` with params:
@@ -365,7 +545,7 @@ Example using the configuration [above](#configuration-for-using-http-headers):
 
 ```cs
 const string encryptedPayload = "{" +
-    "  \"data\": \"53b5f07ee46403af2e92abab900853(...)d560a0a08a1ed142099e3f4c84fe5e5\"" +
+    "  \"data\": \"53b5f07ee46403af2e92abab900853…d560a0a08a1ed142099e3f4c84fe5e5\"" +
     "}";
 var payload = FieldLevelEncryption.DecryptPayload(encryptedPayload, config, parameters);
 Console.WriteLine(JObject.Parse(payload));
@@ -445,12 +625,12 @@ var client = new ApiClient(SigningKey, BasePath, ConsumerKey);
 
 var fieldLevelEncryptionConfig = FieldLevelEncryptionConfigBuilder
     .AFieldLevelEncryptionConfig()
-    // ...
+    // …
     .Build();
 
 client.EncryptionInterceptor = new RestSharpFieldLevelEncryptionInterceptor(fieldLevelEncryptionConfig)
 serviceApi.Client = client;
-// ...
+// …
 ```
 
 #### csharp (deprecated)<a name="csharp-generator"></a>
@@ -498,9 +678,9 @@ config.BasePath = "https://sandbox.api.mastercard.com";
 config.ApiClient.RestClient.Authenticator = new RestSharpOAuth1Authenticator(ConsumerKey, signingKey, new Uri(config.BasePath));
 var fieldLevelEncryptionConfig = FieldLevelEncryptionConfigBuilder
     .AFieldLevelEncryptionConfig()
-    // ...
+    // …
     .Build();
 config.ApiClient.EncryptionInterceptor = new RestSharpFieldLevelEncryptionInterceptor(fieldLevelEncryptionConfig);
 var serviceApi = new ServiceApi(config);
-// ...
+// …
 ```
