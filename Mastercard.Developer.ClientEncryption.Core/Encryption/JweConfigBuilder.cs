@@ -18,12 +18,6 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         public static JweConfigBuilder AJweEncryptionConfig() => new JweConfigBuilder();
 
         /// <summary>
-        /// Get an instance of the builder.
-        /// </summary>
-        [Obsolete("Use AJweEncryptionConfig instead.")]
-        public static JweConfigBuilder AJweConfigBuilder() => new JweConfigBuilder();
-
-        /// <summary>
         /// See: <see cref="EncryptionConfig.EncryptionCertificate"/>
         /// </summary>
         public JweConfigBuilder WithEncryptionCertificate(X509Certificate2 encryptionCertificate)
