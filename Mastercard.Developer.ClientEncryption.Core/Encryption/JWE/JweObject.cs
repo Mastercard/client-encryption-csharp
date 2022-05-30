@@ -21,52 +21,51 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
 
         public string Decrypt(JweConfig config)
         {
-            byte[] unwrappedKey = RsaEncryption.UnwrapSecretKey(config, Base64Utils.URLDecode(EncryptedKey), "SHA-256");
+            var unwrappedKey = RsaEncryption.UnwrapSecretKey(config, Base64Utils.URLDecode(EncryptedKey), "SHA-256");
             if (unwrappedKey == null)
             {
-                throw new EncryptionException(String.Format("Failed to unwrap key {0}", EncryptedKey));
+                throw new EncryptionException($"Failed to unwrap key {EncryptedKey}");
             }
 
-            string encryptionMethod = Header.Enc;
+            var encryptionMethod = Header.Enc;
 
             byte[] plaintext;
-            if (A256GCM.Equals(encryptionMethod))
+            switch (encryptionMethod)
             {
-                plaintext = AesGcm.Decrypt(unwrappedKey, this);
-            }
-            else if (A128CBC_HS256.Equals(encryptionMethod))
-            {
-                plaintext = AesCbc.Decrypt(unwrappedKey, this);
-            }
-            else
-            {
-                throw new EncryptionException(String.Format("Encryption method {0} is not supported", encryptionMethod));
+                case A256GCM:
+                    plaintext = AesGcm.Decrypt(unwrappedKey, this);
+                    break;
+                case A128CBC_HS256:
+                    plaintext = AesCbc.Decrypt(unwrappedKey, this);
+                    break;
+                default:
+                    throw new EncryptionException($"Encryption method {encryptionMethod} is not supported");
             }
             return Encoding.UTF8.GetString(plaintext);
         }
 
-        public static string Encrypt(JweConfig config, String payload, JweHeader header)
+        public static string Encrypt(JweConfig config, string payload, JweHeader header)
         {
-            byte[] cek = AesEncryption.GenerateCek(256);
-            byte[] encryptedSecretKeyBytes = RsaEncryption.WrapSecretKey(config.EncryptionCertificate.GetRSAPublicKey(), cek, "SHA-256");
-            string encryptedKey = Base64Utils.URLEncode(encryptedSecretKeyBytes);
+            var cek = AesEncryption.GenerateCek(256);
+            var encryptedSecretKeyBytes = RsaEncryption.WrapSecretKey(config.EncryptionCertificate.GetRSAPublicKey(), cek, "SHA-256");
+            var encryptedKey = Base64Utils.URLEncode(encryptedSecretKeyBytes);
 
-            byte[] iv = AesEncryption.GenerateIV();
-            byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
+            var iv = AesEncryption.GenerateIV();
+            var payloadBytes = Encoding.UTF8.GetBytes(payload);
 
-            string headerString = header.Json.ToString();
-            string encodedHeader = Base64Utils.URLEncode(Encoding.UTF8.GetBytes(headerString));
-            byte[] aad = Encoding.ASCII.GetBytes(encodedHeader);
+            var headerString = header.Json.ToString();
+            var encodedHeader = Base64Utils.URLEncode(Encoding.UTF8.GetBytes(headerString));
+            var aad = Encoding.ASCII.GetBytes(encodedHeader);
 
             var encrypted = AesGcm.Encrypt(cek, iv, payloadBytes, aad);
             return Serialize(encodedHeader, encryptedKey, Base64Utils.URLEncode(iv), Base64Utils.URLEncode(encrypted.Ciphertext), Base64Utils.URLEncode(encrypted.AuthTag));
         }
 
-        public static JweObject Parse(String encryptedPayload)
+        public static JweObject Parse(string encryptedPayload)
         {
-            string[] fields = encryptedPayload.Trim().Split('.');
+            var fields = encryptedPayload.Trim().Split('.');
 
-            JweObject jweObject = new JweObject();
+            var jweObject = new JweObject();
             jweObject.RawHeader = fields[0];
             jweObject.Header = JweHeader.Parse(jweObject.RawHeader);
             jweObject.EncryptedKey = fields[1];

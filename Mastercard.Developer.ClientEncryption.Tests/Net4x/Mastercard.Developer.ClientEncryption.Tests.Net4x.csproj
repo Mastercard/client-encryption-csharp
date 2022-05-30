@@ -63,6 +63,9 @@
     <Compile Include="..\NetCore2\Encryption\JweConfigBuilderTest.cs">
       <Link>Encryption\JweConfigBuilderTest.cs</Link>
     </Compile>
+    <Compile Include="..\NetCore2\Encryption\JWE\JweEncryptionTest.cs">
+      <Link>Encryption\JWE\JweEncryptionTest.cs</Link>
+    </Compile>
     <Compile Include="..\NetCore2\Interceptors\RestResponseDouble.cs">
       <Link>Interceptors\RestResponseDouble.cs</Link>
     </Compile>

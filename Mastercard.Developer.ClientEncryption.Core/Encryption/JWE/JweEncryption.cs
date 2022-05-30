@@ -8,26 +8,26 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
 {
     public static class JweEncryption
     {
-        private const string ALGORITHM = "RSA-OAEP-256";
-        private const string ENCRYPTION = "A256GCM";
-        private const string CONTENT_TYPE = "application/json";
+        private const string Algorithm = "RSA-OAEP-256";
+        private const string Encryption = "A256GCM";
+        private const string ContentType = "application/json";
 
         public static string EncryptPayload(string payload, JweConfig config)
         {
             try
             {
                 // Parse the given payload
-                JToken json = JObject.Parse(payload);
+                var payloadToken = JToken.Parse(payload);
 
                 // Encrypt
                 foreach (var entry in config.EncryptionPaths)
                 {
-                    string jsonPathIn = entry.Key;
-                    string jsonPathOut = entry.Value;
-                    json = EncryptPayloadPath(json, jsonPathIn, jsonPathOut, config);
+                    var jsonPathIn = entry.Key;
+                    var jsonPathOut = entry.Value;
+                    payloadToken = EncryptPayloadPath(payloadToken, jsonPathIn, jsonPathOut, config);
                 }
 
-                return json.ToString();
+                return payloadToken.ToString();
             }
             catch (Exception ex)
             {
@@ -40,16 +40,16 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
             try
             {
                 // Parse the given payload
-                JToken json = JObject.Parse(payload);
+                var payloadToken = JToken.Parse(payload);
 
                 // Perform decryption
                 foreach (var entry in config.DecryptionPaths)
                 {
-                    string jsonPathIn = entry.Key;
-                    string jsonPathOut = entry.Value;
-                    json = DecryptPayloadPath(json, jsonPathIn, jsonPathOut, config);
+                    var jsonPathIn = entry.Key;
+                    var jsonPathOut = entry.Value;
+                    payloadToken = DecryptPayloadPath(payloadToken, jsonPathIn, jsonPathOut, config);
                 }
-                return json.ToString();
+                return payloadToken.ToString();
             }
             catch (Exception ex)
             {
@@ -59,26 +59,26 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
 
         private static JToken DecryptPayloadPath(JToken payload, string jsonPathIn, string jsonPathOut, JweConfig config)
         {
-            JToken token = payload.SelectToken(jsonPathIn);
-            if (JsonUtils.IsNullOrEmptyJson( token ))
+            var token = payload.SelectToken(jsonPathIn);
+            if (JsonUtils.IsNullOrEmptyJson(token))
             {
                 // Nothing to decrypt
                 return payload;
             }
 
             // Read and remove encrypted data and encryption fields at the given JSON path
-            string encryptedValue = ReadAndDeleteJsonKey(payload, token, config.EncryptedValueFieldName);
+            var encryptedValue = ReadAndDeleteJsonKey(payload, token, config.EncryptedValueFieldName);
             if (string.IsNullOrEmpty(encryptedValue))
             {
                 // Nothing to decrypt
                 return payload;
             }
-            JweObject jweObject = JweObject.Parse(encryptedValue);
-            string decryptedValue = jweObject.Decrypt(config);
+            var jweObject = JweObject.Parse(encryptedValue);
+            var decryptedValue = jweObject.Decrypt(config);
 
             if ("$".Equals(jsonPathOut))
             {
-                return JObject.Parse(decryptedValue);
+                return JToken.Parse(decryptedValue);
             }
 
             JsonUtils.CheckOrCreateOutObject(payload, jsonPathOut);
@@ -95,20 +95,18 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
 
         private static string ReadAndDeleteJsonKey(JToken context, JToken token, string key)
         {
-            if (!string.IsNullOrEmpty(key))
+            if (string.IsNullOrEmpty(key)) return token.ToString();
+            var value = context.SelectToken(key);
+            if (null != value && null != value.Parent)
             {
-                var value = context.SelectToken(key);
-                if (null != value && null != value.Parent)
-                {
-                    value.Parent.Remove();
-                }
+                value.Parent.Remove();
             }
             return token.ToString();
         }
 
         private static JToken EncryptPayloadPath(JToken json, string jsonPathIn, string jsonPathOut, JweConfig config)
         {
-            JToken token = json.SelectToken(jsonPathIn);
+            var token = json.SelectToken(jsonPathIn);
             if (JsonUtils.IsNullOrEmptyJson(token))
             {
                 // Nothing to encrypt
@@ -116,9 +114,9 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
             }
 
             // Encode and encrypt
-            string inJsonString = JsonUtils.SanitizeJson(token.ToString(Formatting.None));
-            JweHeader header = new JweHeader(ALGORITHM, ENCRYPTION, config.EncryptionKeyFingerprint, CONTENT_TYPE);
-            string encrypted = JweObject.Encrypt(config, inJsonString, header);
+            var inJsonString = JsonUtils.SanitizeJson(token.ToString(Formatting.None));
+            var header = new JweHeader(Algorithm, Encryption, config.EncryptionKeyFingerprint, ContentType);
+            var encrypted = JweObject.Encrypt(config, inJsonString, header);
 
             // Delete data in the clear
             if ("$".Equals(jsonPathIn))
@@ -134,7 +132,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
             JsonUtils.CheckOrCreateOutObject(json, jsonPathOut);
             var outJsonToken = json.SelectToken(jsonPathOut) as JObject;
             JsonUtils.AddOrReplaceJsonKey(outJsonToken, config.EncryptedValueFieldName, encrypted);
-            return outJsonToken;
+            return json;
         }
     }
 }

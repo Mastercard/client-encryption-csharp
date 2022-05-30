@@ -61,6 +61,9 @@
     <Compile Include="..\NetCore2\Encryption\JWE\JweHeaderTest.cs">
         <Link>Encryption\JWE\JweHeaderTest.cs</Link>
     </Compile>
+    <Compile Include="..\NetCore2\Encryption\JWE\JweEncryptionTest.cs">
+      <Link>Encryption\JWE\JweEncryptionTest.cs</Link>
+    </Compile>
     <Compile Include="..\NetCore2\Encryption\RSA\RsaEncryptionTest.cs">
       <Link>Encryption\RSA\RsaEncryptionTest.cs</Link>
     </Compile>

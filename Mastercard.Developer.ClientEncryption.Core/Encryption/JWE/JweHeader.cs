@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Newtonsoft.Json.Linq;
 using Mastercard.Developer.ClientEncryption.Core.Utils;
 #pragma warning disable 1591 // "Missing XML comment for publicly visible type or member."
@@ -8,15 +7,15 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
 {
     internal sealed class JweHeader
     {
-        const string ALGORITHM = "alg";
-        const string KEY_ID = "kid";
-        const string ENCRYPTION_ALGORITHM = "enc";
-        const string CONTENT_TYPE = "cty";
+        private const string Algorithm = "alg";
+        private const string KeyId = "kid";
+        private const string EncryptionAlgorithm = "enc";
+        private const string ContentType = "cty";
 
-        public string Enc { get; private set; }
-        public string Kid { get; private set; }
-        public string Alg { get; private set; }
-        public string Cty { get; private set; }
+        public string Enc { get; }
+        public string Kid { get; }
+        public string Alg { get; }
+        public string Cty { get; }
 
         public JweHeader(string alg, string enc, string kid, string cty)
         {
@@ -26,32 +25,27 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
             Cty = cty;
         }
 
-        public JObject Json
-        {
-            get
-            {
-                return new JObject(
-                    new JProperty(KEY_ID, Kid),
-                    new JProperty(CONTENT_TYPE, Cty),
-                    new JProperty(ENCRYPTION_ALGORITHM, Enc),
-                    new JProperty(ALGORITHM, Alg)
-                );
-            }
-        }
+        public JObject Json =>
+            new JObject(
+                new JProperty(KeyId, Kid),
+                new JProperty(ContentType, Cty),
+                new JProperty(EncryptionAlgorithm, Enc),
+                new JProperty(Algorithm, Alg)
+            );
 
-        public static JweHeader Parse(String encoded)
+        public static JweHeader Parse(string encoded)
         {
             // Decode and parse the string
-            byte[] decoded = Base64Utils.URLDecode(encoded);
-            string json = Encoding.UTF8.GetString(decoded);
-            JObject jobject = JObject.Parse(json);
+            var decoded = Base64Utils.URLDecode(encoded);
+            var json = Encoding.UTF8.GetString(decoded);
+            var jobject = JObject.Parse(json);
 
             // Wrap it up
             return new JweHeader(
-                ((string)jobject[ALGORITHM]),
-                ((string)jobject[ENCRYPTION_ALGORITHM]),
-                ((string)jobject[KEY_ID]),
-                ((string)jobject[CONTENT_TYPE])
+                ((string)jobject[Algorithm]),
+                ((string)jobject[EncryptionAlgorithm]),
+                ((string)jobject[KeyId]),
+                ((string)jobject[ContentType])
             );
         }
     }

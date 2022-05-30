@@ -46,6 +46,12 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Test
             AssertPayloadEquals(expectedPayload, payloadString);
         }
 
+        internal static void AssertDecryptedJweEquals(string expectedPayload, string encryptedPayload, JweConfig config)
+        {
+            var payloadString = JweEncryption.DecryptPayload(encryptedPayload, config);
+            AssertPayloadEquals(expectedPayload, payloadString);
+        }
+
         internal static void AssertPayloadEquals(string expectedPayload, string payload)
         {
             var expectedPayloadToken = JToken.Parse(expectedPayload);
@@ -56,8 +62,8 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Test
         internal static JweConfigBuilder GetTestJweConfigBuilder()
         {
             return JweConfigBuilder.AJweEncryptionConfig()
-                .WithEncryptionCertificate(TestUtils.GetTestEncryptionCertificate())
-                .WithDecryptionKey(TestUtils.GetTestDecryptionKey());
+                .WithEncryptionCertificate(GetTestEncryptionCertificate())
+                .WithDecryptionKey(GetTestDecryptionKey());
         }
 
         internal static JweObject GetTestCbcJweObject()
