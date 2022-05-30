@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Mastercard.Developer.ClientEncryption.Core.Encryption.JWE;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

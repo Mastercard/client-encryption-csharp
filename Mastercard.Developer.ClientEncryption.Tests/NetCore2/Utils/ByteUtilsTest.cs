@@ -1,5 +1,4 @@
-﻿using System;
-using Mastercard.Developer.ClientEncryption.Core.Utils;
+﻿using Mastercard.Developer.ClientEncryption.Core.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils

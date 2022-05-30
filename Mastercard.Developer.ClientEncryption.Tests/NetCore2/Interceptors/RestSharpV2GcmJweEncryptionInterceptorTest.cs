@@ -4,10 +4,8 @@ using Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors;
 using Mastercard.Developer.ClientEncryption.Tests.NetCore.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Method = RestSharp.Method;
-using Parameter = RestSharp.Parameter;
 using ParameterType = RestSharp.ParameterType;
 using RestRequest = RestSharp.RestRequest;
-using IRestResponse = RestSharp.IRestResponse;
 
 namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
 {
