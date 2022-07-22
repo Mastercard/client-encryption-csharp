@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
 namespace Mastercard.Developer.ClientEncryption.Core.Utils
 {
@@ -16,7 +17,13 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
         internal static RSA ReadPrivateKeyFile(string keyFilePath)
         {
             if (keyFilePath == null) throw new ArgumentNullException(nameof(keyFilePath));
-            var keyString = File.ReadAllText(keyFilePath);
+            var key = File.ReadAllBytes(keyFilePath);
+            return ReadPrivateKey(key);
+        }
+        
+        internal static RSA ReadPrivateKey(byte[] key)
+        {
+            var keyString = Encoding.UTF8.GetString(key);
             if (keyString.Contains(Pkcs1PemHeader))
             {
                 // OpenSSL / PKCS#1 Base64 PEM encoded file
@@ -34,9 +41,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
                 keyString = keyString.Replace(Environment.NewLine, string.Empty);
                 return ReadPkcs8Key(Convert.FromBase64String(keyString));
             }
-
-            // We assume it's a PKCS#8 DER encoded binary file
-            return ReadPkcs8Key(File.ReadAllBytes(keyFilePath));
+            return ReadPkcs8Key(key);
         }
 
         private static RSA ReadPkcs8Key(byte[] pkcs8Bytes)
@@ -269,5 +274,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
             reader.BaseStream.Seek(-1, SeekOrigin.Current);
             return size;
         }
+
+        
     }
 }

@@ -33,5 +33,13 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
             var certificate = new X509Certificate2(pkcs12KeyFilePath, decryptionKeyPassword, keyStorageFlags);
             return certificate.GetRSAPrivateKey();
         }
+
+        /// <summary>
+        /// Load a RSA decryption key from a byte array.
+        /// </summary>
+        public static RSA LoadDecryptionKey(byte[] key)
+        {
+            return RsaKeyUtils.ReadPrivateKey(key);
+        }
     }
 }

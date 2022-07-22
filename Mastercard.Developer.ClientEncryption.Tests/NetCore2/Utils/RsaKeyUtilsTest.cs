@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Mastercard.Developer.ClientEncryption.Core.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -7,172 +8,53 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
     [TestClass]
     public class RsaKeyUtilsTest
     {
+        
         [TestMethod]
-        public void TestReadPrivateKeyFile_ShouldSupportPkcs8Pem512bits()
+        [DataRow("./_Resources/Keys/Pkcs8/test_key_pkcs8-512.pem", 512)]
+        [DataRow("./_Resources/Keys/Pkcs8/test_key_pkcs8-1024.pem", 1024)]
+        [DataRow("./_Resources/Keys/Pkcs8/test_key_pkcs8-2048.pem", 2048)]
+        [DataRow("./_Resources/Keys/Pkcs8/test_key_pkcs8-4096.pem", 4096)]
+        [DataRow("./_Resources/Keys/Pkcs8/test_key_pkcs8-512.der", 512)]
+        [DataRow("./_Resources/Keys/Pkcs8/test_key_pkcs8-1024.der", 1024)]
+        [DataRow("./_Resources/Keys/Pkcs8/test_key_pkcs8-2048.der", 2048)]
+        [DataRow("./_Resources/Keys/Pkcs8/test_key_pkcs8-4096.der", 4096)]
+        [DataRow("./_Resources/Keys/Pkcs1/test_key_pkcs1-512.pem", 512)]
+        [DataRow("./_Resources/Keys/Pkcs1/test_key_pkcs1-1024.pem", 1024)]
+        [DataRow("./_Resources/Keys/Pkcs1/test_key_pkcs1-2048.pem", 2048)]
+        [DataRow("./_Resources/Keys/Pkcs1/test_key_pkcs1-4096.pem", 4096)]
+        public void TestReadPrivateKeyFile(string keyPath, int expectedKeySize)
         {
-            // GIVEN
-            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-512.pem";
-
             // WHEN
             var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
 
             // THEN
             Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name); // We expect a RSACng (Windows) or a RSAOpenSsl (Linux, macOS)
-            Assert.AreEqual(512, rsa.KeySize);
+            Assert.AreEqual(expectedKeySize, rsa.KeySize);
         }
-
+        
         [TestMethod]
-        public void TestReadPrivateKeyFile_ShouldSupportPkcs8Pem1024bits()
+        [DataRow("./_Resources/Keys/Pkcs8/test_key_pkcs8-512.pem", 512)]
+        [DataRow("./_Resources/Keys/Pkcs8/test_key_pkcs8-1024.pem", 1024)]
+        [DataRow("./_Resources/Keys/Pkcs8/test_key_pkcs8-2048.pem", 2048)]
+        [DataRow("./_Resources/Keys/Pkcs8/test_key_pkcs8-4096.pem", 4096)]
+        [DataRow("./_Resources/Keys/Pkcs8/test_key_pkcs8-512.der", 512)]
+        [DataRow("./_Resources/Keys/Pkcs8/test_key_pkcs8-1024.der", 1024)]
+        [DataRow("./_Resources/Keys/Pkcs8/test_key_pkcs8-2048.der", 2048)]
+        [DataRow("./_Resources/Keys/Pkcs8/test_key_pkcs8-4096.der", 4096)]
+        [DataRow("./_Resources/Keys/Pkcs1/test_key_pkcs1-512.pem", 512)]
+        [DataRow("./_Resources/Keys/Pkcs1/test_key_pkcs1-1024.pem", 1024)]
+        [DataRow("./_Resources/Keys/Pkcs1/test_key_pkcs1-2048.pem", 2048)]
+        [DataRow("./_Resources/Keys/Pkcs1/test_key_pkcs1-4096.pem", 4096)]
+        public void TestReadPrivateKey(string keyPath, int expectedKeySize)
         {
             // GIVEN
-            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-1024.pem";
-
+            var bytes = File.ReadAllBytes(keyPath);
             // WHEN
-            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
+            var rsa = RsaKeyUtils.ReadPrivateKey(bytes);
 
             // THEN
-            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
-            Assert.AreEqual(1024, rsa.KeySize);
-        }
-
-        [TestMethod]
-        public void TestReadPrivateKeyFile_ShouldSupportPkcs8Pem2048bits()
-        {
-            // GIVEN
-            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-2048.pem";
-
-            // WHEN
-            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
-
-            // THEN
-            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
-            Assert.AreEqual(2048, rsa.KeySize);
-        }
-
-        [TestMethod]
-        public void TestReadPrivateKeyFile_ShouldSupportPkcs8Pem4096bits()
-        {
-            // GIVEN
-            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-4096.pem";
-
-            // WHEN
-            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
-
-            // THEN
-            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
-            Assert.AreEqual(4096, rsa.KeySize);
-        }
-
-        [TestMethod]
-        public void TestReadPrivateKeyFile_ShouldSupportPkcs8Der512bits()
-        {
-            // GIVEN
-            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-512.der";
-
-            // WHEN
-            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
-
-            // THEN
-            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
-            Assert.AreEqual(512, rsa.KeySize);
-        }
-
-        [TestMethod]
-        public void TestReadPrivateKeyFile_ShouldSupportPkcs8Der1024bits()
-        {
-            // GIVEN
-            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-1024.der";
-
-            // WHEN
-            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
-
-            // THEN
-            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
-            Assert.AreEqual(1024, rsa.KeySize);
-        }
-
-        [TestMethod]
-        public void TestReadPrivateKeyFile_ShouldSupportPkcs8Der2048bits()
-        {
-            // GIVEN
-            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-2048.der";
-
-            // WHEN
-            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
-
-            // THEN
-            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
-            Assert.AreEqual(2048, rsa.KeySize);
-        }
-
-        [TestMethod]
-        public void TestReadPrivateKeyFile_ShouldSupportPkcs8Der4096bits()
-        {
-            // GIVEN
-            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-4096.der";
-
-            // WHEN
-            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
-
-            // THEN
-            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
-            Assert.AreEqual(4096, rsa.KeySize);
-        }
-
-        [TestMethod]
-        public void TestReadPrivateKeyFile_ShouldSupportPkcs1Base64Pem512bits()
-        {
-            // GIVEN
-            const string keyPath = "./_Resources/Keys/Pkcs1/test_key_pkcs1-512.pem";
-
-            // WHEN
-            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
-
-            // THEN
-            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
-            Assert.AreEqual(512, rsa.KeySize);
-        }
-
-        [TestMethod]
-        public void TestReadPrivateKeyFile_ShouldSupportPkcs1Base64Pem1024bits()
-        {
-            // GIVEN
-            const string keyPath = "./_Resources/Keys/Pkcs1/test_key_pkcs1-1024.pem";
-
-            // WHEN
-            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
-
-            // THEN
-            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
-            Assert.AreEqual(1024, rsa.KeySize);
-        }
-
-        [TestMethod]
-        public void TestReadPrivateKeyFile_ShouldSupportPkcs1Base64Pem2048bits()
-        {
-            // GIVEN
-            const string keyPath = "./_Resources/Keys/Pkcs1/test_key_pkcs1-2048.pem";
-
-            // WHEN
-            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
-
-            // THEN
-            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
-            Assert.AreEqual(2048, rsa.KeySize);
-        }
-
-        [TestMethod]
-        public void TestReadPrivateKeyFile_ShouldSupportPkcs1Base64Pem4096bits()
-        {
-            // GIVEN
-            const string keyPath = "./_Resources/Keys/Pkcs1/test_key_pkcs1-4096.pem";
-
-            // WHEN
-            var rsa = RsaKeyUtils.ReadPrivateKeyFile(keyPath);
-
-            // THEN
-            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name);
-            Assert.AreEqual(4096, rsa.KeySize);
+            Assert.AreNotEqual("RSACryptoServiceProvider", rsa.GetType().Name); // We expect a RSACng (Windows) or a RSAOpenSsl (Linux, macOS)
+            Assert.AreEqual(expectedKeySize, rsa.KeySize);
         }
 
         [TestMethod]
