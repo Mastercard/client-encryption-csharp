@@ -274,7 +274,5 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
             reader.BaseStream.Seek(-1, SeekOrigin.Current);
             return size;
         }
-
-        
     }
 }

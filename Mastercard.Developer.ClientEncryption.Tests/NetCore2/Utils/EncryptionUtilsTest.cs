@@ -72,6 +72,21 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
             Assert.AreNotEqual("RSACryptoServiceProvider", privateKey.GetType().Name);
             Assert.AreEqual(2048, privateKey.KeySize);
         }
+        
+        [TestMethod]
+        public void TestLoadDecryptionKey_ShouldSupportByteArray()
+        {
+            // GIVEN
+            const string keyPath = "./_Resources/Keys/Pkcs8/test_key_pkcs8-2048.der";
+            var keyBytes = File.ReadAllBytes(keyPath);
+
+            // WHEN
+            var privateKey = EncryptionUtils.LoadDecryptionKey(keyBytes);
+
+            // THEN
+            Assert.AreNotEqual("RSACryptoServiceProvider", privateKey.GetType().Name);
+            Assert.AreEqual(2048, privateKey.KeySize);
+        }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))] // THEN

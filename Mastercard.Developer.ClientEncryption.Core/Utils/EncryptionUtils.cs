@@ -37,9 +37,6 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
         /// <summary>
         /// Load a RSA decryption key from a byte array.
         /// </summary>
-        public static RSA LoadDecryptionKey(byte[] key)
-        {
-            return RsaKeyUtils.ReadPrivateKey(key);
-        }
+        public static RSA LoadDecryptionKey(byte[] key) => RsaKeyUtils.ReadPrivateKey(key);
     }
 }
