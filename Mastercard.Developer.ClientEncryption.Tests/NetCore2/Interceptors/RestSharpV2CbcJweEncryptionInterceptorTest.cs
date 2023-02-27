@@ -5,9 +5,10 @@ using Mastercard.Developer.ClientEncryption.Tests.NetCore.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Method = RestSharp.Method;
 using Parameter = RestSharp.Parameter;
+using Header = RestSharp.HeaderParameter;
 using ParameterType = RestSharp.ParameterType;
 using RestRequest = RestSharp.RestRequest;
-using IRestResponse = RestSharp.IRestResponse;
+using IRestResponse = RestSharp.RestResponse;
 
 namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
 {
@@ -36,7 +37,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
             // WHEN
             var request = new RestRequest
             {
-                Method = Method.GET,
+                Method = Method.Get,
                 Resource = "/service"
             };
 
@@ -116,7 +117,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
 
         internal static IRestResponse RestResponseWithContentLength(string content)
         {
-            Parameter[] headers = { new Parameter("Content-Length", content.Length, ParameterType.HttpHeader) };
+            Parameter[] headers = { new Header("Content-Length", content.Length.ToString()) };
             return new RestResponseDouble(headers, content);
         }
     }

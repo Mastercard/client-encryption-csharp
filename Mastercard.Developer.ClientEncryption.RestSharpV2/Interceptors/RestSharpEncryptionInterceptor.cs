@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Text.Json;
 using System.Reflection;
 using Mastercard.Developer.ClientEncryption.Core.Encryption;
-using Newtonsoft.Json;
 using RestSharp;
 
 namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
@@ -30,7 +30,7 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
         /// Encrypt RestSharp request payloads.
         /// </summary>
         /// <param name="request">A RestSharp request object</param>
-        public void InterceptRequest(IRestRequest request)
+        public void InterceptRequest(RestRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
@@ -50,14 +50,14 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
                 var payload = bodyParam.Value;
                 if (!(payload is string))
                 {
-                    payload = request.JsonSerializer.Serialize(payload);
+                    payload = JsonSerializer.Serialize(payload);
                 }
 
                 // Encrypt fields & update headers
                 string encryptedPayload = EncryptPayload(request, payload.ToString());
 
                 // Update body and content length
-                bodyParam.Value = JsonConvert.DeserializeObject(encryptedPayload);
+                request.RemoveParameter(bodyParam).AddJsonBody(payload);
                 UpdateRequestHeader(request, "Content-Length", encryptedPayload.Length);
             }
             catch (EncryptionException)
@@ -74,7 +74,7 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
         /// Decrypt RestSharp response payloads.
         /// </summary>
         /// <param name="response">A RestSharp response object</param>
-        public void InterceptResponse(IRestResponse response)
+        public void InterceptResponse(RestResponse response)
         {
             if (response == null) throw new ArgumentNullException(nameof(response));
 
@@ -109,7 +109,7 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
         /// <param name="request">A RestSharp request object</param>
         /// <param name="payload">The payload to be encrypted</param>
         /// <returns>The encrypted payload</returns>
-        internal abstract string EncryptPayload(IRestRequest request, string payload);
+        internal abstract string EncryptPayload(RestRequest request, string payload);
 
         /// <summary>
         /// Decrypt a RestSharp response payload
@@ -117,9 +117,9 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
         /// <param name="response">A RestSharp response object</param>
         /// <param name="encryptedPayload">The encrypted payload to be decrypted</param>
         /// <returns>The decrypted payload</returns>
-        internal abstract string DecryptPayload(IRestResponse response, string encryptedPayload);
+        internal abstract string DecryptPayload(RestResponse response, string encryptedPayload);
 
-        internal static void UpdateResponseHeader(IRestResponse response, string name, object value)
+        internal static void UpdateResponseHeader(RestResponse response, string name, object value)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -132,17 +132,17 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
             {
                 if (p.Name.Equals(name))
                 {
-                    p.Value = value;
+                    typeof(Parameter).GetProperty(name).SetValue(p, value);
                     return;
                 }
             }
 
             // If we get here, there is no such header, so add one
-            var header = new Parameter(name, value.ToString(), ParameterType.HttpHeader);
-            response.Headers.Add(header);
+            var header = new HeaderParameter(name, value.ToString());
+            response.Headers = response.Headers.Concat((System.Collections.Generic.IEnumerable<HeaderParameter>)header).ToList().AsReadOnly();
         }
 
-        internal static void UpdateRequestHeader(IRestRequest request, string name, object value)
+        internal static void UpdateRequestHeader(RestRequest request, string name, object value)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -153,7 +153,7 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
             request.AddHeader(name, value.ToString());
         }
 
-        internal static string ReadAndRemoveHeader(IRestResponse response, string name)
+        internal static string ReadAndRemoveHeader(RestResponse response, string name)
         {
             var header = response.Headers.ToList().Find(h => h.Name == name);
             if (string.IsNullOrEmpty(name) || header == null)

@@ -25,7 +25,7 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
         /// <param name="request">A RestSharp request object</param>
         /// <param name="payload">The payload to be encrypted</param>
         /// <returns>The encrypted payload</returns>
-        internal override string EncryptPayload(IRestRequest request, string payload)
+        internal override string EncryptPayload(RestRequest request, string payload)
         {
             // Encrypt fields & update headers
             string encryptedPayload;
@@ -54,7 +54,7 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
         /// <param name="response">A RestSharp response object</param>
         /// <param name="encryptedPayload">The encrypted payload to be decrypted</param>
         /// <returns>The decrypted payload</returns>
-        internal override string DecryptPayload(IRestResponse response, string encryptedPayload)
+        internal override string DecryptPayload(RestResponse response, string encryptedPayload)
         {
             // Decrypt fields & update headers
             string decryptedPayload;
