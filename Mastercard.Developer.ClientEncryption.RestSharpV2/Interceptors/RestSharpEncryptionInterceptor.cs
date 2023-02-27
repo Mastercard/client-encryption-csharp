@@ -3,7 +3,10 @@ using System.Linq;
 using System.Text.Json;
 using System.Reflection;
 using Mastercard.Developer.ClientEncryption.Core.Encryption;
+using Header = RestSharp.HeaderParameter;
 using RestSharp;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
 {
@@ -128,11 +131,14 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
             }
 
             // Scan
-            foreach (Parameter p in response.Headers)
+            foreach (Header p in response.Headers)
             {
                 if (p.Name.Equals(name))
                 {
-                    typeof(Parameter).GetProperty(name).SetValue(p, value);
+                    List<Header> updatedHeaders = response.Headers.ToList();
+                    updatedHeaders.Remove(p);
+                    updatedHeaders.Add(new Header(name, value.ToString()));
+                    response.Headers = updatedHeaders;
                     return;
                 }
             }

@@ -109,7 +109,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
             var config = TestUtils.GetTestFieldLevelEncryptionConfigBuilder()
                 .WithDecryptionPath("$.encryptedData", "$.data")
                 .Build();
-            Parameter[] headers = { new Header("Content-Length", "100") };
+            Header[] headers = { new Header("Content-Length", "100") };
             var response = new RestResponseDouble(headers, encryptedPayload);
 
             // WHEN
@@ -221,7 +221,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
                 .WithEncryptionCertificateFingerprintHeaderName("x-encryption-certificate-fingerprint")
                 .WithEncryptionKeyFingerprintHeaderName("x-encryption-key-fingerprint")
                 .Build();
-            Parameter[] param =
+            Header[] param =
             {
                 new Header("x-iv", "a32059c51607d0d02e823faecda5fb15"),
                 new Header("x-encrypted-key",

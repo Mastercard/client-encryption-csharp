@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using System.Net;
 using RestSharp;
-using IRestRequest = RestSharp.RestRequest;
-using IRestResponse = RestSharp.RestResponse;
-using Parameter = RestSharp.Parameter;
+using RestRequest = RestSharp.RestRequest;
+using RestResponse = RestSharp.RestResponse;
 
 namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
 {
-    internal class RestResponseDouble : IRestResponse
+    internal class RestResponseDouble : RestResponse
     {
-        public new IRestRequest Request { get; set; } = null;
+        public new RestRequest Request { get; set; } = null;
         public new Uri ResponseUri { get; set; } = null;
         public new string Server { get; set; }
         public new byte[] RawBytes { get; set; } = null;
         public new string ContentType { get; set; } = null;
         public new long ContentLength { get; set; }
         public new string ContentEncoding { get; set; }
-        public new IList<Parameter> Headers { get; }
+        public new IList<HeaderParameter> Headers { get; }
         public new ResponseStatus ResponseStatus { get; set; }
         public new string ErrorMessage { get; set; }
         public new Exception ErrorException { get; set; }
@@ -29,10 +28,12 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
 
         private Lazy<string> _content;
 
-        public RestResponseDouble(IList<Parameter> headers, string content)
+        public RestResponseDouble(IList<HeaderParameter> headers, string content)
         {
             Headers = headers;
             Content = content;
+            base.Headers = (IReadOnlyCollection<HeaderParameter>)headers;
+            base.Content = content;
         }
 
         public new string Content
