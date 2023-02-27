@@ -110,7 +110,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
                 .WithDecryptionPath("$.encryptedData", "$.data")
                 .Build();
             Header[] headers = { new Header("Content-Length", "100") };
-            var response = new RestResponseDouble(headers, encryptedPayload);
+            var response = new RestResponseDouble(headers, encryptedPayload) as RestResponse;
 
             // WHEN
             var instanceUnderTest = new RestSharpFieldLevelEncryptionInterceptor(config);
@@ -232,7 +232,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
                 new Header("x-encryption-certificate-fingerprint",
                     "80810fc13a8319fcf0e2ec322c82a4c304b782cc3ce671176343cfe8160c2279")
             };
-            var response = new RestResponseDouble(param, encryptedPayload);
+            var response = new RestResponseDouble(param, encryptedPayload) as RestResponse;
 
             // WHEN
             var instanceUnderTest = new RestSharpFieldLevelEncryptionInterceptor(config);

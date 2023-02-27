@@ -60,7 +60,8 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
                 string encryptedPayload = EncryptPayload(request, payload.ToString());
 
                 // Update body and content length
-                request.RemoveParameter(bodyParam).AddJsonBody(payload);
+                request.RemoveParameter(bodyParam);
+                request.AddBody(encryptedPayload);
                 UpdateRequestHeader(request, "Content-Length", encryptedPayload.Length);
             }
             catch (EncryptionException)
@@ -131,11 +132,11 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
             }
 
             // Scan
+            List<Header> updatedHeaders = response.Headers.ToList();
             foreach (Header p in response.Headers)
             {
                 if (p.Name.Equals(name))
                 {
-                    List<Header> updatedHeaders = response.Headers.ToList();
                     updatedHeaders.Remove(p);
                     updatedHeaders.Add(new Header(name, value.ToString()));
                     response.Headers = updatedHeaders;
@@ -144,8 +145,8 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
             }
 
             // If we get here, there is no such header, so add one
-            var header = new HeaderParameter(name, value.ToString());
-            response.Headers = response.Headers.Concat((System.Collections.Generic.IEnumerable<HeaderParameter>)header).ToList().AsReadOnly();
+            updatedHeaders.Add(new Header(name, value.ToString()));
+            response.Headers = updatedHeaders;
         }
 
         internal static void UpdateRequestHeader(RestRequest request, string name, object value)
@@ -168,15 +169,8 @@ namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
                 return null;
             }
 
-            // The "Headers" collection has been made read only, but we try to remove
-            // the header from the response anyway.
-            var headersField = response.GetType().GetTypeInfo().GetDeclaredField("<Headers>k__BackingField");
-            if (headersField != null)
-            {
-                var updatedHeaders = response.Headers.ToList().FindAll(h => h.Name != name);
-                headersField.SetValue(response, updatedHeaders);
-            }
-
+            var updatedHeaders = response.Headers.ToList().FindAll(h => h.Name != name);
+            response.Headers = updatedHeaders;
             return header.Value?.ToString() ?? string.Empty;
         }
     }
