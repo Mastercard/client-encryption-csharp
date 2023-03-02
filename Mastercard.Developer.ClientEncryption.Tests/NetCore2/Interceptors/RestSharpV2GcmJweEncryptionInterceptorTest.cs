@@ -3,6 +3,7 @@ using Mastercard.Developer.ClientEncryption.Core.Encryption;
 using Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors;
 using Mastercard.Developer.ClientEncryption.Tests.NetCore.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RestSharp;
 using Method = RestSharp.Method;
 using ParameterType = RestSharp.ParameterType;
 using RestRequest = RestSharp.RestRequest;
@@ -25,10 +26,10 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
                 .Build();
             var request = new RestRequest
             {
-                Method = Method.POST,
+                Method = Method.Post,
                 Resource = "/service"
             };
-            request.AddParameter("param1", "{\"foo\":\"bar\"}", ParameterType.RequestBody);
+            request.AddBody("{\"foo\":\"bar\"}");
 
             // WHEN
             var fixture = RestSharpEncryptionInterceptor.From(config);
@@ -69,7 +70,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
             TestUtils.AssertPayloadEquals("{\"foo\":\"bar\"}", payload);
             var contentLengthHeaderParam = response.Headers.FirstOrDefault(param => param.Type == ParameterType.HttpHeader);
             Assert.IsNotNull(contentLengthHeaderParam);
-            Assert.AreEqual(payload.Length, contentLengthHeaderParam.Value);
+            Assert.AreEqual(payload.Length.ToString(), contentLengthHeaderParam.Value);
         }
     }
 }

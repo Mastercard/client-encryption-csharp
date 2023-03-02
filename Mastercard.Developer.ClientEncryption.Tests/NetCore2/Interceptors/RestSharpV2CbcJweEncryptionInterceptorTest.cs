@@ -4,10 +4,10 @@ using Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors;
 using Mastercard.Developer.ClientEncryption.Tests.NetCore.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Method = RestSharp.Method;
-using Parameter = RestSharp.Parameter;
+using Header = RestSharp.HeaderParameter;
 using ParameterType = RestSharp.ParameterType;
 using RestRequest = RestSharp.RestRequest;
-using IRestResponse = RestSharp.IRestResponse;
+using RestSharp;
 
 namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
 {
@@ -36,7 +36,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
             // WHEN
             var request = new RestRequest
             {
-                Method = Method.GET,
+                Method = Method.Get,
                 Resource = "/service"
             };
 
@@ -65,7 +65,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
             TestUtils.AssertPayloadEquals("{\"foo\":\"bar\"}", payload);
             var contentLengthHeaderParam = response.Headers.FirstOrDefault(param => param.Type == ParameterType.HttpHeader);
             Assert.IsNotNull(contentLengthHeaderParam);
-            Assert.AreEqual(payload.Length, contentLengthHeaderParam.Value);
+            Assert.AreEqual(payload.Length.ToString(), contentLengthHeaderParam.Value);
         }
 
         [TestMethod]
@@ -114,9 +114,9 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
             fixture.InterceptResponse(response);
         }
 
-        internal static IRestResponse RestResponseWithContentLength(string content)
+        internal static RestResponse RestResponseWithContentLength(string content)
         {
-            Parameter[] headers = { new Parameter("Content-Length", content.Length, ParameterType.HttpHeader) };
+            Header[] headers = { new Header("Content-Length", content.Length.ToString()) };
             return new RestResponseDouble(headers, content);
         }
     }
