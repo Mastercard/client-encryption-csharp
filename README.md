@@ -618,7 +618,7 @@ partial class ApiClient
         _encryptionInterceptor = RestSharpEncryptionInterceptor.From(config);
     }
 
-    partial void InterceptRequest(IRestRequest request)
+    partial void InterceptRequest(RestRequest request)
     {
         _encryptionInterceptor.InterceptRequest(request);
         _signer.Sign(_basePath, request);
@@ -666,8 +666,8 @@ See also:
 partial class ApiClient
 {
     public RestSharpFieldLevelEncryptionInterceptor EncryptionInterceptor { private get; set; }
-    partial void InterceptRequest(IRestRequest request) => EncryptionInterceptor.InterceptRequest(request);
-    partial void InterceptResponse(IRestRequest request, IRestResponse response) => EncryptionInterceptor.InterceptResponse(response);
+    partial void InterceptRequest(RestRequest request) => EncryptionInterceptor.InterceptRequest(request);
+    partial void InterceptResponse(RestRequest request, RestResponse response) => EncryptionInterceptor.InterceptResponse(response);
 }
 ```
 
