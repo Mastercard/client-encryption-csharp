@@ -11,6 +11,8 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
     {
         private const string A128CBC_HS256 = "A128CBC-HS256";
         private const string A256GCM = "A256GCM";
+        private const string A128GCM = "A128GCM";
+        private const string A192GCM = "A192GCM";
 
         public JweHeader Header { get; private set; }
         public string RawHeader { get; private set; }
@@ -33,6 +35,12 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
             switch (encryptionMethod)
             {
                 case A256GCM:
+                    plaintext = AesGcm.Decrypt(unwrappedKey, this);
+                    break;
+                case A128GCM:
+                    plaintext = AesGcm.Decrypt(unwrappedKey, this);
+                    break;
+                case A192GCM:
                     plaintext = AesGcm.Decrypt(unwrappedKey, this);
                     break;
                 case A128CBC_HS256:

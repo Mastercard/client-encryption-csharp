@@ -82,23 +82,6 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Interceptors
 
         [TestMethod]
         [ExpectedException(typeof(EncryptionException))] // <-- THEN
-        public void TestInterceptResponse_ShouldThrowAnExceptionWhenEncryptionNotSupported()
-        {
-            // GIVEN
-            string encryptedPayload = "{" +
-                "\"encryptedPayload\":\"eyJraWQiOiI3NjFiMDAzYzFlYWRlM2E1NDkwZTUwMDBkMzc4ODdiYWE1ZTZlYzBlMjI2YzA3NzA2ZTU5OTQ1MWZjMDMyYTc5IiwiY3R5IjoiYXBwbGljYXRpb25cL2pzb24iLCJlbmMiOiJBMTkyR0NNIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0.peSgTt_lPbcNStWh-gI3yMzhOGtFCwExFwLxKeHwjzsXvHB0Fml5XnG0jRbJSfOHzKx02d0NVBzoDDRSAnafuabbbMKcoaUK-jZNHSg4BHdyBZpCO82kzvWeEm3TTNHIMBTfM00EmdFB03z_a0PaWsT-FIOzu4Sd5Z_nsNLhP9941CtVS-YtZ9WkgDezGipxA7ejQ3X5gFVy2RH1gL8OTbzIYCwBcrfSjAiCQgunNbLxPPlfZHB_6prPK7_50NS6FvuMnAhiqUiiAka8DHMdeGBWOie2Q0FV_bsRDHx_6CY8kQA3F_NXz1dELIclJhdZFfRt1y-TEfwOIj4nDi2JnA.8BYMB5MkH2ZNyFGS._xb3uDsUQcPT5fQyZw.O0MzJ5OvNyj_QMuqaloTWA\"}";
-            var config = TestUtils.GetTestJweConfigBuilder()
-                .WithDecryptionPath("$.encryptedPayload", "$.foo")
-                .Build();
-            var response = RestResponseWithContentLength(encryptedPayload);
-
-            // WHEN
-            var fixture = RestSharpEncryptionInterceptor.From(config);
-            fixture.InterceptResponse(response);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(EncryptionException))] // <-- THEN
         public void TestInterceptResponse_ShouldThrowException_WhenDecryptionFails()
         {
             // GIVEN
