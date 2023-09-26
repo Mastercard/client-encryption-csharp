@@ -27,6 +27,15 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
         }
 
         /// <summary>
+        /// See: <see cref="EncryptionConfig.EncryptionCertificate"/>
+        /// </summary>
+        public JweConfigBuilder WithEncryptionKeyFingerprint(string encryptionKeyFingerprint)
+        {
+            _encryptionKeyFingerprint = encryptionKeyFingerprint;
+            return this;
+        }
+
+        /// <summary>
         /// See: <see cref="EncryptionConfig.DecryptionKey"/>
         /// </summary>
         public JweConfigBuilder WithDecryptionKey(RSA decryptionKey)

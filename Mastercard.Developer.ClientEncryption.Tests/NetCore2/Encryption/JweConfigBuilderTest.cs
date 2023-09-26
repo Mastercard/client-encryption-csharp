@@ -45,6 +45,13 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
         }
 
         [TestMethod]
+        public void TestBuild_ShouldUseEncryptionKeyFingerprint_WhenFingerprintIsSet()
+        {
+            EncryptionConfig config = TestUtils.GetTestJweConfigBuilder().WithEncryptionKeyFingerprint("this-is-a-test-fingerprint").Build();
+            Assert.AreEqual("this-is-a-test-fingerprint", config.EncryptionKeyFingerprint);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(EncryptionException))]
         public void TestBuild_ShouldThrowEncryptionException_WhenInvalidEncryptionCertificate()
         {
