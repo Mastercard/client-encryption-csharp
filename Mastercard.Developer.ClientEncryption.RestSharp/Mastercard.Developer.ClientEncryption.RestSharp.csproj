@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.7.0</Version>
+    <Version>1.8.0</Version>
     <Product>Mastercard.Developer.ClientEncryption.RestSharp</Product>
     <Authors>Mastercard</Authors>
     <Company>Mastercard</Company>
@@ -16,7 +16,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../Identity.snk</AssemblyOriginatorKeyFile>
     <AssemblyVersion>1.0.0.0</AssemblyVersion> <!-- Frozen -->
-    <FileVersion>1.7.0.0</FileVersion> <!-- Same version as the package version -->
+    <FileVerion>1.8.0.0</FileVersion> <!-- Same version as the package version -->
     <DocumentationFile>Mastercard.Developer.ClientEncryption.RestSharp.xml</DocumentationFile>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
