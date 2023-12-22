@@ -40,9 +40,6 @@
     <Compile Include="..\NetCore2\Interceptors\RestResponseDouble.cs">
       <Link>Interceptors\RestResponseDouble.cs</Link>
     </Compile>
-    <Compile Include="..\NetCore2\Interceptors\RestSharpFieldLevelEncryptionInterceptorTest.cs">
-      <Link>Interceptors\RestSharpFieldLevelEncryptionInterceptorTest.cs</Link>
-    </Compile>
     <Compile Include="..\NetCore2\Interceptors\RestSharpV2FieldLevelEncryptionInterceptorTest.cs">
       <Link>Interceptors\RestSharpV2FieldLevelEncryptionInterceptorTest.cs</Link>
     </Compile>
@@ -182,7 +179,6 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\Mastercard.Developer.ClientEncryption.Core\Mastercard.Developer.ClientEncryption.Core.csproj" />
-    <ProjectReference Include="..\..\Mastercard.Developer.ClientEncryption.RestSharp\Mastercard.Developer.ClientEncryption.RestSharp.csproj" />
     <ProjectReference Include="..\..\Mastercard.Developer.ClientEncryption.RestSharpV2\Mastercard.Developer.ClientEncryption.RestSharpV2.csproj" />
   </ItemGroup>
 
