@@ -32,9 +32,9 @@
 ### Compatibility <a name="compatibility"></a>
 
 #### .NET <a name="net"></a>
-* `ClientEncryption.Core` targets .NET Standard 1.3 and 2.1
-* `ClientEncryption.RestSharpV2` targets .NET Standard 2.0
-* `ClientEncryption.RestSharp` targets .NET Standard 1.3
+* `ClientEncryption.Core` targets .NET Standard 3.1
+* `ClientEncryption.RestSharpV2` targets .NET Standard 3.1
+* `ClientEncryption.RestSharp` targets .NET Standard 3.1
 
 .NET Standard versions supported by .NET implementations can be found in the following articles: [.NET Standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard), [.NET Standard versions](https://dotnet.microsoft.com/en-us/platform/dotnet-standard#versions).
 
@@ -646,7 +646,7 @@ openapi-generator-cli generate -i openapi-spec.yaml -g csharp -c config.json -o 
 
 config.json:
 ```json
-{ "targetFramework": "netstandard1.3" }
+{ "targetFramework": "netstandard2.1" }
 ```
 
 ⚠️ `v5.0` was used for `targetFramework` in OpenAPI Generator versions prior 5.0.0.

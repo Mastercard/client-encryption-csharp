@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.8.0</Version>
     <Product>Mastercard.Developer.ClientEncryption.RestSharp</Product>
@@ -16,7 +16,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../Identity.snk</AssemblyOriginatorKeyFile>
     <AssemblyVersion>1.0.0.0</AssemblyVersion> <!-- Frozen -->
-    <FileVerion>1.8.0.0</FileVersion> <!-- Same version as the package version -->
+    <FileVersion>1.8.0.0</FileVersion> <!-- Same version as the package version -->
     <DocumentationFile>Mastercard.Developer.ClientEncryption.RestSharp.xml</DocumentationFile>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
