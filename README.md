@@ -27,7 +27,6 @@
 ## Overview <a name="overview"></a>
 * [`ClientEncryption.Core`](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.Core/) is a zero dependency library for Mastercard API compliant payload encryption/decryption
 * [`ClientEncryption.RestSharpV2`](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.RestSharpV2/) is an extension dedicated to [RestSharp](https://restsharp.dev/)
-* [`ClientEncryption.RestSharp`](https://www.nuget.org/packages/Mastercard.Developer.ClientEncryption.RestSharp) is an extension dedicated to [RestSharp Portable](https://github.com/FubarDevelopment/restsharp.portable) (project no longer maintained)
 
 ### Compatibility <a name="compatibility"></a>
 
