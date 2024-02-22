@@ -17,7 +17,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
             try
             {
                 // Parse the given payload
-                var payloadToken = JToken.Parse(payload);
+                var payloadToken = JsonUtils.ParsePayload(payload);
 
                 // Encrypt
                 foreach (var entry in config.EncryptionPaths)
@@ -40,7 +40,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
             try
             {
                 // Parse the given payload
-                var payloadToken = JToken.Parse(payload);
+                var payloadToken = JsonUtils.ParsePayload(payload);
 
                 // Perform decryption
                 foreach (var entry in config.DecryptionPaths)
@@ -78,7 +78,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption.JWE
 
             if ("$".Equals(jsonPathOut))
             {
-                return JToken.Parse(decryptedValue);
+                return JsonUtils.ParsePayload(decryptedValue);
             }
 
             JsonUtils.CheckOrCreateOutObject(payload, jsonPathOut);

@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace Mastercard.Developer.ClientEncryption.Core.Utils
 {
@@ -75,6 +76,18 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
         internal static bool IsPathDefinite(string path)
         {
             return !path.Contains("*") && !path.Contains("..") && !path.Contains("@") && !path.Contains(",");
+        }
+        /// <summary>
+        /// Parses the Json payload with specified parameters
+        /// </summary>
+        /// <returns>payloadToken</returns>
+        internal static JToken ParsePayload(string payload)
+        {
+            var jsonReader = new JsonTextReader(new System.IO.StringReader(payload)) {
+                    DateParseHandling = DateParseHandling.None 
+                };
+                
+            return JToken.ReadFrom(jsonReader);
         }
 
         internal static void CheckOrCreateOutObject(JToken payloadObject, string jsonPathOut)

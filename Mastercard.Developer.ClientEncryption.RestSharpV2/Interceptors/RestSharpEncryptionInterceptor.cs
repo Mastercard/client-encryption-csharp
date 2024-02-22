@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Text.Json;
-using System.Reflection;
 using Mastercard.Developer.ClientEncryption.Core.Encryption;
 using Header = RestSharp.HeaderParameter;
 using RestSharp;
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
+
 
 namespace Mastercard.Developer.ClientEncryption.RestSharpV2.Interceptors
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using Mastercard.Developer.ClientEncryption.Core.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json.Linq;
 
 namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
 {
@@ -130,6 +131,32 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
                 Assert.AreEqual("Unable to find object key for '$'", e.Message);
                 throw;
             }
+        }
+
+         [TestMethod]
+        public void TestParsePayload()
+        {
+            // GIVEN
+            const string payload = "{\"num\":123, timestamp:\"2024-02-12T00:00:00-05:00\"}";
+            JToken token = JsonUtils.ParsePayload(payload);
+
+            // WHEN
+            string num = token.SelectToken("num").ToString();
+            string timestamp = token.SelectToken("timestamp").ToString();
+            // THEN
+            Assert.AreEqual(num, "123");
+            Assert.AreEqual(timestamp, "2024-02-12T00:00:00-05:00");
+
+            // WHEN
+            var defaultToken = JToken.Parse(payload);
+            num = defaultToken.SelectToken("num").ToString();
+            timestamp = defaultToken.SelectToken("timestamp").ToString();
+
+            // THEN
+            Assert.AreEqual(num, "123");
+            Assert.AreNotEqual(timestamp, "2024-02-12T00:00:00-05:00");
+
+
         }
     }
 }
