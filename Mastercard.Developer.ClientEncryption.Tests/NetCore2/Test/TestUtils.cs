@@ -54,8 +54,8 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Test
 
         internal static void AssertPayloadEquals(string expectedPayload, string payload)
         {
-            var expectedPayloadToken = JToken.Parse(expectedPayload);
-            var payloadToken = JToken.Parse(payload);
+            var expectedPayloadToken = JsonUtils.ParsePayload(expectedPayload);
+            var payloadToken = JsonUtils.ParsePayload(payload);
             Assert.AreEqual(expectedPayloadToken.ToString(), payloadToken.ToString());
         }
 
