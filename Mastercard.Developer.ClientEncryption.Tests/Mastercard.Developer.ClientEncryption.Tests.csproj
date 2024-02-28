@@ -1,0 +1,143 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DE07F478-E087-4FAA-80E2-220671C70418}</ProjectGuid>
+    <OutputType>Tests</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mastercard.Developer.ClientEncryption.Tests</RootNamespace>
+    <AssemblyName>Mastercard.Developer.ClientEncryption.Tests</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>../Identity.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include=".\Tests\_Resources\Certificates\test_certificate-1024.pem">
+      <Link>_Resources\Certificates\test_certificate-1024.pem</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Certificates\test_certificate-2048.der">
+      <Link>_Resources\Certificates\test_certificate-2048.der</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Certificates\test_certificate-2048.pem">
+      <Link>_Resources\Certificates\test_certificate-2048.pem</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Certificates\test_certificate-4096.pem">
+      <Link>_Resources\Certificates\test_certificate-4096.pem</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Certificates\test_certificate-512.pem">
+      <Link>_Resources\Certificates\test_certificate-512.pem</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Keys\Pkcs1\test_key_pkcs1-1024.pem">
+      <Link>_Resources\Keys\Pkcs1\test_key_pkcs1-1024.pem</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Keys\Pkcs1\test_key_pkcs1-2048.pem">
+      <Link>_Resources\Keys\Pkcs1\test_key_pkcs1-2048.pem</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Keys\Pkcs1\test_key_pkcs1-4096.pem">
+      <Link>_Resources\Keys\Pkcs1\test_key_pkcs1-4096.pem</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Keys\Pkcs1\test_key_pkcs1-512.pem">
+      <Link>_Resources\Keys\Pkcs1\test_key_pkcs1-512.pem</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Keys\Pkcs12\test_key.p12">
+      <Link>_Resources\Keys\Pkcs12\test_key.p12</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Keys\Pkcs8\test_invalid_key.der">
+      <Link>_Resources\Keys\Pkcs8\test_invalid_key.der</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Keys\Pkcs8\test_key_pkcs8-1024.der">
+      <Link>_Resources\Keys\Pkcs8\test_key_pkcs8-1024.der</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Keys\Pkcs8\test_key_pkcs8-1024.pem">
+      <Link>_Resources\Keys\Pkcs8\test_key_pkcs8-1024.pem</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Keys\Pkcs8\test_key_pkcs8-2048.der">
+      <Link>_Resources\Keys\Pkcs8\test_key_pkcs8-2048.der</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Keys\Pkcs8\test_key_pkcs8-2048.pem">
+      <Link>_Resources\Keys\Pkcs8\test_key_pkcs8-2048.pem</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Keys\Pkcs8\test_key_pkcs8-4096.der">
+      <Link>_Resources\Keys\Pkcs8\test_key_pkcs8-4096.der</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Keys\Pkcs8\test_key_pkcs8-4096.pem">
+      <Link>_Resources\Keys\Pkcs8\test_key_pkcs8-4096.pem</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Keys\Pkcs8\test_key_pkcs8-512.der">
+      <Link>_Resources\Keys\Pkcs8\test_key_pkcs8-512.der</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include=".\Tests\_Resources\Keys\Pkcs8\test_key_pkcs8-512.pem">
+      <Link>_Resources\Keys\Pkcs8\test_key_pkcs8-512.pem</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mastercard.Developer.ClientEncryption.Core\Mastercard.Developer.ClientEncryption.Core.csproj">
+      <Project>{8ffa4f79-9d2c-4807-bad7-8e2f0a15e099}</Project>
+      <Name>Mastercard.Developer.ClientEncryption.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mastercard.Developer.ClientEncryption.RestSharpV2\Mastercard.Developer.ClientEncryption.RestSharpV2.csproj">
+      <Project>{bc6f2c72-16a3-44cb-ad68-3acd8a465640}</Project>
+      <Name>Mastercard.Developer.ClientEncryption.RestSharpV2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mastercard.Developer.ClientEncryption.RestSharp\Mastercard.Developer.ClientEncryption.RestSharp.csproj">
+      <Project>{4abdad88-8dc4-4463-91ec-74a711d6acfb}</Project>
+      <Name>Mastercard.Developer.ClientEncryption.RestSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup> 
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.2.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.2.2" />
+    <PackageReference Include="coverlet.collector" Version="6.0.1" />
+  </ItemGroup>
+</Project>

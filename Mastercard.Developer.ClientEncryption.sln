@@ -5,15 +5,7 @@ VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mastercard.Developer.ClientEncryption.Core", "Mastercard.Developer.ClientEncryption.Core\Mastercard.Developer.ClientEncryption.Core.csproj", "{8FFA4F79-9D2C-4807-BAD7-8E2F0A15E099}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mastercard.Developer.ClientEncryption.Tests.NetCore2", "Mastercard.Developer.ClientEncryption.Tests\NetCore2\Mastercard.Developer.ClientEncryption.Tests.NetCore2.csproj", "{BD40992E-4317-42E9-8CC3-425C79167017}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mastercard.Developer.ClientEncryption.RestSharp", "Mastercard.Developer.ClientEncryption.RestSharp\Mastercard.Developer.ClientEncryption.RestSharp.csproj", "{4ABDAD88-8DC4-4463-91EC-74A711D6ACFB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mastercard.Developer.ClientEncryption.Tests.Net4x", "Mastercard.Developer.ClientEncryption.Tests\Net4x\Mastercard.Developer.ClientEncryption.Tests.Net4x.csproj", "{DE07F478-E087-4FAA-80E2-220671C70418}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E0CEBD8D-61FC-4923-9D09-CBC9EC5E9187}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mastercard.Developer.ClientEncryption.Tests.NetCore3", "Mastercard.Developer.ClientEncryption.Tests\NetCore3\Mastercard.Developer.ClientEncryption.Tests.NetCore3.csproj", "{C7781CA0-4F09-45D3-A063-3892EAD237C7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9FF81251-FD39-4A8E-9092-99D23D1EFFE3}"
 	ProjectSection(SolutionItems) = preProject
@@ -23,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mastercard.Developer.ClientEncryption.RestSharpV2", "Mastercard.Developer.ClientEncryption.RestSharpV2\Mastercard.Developer.ClientEncryption.RestSharpV2.csproj", "{BC6F2C72-16A3-44CB-AD68-3ACD8A465640}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mastercard.Developer.ClientEncryption.Tests.Net5", "Mastercard.Developer.ClientEncryption.Tests\Net5\Mastercard.Developer.ClientEncryption.Tests.Net5.csproj", "{6BDFFEF6-994D-404E-AA54-9D2319CD6776}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mastercard.Developer.ClientEncryption.Tests", "Mastercard.Developer.ClientEncryption.Tests\Mastercard.Developer.ClientEncryption.Tests.csproj", "{5F44EDFF-8818-44F0-9A60-8FED8ABC36C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +27,6 @@ Global
 		{8FFA4F79-9D2C-4807-BAD7-8E2F0A15E099}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FFA4F79-9D2C-4807-BAD7-8E2F0A15E099}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FFA4F79-9D2C-4807-BAD7-8E2F0A15E099}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BD40992E-4317-42E9-8CC3-425C79167017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BD40992E-4317-42E9-8CC3-425C79167017}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BD40992E-4317-42E9-8CC3-425C79167017}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BD40992E-4317-42E9-8CC3-425C79167017}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4ABDAD88-8DC4-4463-91EC-74A711D6ACFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4ABDAD88-8DC4-4463-91EC-74A711D6ACFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4ABDAD88-8DC4-4463-91EC-74A711D6ACFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,10 +35,6 @@ Global
 		{DE07F478-E087-4FAA-80E2-220671C70418}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE07F478-E087-4FAA-80E2-220671C70418}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE07F478-E087-4FAA-80E2-220671C70418}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C7781CA0-4F09-45D3-A063-3892EAD237C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C7781CA0-4F09-45D3-A063-3892EAD237C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C7781CA0-4F09-45D3-A063-3892EAD237C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C7781CA0-4F09-45D3-A063-3892EAD237C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BC6F2C72-16A3-44CB-AD68-3ACD8A465640}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BC6F2C72-16A3-44CB-AD68-3ACD8A465640}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC6F2C72-16A3-44CB-AD68-3ACD8A465640}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -59,15 +43,13 @@ Global
 		{6BDFFEF6-994D-404E-AA54-9D2319CD6776}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BDFFEF6-994D-404E-AA54-9D2319CD6776}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BDFFEF6-994D-404E-AA54-9D2319CD6776}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F44EDFF-8818-44F0-9A60-8FED8ABC36C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F44EDFF-8818-44F0-9A60-8FED8ABC36C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F44EDFF-8818-44F0-9A60-8FED8ABC36C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F44EDFF-8818-44F0-9A60-8FED8ABC36C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{BD40992E-4317-42E9-8CC3-425C79167017} = {E0CEBD8D-61FC-4923-9D09-CBC9EC5E9187}
-		{DE07F478-E087-4FAA-80E2-220671C70418} = {E0CEBD8D-61FC-4923-9D09-CBC9EC5E9187}
-		{C7781CA0-4F09-45D3-A063-3892EAD237C7} = {E0CEBD8D-61FC-4923-9D09-CBC9EC5E9187}
-		{6BDFFEF6-994D-404E-AA54-9D2319CD6776} = {E0CEBD8D-61FC-4923-9D09-CBC9EC5E9187}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0BA6CB82-AD23-4F2E-BEC3-CA02F18DFF99}
