@@ -114,7 +114,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
 
             // Encrypt data at the given JSON path
             var inJsonString = JsonUtils.SanitizeJson(inJsonToken.ToString());
-            var inJsonBytes = Encoding.ASCII.GetBytes(inJsonString);
+            var inJsonBytes = Encoding.UTF8.GetBytes(inJsonString);
             var encryptedValueBytes = EncryptBytes(parameters.GetSecretKeyBytes(), parameters.GetIvBytes(), inJsonBytes);
             var encryptedValue = EncodingUtils.EncodeBytes(encryptedValueBytes, config.ValueEncoding);
 

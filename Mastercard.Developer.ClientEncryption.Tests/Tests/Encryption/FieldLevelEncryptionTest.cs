@@ -75,17 +75,11 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
             Assert.IsTrue(payload.Contains("account"));
         }
 
-        [TestMethod]
-        public void TestEncryptPayload_Nominal()
+         [DataTestMethod]
+        [DataRow("{\"data\":{\"field1\":\"field1\",\"field2\":\"value2\"}}")]
+        [DataRow("{\"data\":{\"field1\":\"Zürich\",\"field2\":\"value2\"}}")]
+        public void TestEncryptPayload_Nominal(string payload)
         {
-            // GIVEN
-            const string payload = "{" +
-                "    \"data\": {" +
-                "        \"field1\": \"value1\"," +
-                "        \"field2\": \"value2\"" +
-                "    }," +
-                "    \"encryptedData\": {}" +
-                "}";
             var config = TestUtils.GetTestFieldLevelEncryptionConfigBuilder()
                 .WithEncryptionPath("data", "encryptedData")
                 .WithDecryptionPath("encryptedData", "data")
@@ -107,7 +101,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Encryption
             Assert.IsNotNull(encryptedDataToken["encryptedValue"]);
             Assert.IsNotNull(encryptedDataToken["encryptedKey"]);
             Assert.IsNotNull(encryptedDataToken["iv"]);
-            TestUtils.AssertDecryptedPayloadEquals("{\"data\":{\"field1\":\"value1\",\"field2\":\"value2\"}}", encryptedPayload, config);
+            TestUtils.AssertDecryptedPayloadEquals(payload, encryptedPayload, config);
         }
 
         [TestMethod]
