@@ -150,8 +150,6 @@ var config = JweConfigBuilder.AJweEncryptionConfig()
     .Build();
 ```
 
-See also:
-* [Service Configurations for Client Encryption C#](https://github.com/Mastercard/client-encryption-csharp/wiki/Service-Configurations-for-Client-Encryption-C%23)
 
 ##### • Performing JWE Encryption <a name="performing-jwe-encryption"></a>
 
@@ -319,7 +317,6 @@ var config = FieldLevelEncryptionConfigBuilder.AFieldLevelEncryptionConfig()
 
 See also:
 * [FieldLevelEncryptionConfig.cs](https://github.com/Mastercard/client-encryption-csharp/blob/master/Mastercard.Developer.ClientEncryption.Core/Encryption/FieldLevelEncryptionConfig.cs) for all config options
-* [Service Configurations for Client Encryption C#](https://github.com/Mastercard/client-encryption-csharp/wiki/Service-Configurations-for-Client-Encryption-C%23)
 
 ##### • Performing Mastercard Encryption <a name="performing-mastercard-encryption"></a>
 
@@ -479,7 +476,6 @@ var config = FieldLevelEncryptionConfigBuilder.AFieldLevelEncryptionConfig()
 
 See also:
 * [FieldLevelEncryptionConfig.cs](https://github.com/Mastercard/client-encryption-csharp/blob/master/Mastercard.Developer.ClientEncryption.Core/Encryption/FieldLevelEncryptionConfig.cs) for all config options
-* [Service Configurations for Client Encryption C#](https://github.com/Mastercard/client-encryption-csharp/wiki/Service-Configurations-for-Client-Encryption-C%23)
 
 ###### Encrypting Using HTTP Headers
 
