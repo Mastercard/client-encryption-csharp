@@ -118,42 +118,58 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
         {
             try
             {
-                using (var memoryStream = new MemoryStream(pkcs1Bytes))
-                using (var reader = new BinaryReader(memoryStream))
+                var memoryStream = new MemoryStream(pkcs1Bytes);
+                var reader = new BinaryReader(memoryStream);
+            
+                var bytes = reader.ReadUInt16();
+                if (bytes == 0x8130)
                 {
-                    if (reader.ReadUInt16() != 0x3082)
-                    {
-                        throw new ArgumentException("Failed to parse PKCS#1 key, 0x3082 was expected!");
-                    }
-
-                    reader.ReadUInt16(); // Skip the total length
-
-                    if (reader.ReadUInt16() != 0x0201)
-                    {
-                        throw new ArgumentException("Failed to parse PKCS#1 key, 0x0201 was expected!");
-                    }
-
-                    if (reader.ReadByte() != 0x00)
-                    {
-                        throw new ArgumentException("Failed to parse PKCS#1 key, 0x00 was expected!");
-                    }
-
-                    var rsaParameters = new RSAParameters
-                    {
-                        Modulus = ReadInteger(reader),
-                        Exponent = ReadInteger(reader),
-                        D = ReadInteger(reader),
-                        P = ReadInteger(reader),
-                        Q = ReadInteger(reader),
-                        DP = ReadInteger(reader),
-                        DQ = ReadInteger(reader),
-                        InverseQ = ReadInteger(reader)
-                    };
-
-                    var rsa = CreateRsa();
-                    rsa.ImportParameters(rsaParameters);
-                    return rsa;
+                    reader.ReadByte();
                 }
+                else if (bytes == 0x8230)
+                {
+                    reader.ReadByte();
+                    reader.ReadByte();
+                }
+                else
+                {
+                    throw new ArgumentException("Failed to parse PKCS#1 key, 0x8130 or 0x8230 was expected!");
+                }
+
+                var versionBytes = reader.ReadUInt16();
+                if (versionBytes != 0x0102)
+                {
+                    throw new ArgumentException("Failed to parse PKCS#1 key, 0x0102 was expected!");
+                }
+
+                bytes = reader.ReadByte();
+                if (bytes != 0x00)
+                {
+                    throw new ArgumentException("Failed to parse PKCS#1 key, 0x00 was expected!");
+                }
+
+                var modulus = reader.ReadBytes(GetIntegerSize(reader));
+                var publicExponent = reader.ReadBytes(GetIntegerSize(reader));
+                var privateExponent = reader.ReadBytes(GetIntegerSize(reader));
+                var prime1 = reader.ReadBytes(GetIntegerSize(reader));
+                var prime2 = reader.ReadBytes(GetIntegerSize(reader));
+                var exponent1 = reader.ReadBytes(GetIntegerSize(reader, true));
+                var exponent2 = reader.ReadBytes(GetIntegerSize(reader));
+                var coefficient = reader.ReadBytes(GetIntegerSize(reader));
+
+                var rsa = CreateRsa();
+                rsa.ImportParameters(new RSAParameters
+                {
+                    Modulus = modulus,
+                    Exponent = publicExponent,
+                    D = privateExponent ,
+                    P = prime1,
+                    Q = prime2,
+                    DP = exponent1,
+                    DQ = exponent2,
+                    InverseQ = coefficient
+                });
+                return rsa;
             }
             catch (ArgumentException)
             {
@@ -163,32 +179,6 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
             {
                 throw new ArgumentException("Failed to parse PKCS#1 key!", e);
             }
-        }
-
-        private static byte[] ReadInteger(BinaryReader reader)
-        {
-            if (reader.ReadByte() != 0x02)
-            {
-                throw new ArgumentException("Failed to parse integer, 0x02 was expected!");
-            }
-
-            int length = reader.ReadByte();
-            if (length == 0x81)
-            {
-                length = reader.ReadByte();
-            }
-            else if (length == 0x82)
-            {
-                length = (reader.ReadByte() << 8) | reader.ReadByte();
-            }
-
-            byte[] integerBytes = reader.ReadBytes(length);
-            if (integerBytes.Length != length)
-            {
-                throw new ArgumentException("Failed to parse integer, incorrect length!");
-            }
-
-            return integerBytes;
         }
 
         private static RSA CreateRsa()
@@ -251,7 +241,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
                 .ToArray();
         }
 
-        private static int GetIntegerSize(BinaryReader reader)
+        private static int GetIntegerSize(BinaryReader reader, bool ignorePadding = false)
         {
             int size;
             var bytes = reader.ReadByte();
@@ -276,12 +266,14 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
                 size = bytes;
             }
 
-            while (reader.ReadByte() == 0x00)
-            {
-                size -= 1;
+            if (!ignorePadding) {
+                while (reader.ReadByte() == 0x00)
+                {
+                    size -= 1;
+                }
+                reader.BaseStream.Seek(-1, SeekOrigin.Current);
             }
-
-            reader.BaseStream.Seek(-1, SeekOrigin.Current);
+            
             return size;
         }
     }
