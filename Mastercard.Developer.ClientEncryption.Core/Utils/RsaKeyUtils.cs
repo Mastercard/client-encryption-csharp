@@ -148,14 +148,31 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
                     throw new ArgumentException("Failed to parse PKCS#1 key, 0x00 was expected!");
                 }
 
+                byte[] padded(byte[] array, int totalLength)
+                {
+                    var currentLength = array.Length;
+                    if(currentLength >= totalLength) {
+                        return array;
+                    }
+
+                    var paddedArray = new byte[totalLength];
+                    Array.Copy(array, 0, paddedArray, totalLength - currentLength, currentLength);
+
+                    return paddedArray;
+                }
+
                 var modulus = reader.ReadBytes(GetIntegerSize(reader));
+                
+                var modulusLength = modulus.Length;
+                var modulusHalfLength = (modulus.Length + 1) / 2; // half length rounded up
+
                 var publicExponent = reader.ReadBytes(GetIntegerSize(reader));
-                var privateExponent = reader.ReadBytes(GetIntegerSize(reader));
-                var prime1 = reader.ReadBytes(GetIntegerSize(reader));
-                var prime2 = reader.ReadBytes(GetIntegerSize(reader));
-                var exponent1 = reader.ReadBytes(GetIntegerSize(reader));
-                var exponent2 = reader.ReadBytes(GetIntegerSize(reader));
-                var coefficient = reader.ReadBytes(GetIntegerSize(reader));
+                var privateExponent = padded(reader.ReadBytes(GetIntegerSize(reader)), modulusLength);
+                var prime1 = padded(reader.ReadBytes(GetIntegerSize(reader)), modulusHalfLength);
+                var prime2 = padded(reader.ReadBytes(GetIntegerSize(reader)), modulusHalfLength);
+                var exponent1 = padded(reader.ReadBytes(GetIntegerSize(reader)), modulusHalfLength);
+                var exponent2 = padded(reader.ReadBytes(GetIntegerSize(reader)), modulusHalfLength);
+                var coefficient = padded(reader.ReadBytes(GetIntegerSize(reader)), modulusHalfLength);
 
                 var rsa = CreateRsa();
                 rsa.ImportParameters(new RSAParameters

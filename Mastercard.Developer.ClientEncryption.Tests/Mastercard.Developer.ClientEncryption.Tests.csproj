@@ -68,6 +68,10 @@
       <Link>_Resources\Keys\Pkcs1\test_key_pkcs1-2048.pem</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+	<EmbeddedResource Include=".\Tests\_Resources\Keys\Pkcs1\test_key_pkcs1-2048_uneven_length.pem">
+	  <Link>_Resources\Keys\Pkcs1\test_key_pkcs1-2048_uneven_length.pem</Link>
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</EmbeddedResource>
     <EmbeddedResource Include=".\Tests\_Resources\Keys\Pkcs1\test_key_pkcs1-4096.pem">
       <Link>_Resources\Keys\Pkcs1\test_key_pkcs1-4096.pem</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

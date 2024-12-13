@@ -44,6 +44,7 @@ namespace Mastercard.Developer.ClientEncryption.Tests.NetCore.Utils
         [DataRow("./_Resources/Keys/Pkcs1/test_key_pkcs1-512.pem", 512)]
         [DataRow("./_Resources/Keys/Pkcs1/test_key_pkcs1-1024.pem", 1024)]
         [DataRow("./_Resources/Keys/Pkcs1/test_key_pkcs1-2048.pem", 2048)]
+        [DataRow("./_Resources/Keys/Pkcs1/test_key_pkcs1-2048_uneven_length.pem", 2048)]
         [DataRow("./_Resources/Keys/Pkcs1/test_key_pkcs1-4096.pem", 4096)]
         public void TestReadPrivateKey(string keyPath, int expectedKeySize)
         {
