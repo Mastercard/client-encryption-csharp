@@ -153,7 +153,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
                 var privateExponent = reader.ReadBytes(GetIntegerSize(reader));
                 var prime1 = reader.ReadBytes(GetIntegerSize(reader));
                 var prime2 = reader.ReadBytes(GetIntegerSize(reader));
-                var exponent1 = reader.ReadBytes(GetIntegerSize(reader));
+                var exponent1 = reader.ReadBytes(GetIntegerSize(reader, true));
                 var exponent2 = reader.ReadBytes(GetIntegerSize(reader));
                 var coefficient = reader.ReadBytes(GetIntegerSize(reader));
 
@@ -241,7 +241,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
                 .ToArray();
         }
 
-        private static int GetIntegerSize(BinaryReader reader)
+        private static int GetIntegerSize(BinaryReader reader, bool ignorePadding = false)
         {
             int size;
             var bytes = reader.ReadByte();
@@ -266,12 +266,14 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
                 size = bytes;
             }
 
-            while (reader.ReadByte() == 0x00)
-            {
-                size -= 1;
+            if (!ignorePadding) {
+                while (reader.ReadByte() == 0x00)
+                {
+                    size -= 1;
+                }
+                reader.BaseStream.Seek(-1, SeekOrigin.Current);
             }
-
-            reader.BaseStream.Seek(-1, SeekOrigin.Current);
+            
             return size;
         }
     }
