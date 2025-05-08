@@ -41,7 +41,7 @@
 
 #### Strong Naming <a name="strong-naming"></a>
 Assemblies are strong-named as per [Strong naming and .NET libraries](https://docs.microsoft.com/en-us/dotnet/standard/library-guidance/strong-naming).
-The SN key is available here: [`Identity.snk`](https://github.com/Mastercard/client-encryption-csharp/blob/master/Identity.snk).
+The SN key is available here: [`Identity.snk`](https://github.com/Mastercard/client-encryption-csharp/blob/main/Identity.snk).
 
 ### References <a name="references"></a>
 * [JSON Web Encryption (JWE)](https://datatracker.ietf.org/doc/html/rfc7516)
@@ -316,7 +316,7 @@ var config = FieldLevelEncryptionConfigBuilder.AFieldLevelEncryptionConfig()
 ```
 
 See also:
-* [FieldLevelEncryptionConfig.cs](https://github.com/Mastercard/client-encryption-csharp/blob/master/Mastercard.Developer.ClientEncryption.Core/Encryption/FieldLevelEncryptionConfig.cs) for all config options
+* [FieldLevelEncryptionConfig.cs](https://github.com/Mastercard/client-encryption-csharp/blob/main/Mastercard.Developer.ClientEncryption.Core/Encryption/FieldLevelEncryptionConfig.cs) for all config options
 
 ##### • Performing Mastercard Encryption <a name="performing-mastercard-encryption"></a>
 
@@ -475,7 +475,7 @@ var config = FieldLevelEncryptionConfigBuilder.AFieldLevelEncryptionConfig()
 ```
 
 See also:
-* [FieldLevelEncryptionConfig.cs](https://github.com/Mastercard/client-encryption-csharp/blob/master/Mastercard.Developer.ClientEncryption.Core/Encryption/FieldLevelEncryptionConfig.cs) for all config options
+* [FieldLevelEncryptionConfig.cs](https://github.com/Mastercard/client-encryption-csharp/blob/main/Mastercard.Developer.ClientEncryption.Core/Encryption/FieldLevelEncryptionConfig.cs) for all config options
 
 ###### Encrypting Using HTTP Headers
 
