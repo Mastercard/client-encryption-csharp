@@ -19,7 +19,6 @@ jobs:
       matrix:
         dotnet:
           - 8.0.x
-          - netstandard2.1
         include:
           - dotnet: 8.0.x
             mono: none
