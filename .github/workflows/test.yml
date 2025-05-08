@@ -18,25 +18,25 @@ jobs:
     strategy:
       matrix:
         dotnet:
-          - 5.0.x
+          - 6.0.x
         include:
-          - dotnet: 5.0.x
+          - dotnet: 6.0.x
             mono: none
             TEST_PROJECT: $NETCORE_TEST_PROJECT
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Setup .NET 5
-        uses: actions/setup-dotnet@v1.9.0
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v4.3.1
         with:
-          dotnet-version: 5.0.x
-      - name: Build using .NET 5
+          dotnet-version: 6.0.x
+      - name: Build using .NET 6
         run: >
           export PATH="$PATH:$HOME/.dotnet/tools"  
           
           dotnet build ${{ env.NETCORE_TEST_PROJECT }} -c Release
       - name: Setup .NET [Core] ${{ matrix.dotnet }}
-        uses: actions/setup-dotnet@v1.9.0
+        uses: actions/setup-dotnet@v4.3.1
         with:
           dotnet-version: '${{ matrix.dotnet }}'
       - name: List .NET SDKs
