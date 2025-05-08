@@ -18,18 +18,20 @@ jobs:
     strategy:
       matrix:
         dotnet:
-          - 8.0.100
+          - 8.0.x
         include:
-          - dotnet: 8.0.100
+          - dotnet: 8.0.x
+
             mono: none
             TEST_PROJECT: $NETCORE_TEST_PROJECT
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Setup .NET 8
+      - name: Setup .NET 5
         uses: actions/setup-dotnet@v1.9.1
         with:
-          dotnet-version: 8.0.100
+          dotnet-version: 8.0.x
+
       - name: Build using .NET 8
         run: >
           export PATH="$PATH:$HOME/.dotnet/tools"  
