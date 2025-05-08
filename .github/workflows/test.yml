@@ -21,8 +21,6 @@ jobs:
           - 8.0.x
         include:
           - dotnet: 8.0.x
-
-            mono: none
             TEST_PROJECT: $NETCORE_TEST_PROJECT
     steps:
       - name: Checkout code
