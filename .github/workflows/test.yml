@@ -18,9 +18,9 @@ jobs:
     strategy:
       matrix:
         dotnet:
-          - 8.0.x
+          - 8.0.100
         include:
-          - dotnet: 8.0.x
+          - dotnet: 8.0.100
             mono: none
             TEST_PROJECT: $NETCORE_TEST_PROJECT
     steps:
@@ -29,7 +29,7 @@ jobs:
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4.3.1
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 8.0.100
       - name: Build using .NET 8
         run: >
           export PATH="$PATH:$HOME/.dotnet/tools"  
