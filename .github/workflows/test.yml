@@ -21,6 +21,7 @@ jobs:
           - 8.0.x
         include:
           - dotnet: 8.0.x
+
             mono: none
             TEST_PROJECT: $NETCORE_TEST_PROJECT
     steps:
@@ -30,6 +31,7 @@ jobs:
         uses: actions/setup-dotnet@v1.9.1
         with:
           dotnet-version: 8.0.x
+
       - name: Build using .NET 8
         run: >
           export PATH="$PATH:$HOME/.dotnet/tools"  
