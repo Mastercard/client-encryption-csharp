@@ -22,18 +22,18 @@ jobs:
           github.event.pull_request.head.repo.full_name == github.repository ||
           github.event_name != 'pull_request_target') }}
         run: echo "Unsecure PR, must be labelled with the 'safe' label, then run the workflow again" && exit 1
-      - name: Setup .NET 6
+      - name: Setup .NET 8
         uses: actions/setup-dotnet@v1.9.0
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 8.0.x
       - name: Setup java
         uses: actions/setup-java@v1
         with:
           java-version: '11'
       - name: Test
         env:
-          NETCORE5_TEST_PROJECT: >-
-            Mastercard.Developer.ClientEncryption.Tests/Net5/Mastercard.Developer.ClientEncryption.Tests.Net5.csproj
+          NETCORE_TEST_PROJECT: >-
+            Mastercard.Developer.ClientEncryption.Tests/Mastercard.Developer.ClientEncryption.Tests.csproj
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
           SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
         run: >
@@ -47,11 +47,11 @@ jobs:
             /o:"mastercard" \
             /d:sonar.host.url="https://sonarcloud.io" \
             /d:sonar.login="$SONAR_TOKEN" \
-            /d:sonar.cs.vstest.reportsPaths="./Mastercard.Developer.ClientEncryption.Tests/Net5/bin/tests.trx" \
-            /d:sonar.cs.opencover.reportsPaths="./Mastercard.Developer.ClientEncryption.Tests/Net5/bin/coverage.xml"
+            /d:sonar.cs.vstest.reportsPaths="./Mastercard.Developer.ClientEncryption.Tests/bin/tests.trx" \
+            /d:sonar.cs.opencover.reportsPaths="./Mastercard.Developer.ClientEncryption.Tests/bin/coverage.xml"
 
           dotnet test $NETCORE5_TEST_PROJECT -c Release
-          -l:"trx;LogFileName=tests.trx" -r:"./Mastercard.Developer.ClientEncryption.Tests/Net5/bin/" /p:CollectCoverage=true
+          -l:"trx;LogFileName=tests.trx" -r:"./Mastercard.Developer.ClientEncryption.Tests/bin/" /p:CollectCoverage=true
           /p:CoverletOutputFormat="opencover"
           /p:CoverletOutput="bin/coverage.xml"
 
