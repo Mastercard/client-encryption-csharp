@@ -23,7 +23,7 @@ jobs:
           github.event_name != 'pull_request_target') }}
         run: echo "Unsecure PR, must be labelled with the 'safe' label, then run the workflow again" && exit 1
       - name: Setup .NET 8
-        uses: actions/setup-dotnet@v1.9.0
+        uses: actions/setup-dotnet@v4.3.1
         with:
           dotnet-version: 8.0.x
       - name: Setup java
