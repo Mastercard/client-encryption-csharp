@@ -19,6 +19,9 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
 
+    - name: Build and Test
+      run: dotnet test -c Release Mastercard.Developer.ClientEncryption.Tests/Mastercard.Developer.ClientEncryption.Tests.csproj
+
     - name: Pack
       run: |
         dotnet pack -c Release Mastercard.Developer.ClientEncryption.Core/Mastercard.Developer.ClientEncryption.Core.csproj
