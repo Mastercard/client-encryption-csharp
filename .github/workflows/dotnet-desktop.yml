@@ -1,0 +1,32 @@
+name: Publish
+
+on:
+  pull_request:
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Install dependencies
+      run: dotnet restore
+
+    - name: Pack
+      run: |
+        dotnet pack -c Release Mastercard.Developer.ClientEncryption.Core/Mastercard.Developer.ClientEncryption.Core.csproj
+        dotnet pack -c Release Mastercard.Developer.ClientEncryption.RestSharp/Mastercard.Developer.ClientEncryption.RestSharp.csproj
+        dotnet pack -c Release Mastercard.Developer.ClientEncryption.RestSharpV2/Mastercard.Developer.ClientEncryption.RestSharpV2.csproj
+
+    - name: Publish to NuGet
+      run: |
+        dotnet nuget push Mastercard.Developer.ClientEncryption.RestSharp/bin/Release/Mastercard.Developer.ClientEncryption.RestSharp.${{ env.PACKAGE_VERSION }}.nupkg -k ${{ env.NUGET_API_KEY }} -sk ${{ env.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+        dotnet nuget push Mastercard.Developer.ClientEncryption.RestSharpV2/bin/Release/Mastercard.Developer.ClientEncryption.RestSharpV2.${{ env.PACKAGE_VERSION }}.nupkg -k ${{ env.NUGET_API_KEY }} -sk ${{ env.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+        dotnet nuget push Mastercard.Developer.ClientEncryption.Core/bin/Release/Mastercard.Developer.ClientEncryption.Core.${{ env.PACKAGE_VERSION }}.nupkg -k ${{ env.NUGET_API_KEY }} -sk ${{ env.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
