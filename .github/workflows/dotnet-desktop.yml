@@ -30,9 +30,9 @@ jobs:
 
     - name: Get Package Version
       run: |
-        VERSION=$(grep -m1 '<Version>' Mastercard.Developer.ClientEncryption.Core/Mastercard.Developer.ClientEncryption.Core.csproj | sed -E 's/.*<Version>([^<]+)<\/Version>.*/\1/')
-        echo $VERSION
-        echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
+            [xml]$csproj = Get-Content Mastercard.Developer.ClientEncryption.Core/Mastercard.Developer.ClientEncryption.Core.csproj
+            $version = $csproj.Project.PropertyGroup.Version
+            "PACKAGE_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Publish to NuGet
       run: |
