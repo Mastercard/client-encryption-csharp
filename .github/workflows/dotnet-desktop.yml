@@ -31,7 +31,8 @@ jobs:
     - name: Get Package Version
       run: |
         VERSION=$(grep -m1 '<Version>' Mastercard.Developer.ClientEncryption.Core/Mastercard.Developer.ClientEncryption.Core.csproj | sed -E 's/.*<Version>([^<]+)<\/Version>.*/\1/')
-          echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
+        echo $VERSION
+        echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
 
     - name: Publish to NuGet
       run: |
