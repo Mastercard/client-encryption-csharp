@@ -2,7 +2,7 @@
   <PropertyGroup>
      <TargetFramework>netstandard2.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.9.3</Version>
+    <Version>1.9.4</Version>
     <Product>Mastercard.Developer.ClientEncryption.RestSharpV2</Product>
     <Authors>Mastercard</Authors>
     <Company>Mastercard</Company>
