@@ -7,7 +7,7 @@ namespace Mastercard.Developer.ClientEncryption.Core.Utils
 {
     internal static class JsonUtils
     {
-        private static readonly Regex LastElementInPathRegExp = new Regex(".*(\\['.*'\\])"); // Returns "['obj2']" for "$['obj1']['obj2']"
+        private static readonly Regex LastElementInPathRegExp = new Regex(".*(\\['.*'\\])", RegexOptions.Compiled, TimeSpan.FromMilliseconds(100)); // Returns "['obj2']" for "$['obj1']['obj2']"
         
         /// <summary>
         /// Get JSON path to the parent of the object at the given JSON path.
