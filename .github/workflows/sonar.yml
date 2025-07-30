@@ -50,11 +50,11 @@ jobs:
             /d:sonar.cs.vstest.reportsPaths="./Mastercard.Developer.ClientEncryption.Tests/bin/tests.trx" \
             /d:sonar.cs.opencover.reportsPaths="./Mastercard.Developer.ClientEncryption.Tests/bin/coverage.xml"
 
-          dotnet test $NETCORE5_TEST_PROJECT -c Release
+          dotnet test $NETCORE_TEST_PROJECT -c Release
           -l:"trx;LogFileName=tests.trx" -r:"./Mastercard.Developer.ClientEncryption.Tests/bin/" /p:CollectCoverage=true
           /p:CoverletOutputFormat="opencover"
           /p:CoverletOutput="bin/coverage.xml"
 
-          dotnet publish $NETCORE5_TEST_PROJECT -c Release
+          dotnet publish $NETCORE_TEST_PROJECT -c Release
 
           dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
