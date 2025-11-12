@@ -150,6 +150,50 @@ var config = JweConfigBuilder.AJweEncryptionConfig()
     .Build();
 ```
 
+###### Supported Encryption Algorithms
+
+The library supports the following JWE encryption algorithms:
+
+**AES-GCM (Galois/Counter Mode):**
+
+- `A128GCM` - AES-128 with GCM mode
+- `A192GCM` - AES-192 with GCM mode
+- `A256GCM` - AES-256 with GCM mode (default)
+
+**AES-CBC with HMAC (Cipher Block Chaining with HMAC authentication):**
+
+- `A128CBC-HS256` - AES-128-CBC with HMAC-SHA256
+- `A192CBC-HS384` - AES-192-CBC with HMAC-SHA384
+- `A256CBC-HS512` - AES-256-CBC with HMAC-SHA512
+
+The encryption algorithm is determined by the `enc` header parameter in the JWE header.
+
+###### Configuring CBC-HMAC Verification
+
+For CBC-HMAC algorithms (`A128CBC-HS256`, `A192CBC-HS384`, `A256CBC-HS512`), HMAC verification is **disabled by default** for backward compatibility. You can enable HMAC authentication and verification using the `WithCbcHmacVerification()` method:
+
+```cs
+var config = JweConfigBuilder.AJweEncryptionConfig()
+    .WithEncryptionCertificate(encryptionCertificate)
+    .WithDecryptionKey(decryptionKey)
+    .WithCbcHmacVerification(true)  // Enable HMAC verification
+    .Build();
+```
+
+**When HMAC verification is enabled:**
+
+- During encryption: HMAC authentication tags are generated according to RFC 7516
+- During decryption: HMAC tags are verified before decryption, providing authenticated encryption
+- Tampering with ciphertext or authentication tags will cause decryption to fail with an `EncryptionException`
+
+**When HMAC verification is disabled (default):**
+
+- Maintains backward compatibility with existing implementations
+- HMAC verification is skipped during decryption
+- Empty authentication tags are generated during encryption
+
+**Security Recommendation:** Enable HMAC verification for new integrations using CBC-HMAC algorithms to ensure data integrity and authenticity.
+
 
 ##### • Performing JWE Encryption <a name="performing-jwe-encryption"></a>
 
