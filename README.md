@@ -186,7 +186,7 @@ The encryption algorithm is determined by the `enc` parameter in the JWE header.
 
 **GCM vs CBC-HMAC:**
 
-- **AES-GCM (Recommended):** Provides both encryption and authentication in a single operation. Default choice for new implementations.
+- **AES-GCM:** Provides both encryption and authentication in a single operation. Default choice for new implementations.
 - **AES-CBC-HMAC:** Provides encryption via CBC mode and authentication via HMAC. Requires two separate operations and proper HMAC verification configuration.
 
 ###### Configuring CBC-HMAC Verification
