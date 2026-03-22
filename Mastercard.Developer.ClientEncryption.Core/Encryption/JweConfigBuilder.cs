@@ -71,6 +71,19 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
             return this;
         }
 
+        private bool _enableCbcHmacVerification = false;
+
+        /// <summary>
+        /// Enable HMAC verification for CBC mode encryption algorithms (A128CBC-HS256, A192CBC-HS384, A256CBC-HS512).
+        /// When enabled, HMAC authentication tags will be verified during decryption and generated during encryption.
+        /// Default is false for backward compatibility.
+        /// </summary>
+        public JweConfigBuilder WithCbcHmacVerification(bool enable = true)
+        {
+            _enableCbcHmacVerification = enable;
+            return this;
+        }
+
         /// <summary>
         /// Build a <see cref="JweConfig"/>
         /// </summary>
@@ -88,7 +101,8 @@ namespace Mastercard.Developer.ClientEncryption.Core.Encryption
                 EncryptionPaths = _encryptionPaths.Count == 0 ? new Dictionary<string, string> { { "$", "$" } } : _encryptionPaths,
                 DecryptionPaths = _decryptionPaths.Count == 0 ? new Dictionary<string, string> { { "$.encryptedData", "$" } } : _decryptionPaths,
                 EncryptedValueFieldName = _encryptedValueFieldName ?? "encryptedData",
-                Scheme = EncryptionConfig.EncryptionScheme.Jwe
+                Scheme = EncryptionConfig.EncryptionScheme.Jwe,
+                EnableCbcHmacVerification = _enableCbcHmacVerification
             };
         }
 

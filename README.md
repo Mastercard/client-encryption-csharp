@@ -154,6 +154,71 @@ var config = JweConfigBuilder.AJweEncryptionConfig()
     .Build();
 ```
 
+###### Supported Encryption Algorithms
+
+The library supports the following JWE encryption algorithms according to [RFC 7516](https://datatracker.ietf.org/doc/html/rfc7516):
+
+**Key Encryption Algorithms (`alg` header):**
+
+| Algorithm | Description | Key Size |
+|-----------|-------------|----------|
+| `RSA-OAEP` | RSAES using Optimal Asymmetric Encryption Padding (OAEP) with SHA-1 and MGF1 | 2048+ bits |
+| `RSA-OAEP-256` | RSAES-OAEP using SHA-256 and MGF1 with SHA-256 | 2048+ bits |
+
+**Content Encryption Algorithms (`enc` header):**
+
+| Algorithm | Description | Key Size | Authentication |
+|-----------|-------------|----------|----------------|
+| `A128GCM` | AES-128 with Galois/Counter Mode | 128 bits | Built-in |
+| `A192GCM` | AES-192 with Galois/Counter Mode | 192 bits | Built-in |
+| `A256GCM` | AES-256 with Galois/Counter Mode (default) | 256 bits | Built-in |
+| `A128CBC-HS256` | AES-128-CBC with HMAC-SHA256 | 256 bits (128+128) | HMAC-SHA256 |
+| `A192CBC-HS384` | AES-192-CBC with HMAC-SHA384 | 384 bits (192+192) | HMAC-SHA384 |
+| `A256CBC-HS512` | AES-256-CBC with HMAC-SHA512 | 512 bits (256+256) | HMAC-SHA512 |
+
+**Algorithm Selection:**
+
+The encryption algorithm is determined by the `enc` parameter in the JWE header. For example:
+
+```json
+{
+  "alg": "RSA-OAEP-256",
+  "enc": "A256GCM",
+  "kid": "761b003c1eade3a5490e5000d37887baa5e6ec0e226c07706e599451fc032a79"
+}
+```
+
+**GCM vs CBC-HMAC:**
+
+- **AES-GCM:** Provides both encryption and authentication in a single operation. Default choice for new implementations.
+- **AES-CBC-HMAC:** Provides encryption via CBC mode and authentication via HMAC. Requires two separate operations and proper HMAC verification configuration.
+
+###### Configuring CBC-HMAC Verification
+
+For CBC-HMAC algorithms (`A128CBC-HS256`, `A192CBC-HS384`, `A256CBC-HS512`), HMAC verification is **disabled by default** for backward compatibility. You can enable HMAC authentication and verification using the `WithCbcHmacVerification()` method:
+
+```cs
+var config = JweConfigBuilder.AJweEncryptionConfig()
+    .WithEncryptionCertificate(encryptionCertificate)
+    .WithDecryptionKey(decryptionKey)
+    .WithCbcHmacVerification(true)  // Enable HMAC verification
+    .Build();
+```
+
+**When HMAC verification is enabled:**
+
+- During encryption: HMAC authentication tags are generated according to RFC 7516
+- During decryption: HMAC tags are verified before decryption, providing authenticated encryption
+- Tampering with ciphertext or authentication tags will cause decryption to fail with an `EncryptionException`
+
+**When HMAC verification is disabled (default):**
+
+- Maintains backward compatibility with existing implementations
+- HMAC verification is skipped during decryption
+- Empty authentication tags are generated during encryption
+
+**Security Recommendation:** Enable HMAC verification for new integrations using CBC-HMAC algorithms to ensure data integrity and authenticity.
+
 
 ##### • Performing JWE Encryption <a name="performing-jwe-encryption"></a>
 
