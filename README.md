@@ -154,6 +154,31 @@ var config = JweConfigBuilder.AJweEncryptionConfig()
     .Build();
 ```
 
+##### • FPAN Payload Encryption
+
+To perform FPAN encryption, Mastercard provides a public key in the JsonWebKey format. To convert this format into an `X509Certificate2` you'll need to install the `Microsoft.IdentityModel.Tokens` package.
+
+Using the FPAN Encryption keys from the [Perform Encryption Tutorial](https://developer.mastercard.com/mastercard-checkout-solutions/documentation/tutorials-and-guides/perform-encryption-tutorial/), you can parse the keyset and extract the key into an `X509Certificate2`:
+```cs
+    var keySet = JsonWebKeySet.Create(keyText);
+    var key = keySet.Keys[0];
+
+    byte[] keyBytes = Encoding.UTF8.GetBytes(key.X5c[0]);
+    var encryptionCertificate = X509CertificateLoader.LoadCertificate(keyBytes);
+    var keyId = key.KeyId;
+```
+
+Importantly, you must supply the `KeyId` to the `JweConfig`, as an `X509Certificate2` does not have this property.
+
+Using the key captured above, you can supply the values to the `JweConfigBuilder` as follows:
+```cs
+var config = JweConfigBuilder.AJweEncryptionConfig()
+    .WithEncryptionCertificate(encryptionCertificate)
+    .WithEncryptionKeyFingerprint(keyId)
+    .WithEncryptionPath("$.path.to.foo", "$.path.to.encryptedFoo")
+    .WithEncryptedValueFieldName("encryptedValue")
+    .Build();
+```
 
 ##### • Performing JWE Encryption <a name="performing-jwe-encryption"></a>
 
